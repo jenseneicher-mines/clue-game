@@ -1,4 +1,4 @@
-package tests;
+package experiment;
 
 public class BoardCell {
 
