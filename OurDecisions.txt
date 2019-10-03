@@ -1,0 +1,18 @@
+Kai Mizuno and Jensen Eicher Decisions for JUnitTests
+
+Changed NUM_ROWS and NUM_COLUMNS to match our board size
+Changed setUp() to read in our config files
+
+testRooms()
+	We chose a random set of 6 rooms from our legend to test that they were correctly loaded
+	Library, Den, Cloakroom, Gallery, Porch, Bathroom
+
+FourDoorDirections() 
+	We randomly chose 4 doors who all had different directions, Down, Up, Left, Right and tested that directions were read correctly
+	we used Library, Kitchen, Tackroom, and Hall
+
+testNumberOfDoorways()
+	This method tests that we correctly identified all doors in the csv file (16)
+
+testRoomInitials()
+	This method gets the specified cell and makes sure its the one we expect (the rooms are in the correct place and have correct letters)
