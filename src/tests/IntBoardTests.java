@@ -6,6 +6,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
@@ -15,15 +16,16 @@ import experiment.BoardCell;
 import experiment.IntBoard;
 
 public class IntBoardTests {
-	IntBoard board;
+	private IntBoard board;
 
 	@Before
 	public void beforeAll() {
-		IntBoard board = new IntBoard();
+		board = new IntBoard();
 	}
+	
 
-	@Test
 	// Test if top left corner cell has the correct adjacency list
+	@Test
 	public void testAdjacency0() {
 		BoardCell cell = board.getCell(0, 0);
 		Set<BoardCell> testList = board.getAdjList(cell);
@@ -165,8 +167,9 @@ public class IntBoardTests {
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 5);
 		Set<BoardCell> targets = board.getTargets();
-		assertEquals(7, targets.size());
+		assertEquals(8, targets.size());
 		assertTrue(targets.contains(board.getCell(0, 1)));
+		assertTrue(targets.contains(board.getCell(1, 0)));
 		assertTrue(targets.contains(board.getCell(0, 3)));
 		assertTrue(targets.contains(board.getCell(1, 2)));
 		assertTrue(targets.contains(board.getCell(2, 1)));
