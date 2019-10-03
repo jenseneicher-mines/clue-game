@@ -1,0 +1,11 @@
+L, Library, Card
+B, Bathroom, Card
+C, Cloakroom, Card
+D, Den, Card
+P, Porch, Card
+G, Gallery, Card
+T, Tackroom, Card
+H, Hall, Card
+K, Kitchen, Card
+X, Closet, Other
+W, Walkway, Other
