@@ -1,3 +1,7 @@
+/* Software Engineering: Clue Game
+ * Code by: Kai Mizuno and Jensen Eicher
+ */
+
 package experiment;
 
 public class BoardCell {
