@@ -4,6 +4,10 @@
 
 package clueGame;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +38,25 @@ public class Board {
 	}
 	
 	public void loadRoomConfig() {
-		
+		try {
+			FileReader read = new FileReader("Rooms.txt");
+			BufferedReader buffRead = new BufferedReader(read);
+			String str;
+			int i = 0;
+			int j = 0;
+			int k = 0;
+			while((str = buffRead.readLine()) != null) {
+				String[] character = str.split(",");
+				//if(character[0])
+				//	board[i][j] = character[0];
+
+			}
+		}
+		catch (FileNotFoundException e){
+			System.out.println("File specified was not found:" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void calcAdjacencies() {
@@ -48,19 +70,19 @@ public class Board {
 	// Getter Functions
 	public Map<Character, String> getLegend() {
 		// TODO Auto-generated method stub
-		return null;
+		return legend;
 	}
 	public int getNumRows() {
 		// TODO Auto-generated method stub
-		return 0;
+		return numRows;
 	}
 	public int getNumColumns() {
 		// TODO Auto-generated method stub
-		return 0;
+		return numColumns;
 	}
 	public BoardCell getCellAt(int i, int j) {
 		// TODO Auto-generated method stub
-		return null;
+		return board[i][j];
 	}
 	
 	//Setter Functions
