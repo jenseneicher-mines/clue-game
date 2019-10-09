@@ -34,9 +34,10 @@ public class CTest_FileInitTests {
 		board = Board.getInstance();
 		// set the file names to use my config files
 		board.setConfigFiles("CTest_ClueLayout.csv", "CTest_ClueLegend.txt");		
-		// Initialize will load BOTH config files 
+		// Initialize will load BOTH config files
 		board.initialize();
 	}
+
 	@Test
 	public void testRooms() {
 		// Get the map of initial => room 

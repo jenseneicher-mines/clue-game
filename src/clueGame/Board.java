@@ -35,12 +35,16 @@ public class Board {
 	}
 	
 	public void initialize() {
-		loadRoomConfig();
-		loadBoardConfig();
+		try {
+			loadRoomConfig();
+			loadBoardConfig();
+		} catch (BadConfigFormatException e) {
+			System.out.println("ERROR: " + e);
+		}
 	}
 	
 	// read the given txt file and convert the contents to the Map legend
-	public void loadRoomConfig() {
+	public void loadRoomConfig() throws BadConfigFormatException {
 		legend = new HashMap<Character, String>();
 		
 		// read in the file
@@ -56,16 +60,21 @@ public class Board {
 		
 		// populate the map based off the first two entries of each line
 		String currentLine;
-		while( in.hasNext() ) {
-			currentLine = in.nextLine();
-			String[] words = currentLine.split(", ");
-			legend.put( words[0].charAt(0) , words[1]);
+		try {
+			while (in.hasNext()) {
+				currentLine = in.nextLine();
+				String[] words = currentLine.split(", ");
+				legend.put(words[0].charAt(0), words[1]);
+			}
+		}
+		catch (NullPointerException e){
+			throw new BadConfigFormatException("This room layout does not match your legend");
 		}
 		
 	}
 	
 	// read the given csv file for the board and save to the 2D array board
-	public void loadBoardConfig() {
+	public void loadBoardConfig() throws BadConfigFormatException {
 		numRows = 0;
 		numColumns = 0;
 		
@@ -89,6 +98,9 @@ public class Board {
 			String[] keys = currentLine.split(",");
 			if ( numColumns == 0 )
 				numColumns = keys.length;
+			if(keys.length != numColumns){
+				throw new BadConfigFormatException("This room layout has inconsistent columns");
+			}
 			for ( String space : keys ) 
 				listOfSpaces.add(space);
 		}
