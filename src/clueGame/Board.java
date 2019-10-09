@@ -9,11 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 
 public class Board {
@@ -109,13 +105,51 @@ public class Board {
 		}
 		
 	}
-	
+
+	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix
 	public void calcAdjacencies() {
-		
+		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
+
+		//Nested for loop with checks to find eligible cells
+
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numColumns; col++) {
+
+				Set<BoardCell> currentAdjSet = new HashSet<BoardCell>();
+
+				if ( col > 0 ) {
+					currentAdjSet.add( board[row][col-1] );
+				}
+				if ( col < numColumns - 1 ) {
+					currentAdjSet.add( board[row][col+1] );
+				}
+				if ( row > 0 ) {
+					currentAdjSet.add( board[row-1][col] );
+				}
+				if ( row < numRows - 1 ) {
+					currentAdjSet.add( board[row+1][col] );
+				}
+
+				adjMatrix.put(board[row][col], currentAdjSet);
+			}
+		}
+
 	}
-	
+
+	// Calculate targets that are accessible given a pathLength
 	public void calctargets(BoardCell cell, int pathLength ) {
-		
+		targets.add(cell);
+		for (BoardCell adjCell : adjMatrix.get(cell) ) {
+			if ( targets.contains(adjCell) )
+				continue;
+			targets.add(adjCell);
+			if ( pathLength == 1 )
+				targets.add(adjCell);
+			else
+				calctargets(adjCell, pathLength-1);	// else recursively call function
+			targets.remove(adjCell);
+		}
+		targets.remove(cell);
 	}
 	
 	// Getter Functions
