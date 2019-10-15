@@ -1,0 +1,101 @@
+commit e8e1f4fdbc4e4da5daf52e90033edfb777145021
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Mon Oct 14 22:46:02 2019 -0600
+
+    Added a check in loadBoardConfig() that throws a BadConfigFormatException if the board config contains a room that isn't in the legend. Added a check in loadRoomConfig() that throws a BadConfigFormatException when the config file contains a room type that isn't 'Card' or 'Other'. Added functionality to BadConfigFormatException so it writes errors to an ErrorLog.txt file with the error's date and message.
+
+commit 0c0288a4f24339f154630501f7f91568a4e4e71a
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 9 16:15:00 2019 -0600
+
+    Exception test now pass but only throw one type of exception, trying to think how we can customize the exceptions for each case. Bad columns, bad room, and bad format
+
+commit f0c4056f55ffc146b665198ebd1fce339098dacc
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 8 20:22:20 2019 -0600
+
+    Filled out calcAdj and calcTargets
+
+commit aea410b18e33875ad7852e81ca1e68a2a851ab0d
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Tue Oct 8 16:51:20 2019 -0600
+
+    Finished adding functionality to board methods to make CTest_FileInitTests and our FileInitTests pass
+
+commit 3072733179a48a35ca89687c9c2d15c11a8831d5
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Sun Oct 6 15:53:19 2019 -0600
+
+    Started creating the loadRoomConfig method, Stuck on how to determine if its a letter or number (newline)
+
+commit 484257cfa4c7a44ba8e640c00c408abbb9b283c6
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Thu Oct 3 10:44:50 2019 -0600
+
+    Added Game board excel file
+
+commit acb4a080c17153de78a750fc071d9ad34714f2b4
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Thu Oct 3 10:36:17 2019 -0600
+
+    Imported out csv and txt files for board and legend. Created a JUnitTest file FileInitTests that tests the legend is loaded correctly, the correct number of rows and columns have been read, doorways are correct, and cells have the correct initials
+
+commit 7bc2db0b7794cd11513850263411ce815a2d45f2
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Thu Oct 3 10:03:22 2019 -0600
+
+    Created clueGame package with stubs for classes BadConfigFormatException, Board, BoardCell, and DoorDirection.
+
+commit b117ffa735bf5020567217055bf5fd459c1e37ee
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Wed Oct 2 22:29:04 2019 -0600
+
+    Added functionality to IntBoard functions: getCell, calcAdjacencies, getAdjList, calctargets, getTargets
+
+commit c7967ae15c8a50245828ecdc3c54256ca3777019
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Wed Oct 2 21:04:18 2019 -0600
+
+    Added comments for author names to each file. Added a testTargets5 case that tests cell 0,0 with 5 moves. Fixed a bug where each testTargest junit test had Set targets instead of Set<BoardCell> targets variable declaration
+
+commit 8ea3a9b5ca6ddf5dad75dfe91c0557b18986646c
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 1 19:43:38 2019 -0600
+
+    Added the rest of testTargets() -- now we just have to fill out methods
+
+commit 1f57afeb8bcd7c209da648cddad269e71cb222d5
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 1 16:19:28 2019 -0600
+
+    Added one additional targets test
+
+commit 900297542f3d86224e93d1ee6aa39192de7c8b12
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 1 10:46:25 2019 -0600
+
+    Created functions for BoardCell and IntBoard that have no functionality yet, and created test cases in IntBoardTests to test the creation of adjacency lists and target lists
+
+commit 382771d1a704806b3c3d7fb79c15974e2e7e2a59
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 1 09:54:23 2019 -0600
+
+    Moved BoardCell class to experiment package. Created IntBoard class in experiment package. Created IntBoardTests in tests package.
+
+commit da6fb7102718efb62544536dff977b42c415a499
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 1 09:42:51 2019 -0600
+
+    Created Java Project for Eclipse. Made experiment and tests packages. Made BoardCell Class
+
+commit 1c62c0c28a54e0616133e11bb50b7128cbaf17b0
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 1 09:36:52 2019 -0600
+
+    Update gitignore with .classpath and .project
+
+commit 7a07f81388038db9e9585dd65a7a6b144604e7e2
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 1 09:35:46 2019 -0600
+
+    Initial commit
