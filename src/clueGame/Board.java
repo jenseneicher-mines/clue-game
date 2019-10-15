@@ -64,6 +64,8 @@ public class Board {
 			while (in.hasNext()) {
 				currentLine = in.nextLine();
 				String[] words = currentLine.split(", ");
+				if ( !words[2].equals("Card") && !words[2].equals("Other") )
+					throw new BadConfigFormatException( roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
 				legend.put(words[0].charAt(0), words[1]);
 			}
 		}
@@ -99,10 +101,14 @@ public class Board {
 			if ( numColumns == 0 )
 				numColumns = keys.length;
 			if(keys.length != numColumns){
-				throw new BadConfigFormatException("This room layout has inconsistent columns");
+				throw new BadConfigFormatException(boardConfigFile + " has inconsistent columns");
 			}
-			for ( String space : keys ) 
+			for ( String space : keys ) {
+				if (!legend.containsKey(space.charAt(0)))
+					throw new BadConfigFormatException(boardConfigFile + " contains the room '" + space + "', which is not in the legend.");
+					
 				listOfSpaces.add(space);
+			}
 		}
 		
 		// make the board array with the known information
