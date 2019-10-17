@@ -15,3 +15,6 @@
 2019/10/14 22:38:54 --- This room layout has inconsistent columns
 2019/10/14 22:38:54 --- CTest_ClueLayoutBadRoom.csv contains the room 'Z', which is not in the legend.
 2019/10/14 22:38:54 --- CTest_ClueLegendBadFormat.txt contains a room type 'X'. However, the only vaild types are 'Card' or 'Other'
+2019/10/17 09:38:42 --- CTest_ClueLayoutBadColumns.csv has inconsistent columns
+2019/10/17 09:38:42 --- CTest_ClueLayoutBadRoom.csv contains the room 'Z', which is not in the legend.
+2019/10/17 09:38:42 --- CTest_ClueLegendBadFormat.txt contains a room type 'X'. However, the only vaild types are 'Card' or 'Other'

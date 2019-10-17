@@ -155,19 +155,20 @@ public class Board {
 	}
 
 	// Calculate targets that are accessible given a pathLength
-	public void calctargets(BoardCell cell, int pathLength ) {
-		targets.add(cell);
-		for (BoardCell adjCell : adjMatrix.get(cell) ) {
+	public void calcTargets(int row, int col, int pathLength ) {
+		BoardCell currentCell = getCellAt(row,col); 
+		targets.add( currentCell );
+		for (BoardCell adjCell : adjMatrix.get(currentCell) ) {
 			if ( targets.contains(adjCell) )
 				continue;
 			targets.add(adjCell);
 			if ( pathLength == 1 )
 				targets.add(adjCell);
 			else
-				calctargets(adjCell, pathLength-1);	// else recursively call function
+				calcTargets(adjCell.getRow(), adjCell.getColumn(), pathLength-1);	// else recursively call function
 			targets.remove(adjCell);
 		}
-		targets.remove(cell);
+		targets.remove(currentCell);
 	}
 	
 	// Getter Functions
@@ -183,12 +184,22 @@ public class Board {
 	public BoardCell getCellAt(int i, int j) {
 		return board[i][j];
 	}
+	public Set<BoardCell> getAdjList(int i, int j) {
+		return null;
+	}
+	public Set<BoardCell> getTargets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	//Setter Functions
 	public void setConfigFiles(String boardCSV, String legendTXT) {
 		boardConfigFile = boardCSV;
 		roomConfigFile = legendTXT;
 	}
+	
+	
+	
 	
 	
 }

@@ -59,7 +59,12 @@ public class BoardCell {
 	public DoorDirection getDoorDirection() {
 		return door;
 	}
-
+	public int getRow() {
+		return row;
+	}
+	public int getColumn() {
+		return column;
+	}
 	public char getInitial() {
 		return initial;
 	}
