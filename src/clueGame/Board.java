@@ -134,21 +134,64 @@ public class Board {
 			for(int col = 0; col < numColumns; col++) {
 
 				Set<BoardCell> currentAdjSet = new HashSet<BoardCell>();
+			if(!board[row][col].equals('X')) {
+				if (col > 0 && (board[row][col] == board[row][col - 1])) {
+					currentAdjSet.add(board[row][col - 1]);
+				}
+				if (col < numColumns - 1 && (board[row][col] == board[row][col + 1])) {
+					currentAdjSet.add(board[row][col + 1]);
+				}
+				if (row > 0 && (board[row][col] == board[row - 1][col])) {
+					currentAdjSet.add(board[row - 1][col]);
+				}
+				if (row < numRows - 1 && (board[row][col] == board[row + 1][col])) {
+					currentAdjSet.add(board[row + 1][col]);
+				}
+				if (board[row][col + 1].isDoorway() && board[row][col + 1].getDoorDirection().equals('L')) {
+					currentAdjSet.add(board[row][col + 1]);
+				}
+				if (board[row][col - 1].isDoorway() && board[row][col - 1].getDoorDirection().equals('R')) {
+					currentAdjSet.add(board[row][col - 1]);
+				}
+				if (board[row + 1][col].isDoorway() && board[row + 1][col].getDoorDirection().equals('U')) {
+					currentAdjSet.add(board[row + 1][col]);
+				}
+				if (board[row - 1][col].isDoorway() && board[row - 1][col].getDoorDirection().equals('D')) {
+					currentAdjSet.add(board[row - 1][col]);
+				}
 
-				if ( col > 0 ) {
-					currentAdjSet.add( board[row][col-1] );
-				}
-				if ( col < numColumns - 1 ) {
-					currentAdjSet.add( board[row][col+1] );
-				}
-				if ( row > 0 ) {
-					currentAdjSet.add( board[row-1][col] );
-				}
-				if ( row < numRows - 1 ) {
-					currentAdjSet.add( board[row+1][col] );
+				if (board[row][col].isDoorway()) {
+					if (board[row][col].getDoorDirection().equals('L')) {
+						currentAdjSet.add(board[row][col - 1]);
+					}
+					if (board[row][col].getDoorDirection().equals('R')) {
+						currentAdjSet.add(board[row][col + 1]);
+					}
+					if (board[row][col].getDoorDirection().equals('D')) {
+						currentAdjSet.add(board[row + 1][col]);
+						currentAdjSet.add(board[row - 1][col]);
+					}
+					if (board[row][col].getDoorDirection().equals('U')) {
+						currentAdjSet.add(board[row - 1][col]);
+						currentAdjSet.add(board[row + 1][col]);
+					}
+					if (board[row][col-1].isRoom()) {
+						currentAdjSet.add(board[row][col-1]);
+					}
+					if (board[row][col+1].isRoom()) {
+						currentAdjSet.add(board[row][col-1]);
+					}
+					if (board[row-1][col].isRoom()) {
+						currentAdjSet.add(board[row-1][col]);
+					}
+					if (board[row+1][col].isRoom()) {
+						currentAdjSet.add(board[row+1][col]);
+					}
+
 				}
 
 				adjMatrix.put(board[row][col], currentAdjSet);
+			}
 			}
 		}
 
@@ -185,10 +228,10 @@ public class Board {
 		return board[i][j];
 	}
 	public Set<BoardCell> getAdjList(int i, int j) {
-		return null;
+		calcAdjacencies();
+		return adjMatrix.get(board[i][j]);
 	}
 	public Set<BoardCell> getTargets() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
