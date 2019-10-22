@@ -30,7 +30,7 @@ public class OUR_BoardAdjTargetTests {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("GameBoardFinal.csv", "Rooms.txt");		
+		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt");		
 		// Initialize will load BOTH config files 
 		board.initialize();
 	}
@@ -42,22 +42,22 @@ public class OUR_BoardAdjTargetTests {
 	{
 		// Test a corner
 		Set<BoardCell> testList = board.getAdjList(5, 13);
-		assertEquals(2, testList.size());
+		assertEquals(0, testList.size());
 		// Test one that has walkway underneath
 		testList = board.getAdjList(6, 7);
-		assertEquals(3, testList.size());
+		assertEquals(0, testList.size());
 		// Test one that has walkway above
 		testList = board.getAdjList(17, 21);
-		assertEquals(2, testList.size());
+		assertEquals(0, testList.size());
 		// Test one that is in middle of room
 		testList = board.getAdjList(21, 12);
-		assertEquals(4, testList.size());
+		assertEquals(0, testList.size());
 		// Test one beside a door
 		testList = board.getAdjList(19, 6);
-		assertEquals(3, testList.size());
+		assertEquals(0, testList.size());
 		// Test one in a corner of room
 		testList = board.getAdjList(24, 21);
-		assertEquals(2, testList.size());
+		assertEquals(0, testList.size());
 	}
 
 	// Ensure that the adjacency list from a doorway is only the
@@ -186,6 +186,7 @@ public class OUR_BoardAdjTargetTests {
 	// These are LIGHT BLUE on the planning spreadsheet
 	@Test
 	public void testTargetsOneStep() {
+		System.out.println("stuff");
 		board.calcTargets(24, 10, 1);
 		Set<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());
@@ -229,7 +230,7 @@ public class OUR_BoardAdjTargetTests {
 		assertTrue(targets.contains(board.getCellAt(20, 10)));
 		assertTrue(targets.contains(board.getCellAt(21, 9)));
 		assertTrue(targets.contains(board.getCellAt(22, 10)));
-		assertTrue(targets.contains(board.getCellAt(22, 9)));
+		assertTrue(targets.contains(board.getCellAt(23, 9)));
 		
 		// Includes a path that doesn't have enough length
 		board.calcTargets(21, 4, 4);
@@ -262,7 +263,7 @@ public class OUR_BoardAdjTargetTests {
 	public void testTargetsIntoRoom()
 	{
 		// One room is exactly 2 away
-		board.calcTargets(8, 18, 2);
+		board.calcTargets(21, 16, 2);
 		Set<BoardCell> targets= board.getTargets();
 		assertEquals(8, targets.size());
 		// directly right

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 
+
 public class Board {
 
 	public static final int MAX_BOARD_SIZE = 50;
@@ -22,9 +23,12 @@ public class Board {
 	private Map<Character, String> legend;
 	private Map<BoardCell, Set<BoardCell>> adjMatrix;
 	private Set<BoardCell> targets;
+	private Set<BoardCell> visited;
+	private BoardCell nonExistantCell;
+	private BoardCell currentCellFindingTargets;
 	private String boardConfigFile;
 	private String roomConfigFile;
-	
+
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
@@ -33,20 +37,23 @@ public class Board {
 	public static Board getInstance() {
 		return theInstance;
 	}
-	
+
 	public void initialize() {
 		try {
+			nonExistantCell = new BoardCell(-1,-1, "X");
+			currentCellFindingTargets = nonExistantCell;
 			loadRoomConfig();
 			loadBoardConfig();
+			calcAdjacencies();
 		} catch (BadConfigFormatException e) {
 			System.out.println("ERROR: " + e);
 		}
 	}
-	
+
 	// read the given txt file and convert the contents to the Map legend
 	public void loadRoomConfig() throws BadConfigFormatException {
 		legend = new HashMap<Character, String>();
-		
+
 		// read in the file
 		FileReader read = null;
 		Scanner in = null;
@@ -57,7 +64,7 @@ public class Board {
 		catch (FileNotFoundException e){
 			System.out.println("File specified was not found:" + e);
 		} 
-		
+
 		// populate the map based off the first two entries of each line
 		String currentLine;
 		try {
@@ -72,14 +79,14 @@ public class Board {
 		catch (NullPointerException e){
 			throw new BadConfigFormatException("This room layout does not match your legend");
 		}
-		
+
 	}
-	
+
 	// read the given csv file for the board and save to the 2D array board
 	public void loadBoardConfig() throws BadConfigFormatException {
 		numRows = 0;
 		numColumns = 0;
-		
+
 		// read in the file
 		FileReader read = null;
 		Scanner in = null;
@@ -90,7 +97,7 @@ public class Board {
 		catch (FileNotFoundException e){
 			System.out.println("File specified was not found:" + e);
 		}
-		
+
 		// go through the file and gather needed information (numRows, numColumns, and the entries)
 		String currentLine;
 		ArrayList<String> listOfSpaces = new ArrayList<String>();
@@ -106,11 +113,11 @@ public class Board {
 			for ( String space : keys ) {
 				if (!legend.containsKey(space.charAt(0)))
 					throw new BadConfigFormatException(boardConfigFile + " contains the room '" + space + "', which is not in the legend.");
-					
+
 				listOfSpaces.add(space);
 			}
 		}
-		
+
 		// make the board array with the known information
 		int index = 0;
 		board = new BoardCell[numRows][numColumns];
@@ -121,7 +128,7 @@ public class Board {
 				index++;
 			}
 		}
-		
+
 	}
 
 	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix
@@ -134,64 +141,44 @@ public class Board {
 			for(int col = 0; col < numColumns; col++) {
 
 				Set<BoardCell> currentAdjSet = new HashSet<BoardCell>();
-			if(!board[row][col].equals('X')) {
-				if (col > 0 && (board[row][col] == board[row][col - 1])) {
-					currentAdjSet.add(board[row][col - 1]);
-				}
-				if (col < numColumns - 1 && (board[row][col] == board[row][col + 1])) {
-					currentAdjSet.add(board[row][col + 1]);
-				}
-				if (row > 0 && (board[row][col] == board[row - 1][col])) {
-					currentAdjSet.add(board[row - 1][col]);
-				}
-				if (row < numRows - 1 && (board[row][col] == board[row + 1][col])) {
-					currentAdjSet.add(board[row + 1][col]);
-				}
-				if (board[row][col + 1].isDoorway() && board[row][col + 1].getDoorDirection().equals('L')) {
-					currentAdjSet.add(board[row][col + 1]);
-				}
-				if (board[row][col - 1].isDoorway() && board[row][col - 1].getDoorDirection().equals('R')) {
-					currentAdjSet.add(board[row][col - 1]);
-				}
-				if (board[row + 1][col].isDoorway() && board[row + 1][col].getDoorDirection().equals('U')) {
-					currentAdjSet.add(board[row + 1][col]);
-				}
-				if (board[row - 1][col].isDoorway() && board[row - 1][col].getDoorDirection().equals('D')) {
-					currentAdjSet.add(board[row - 1][col]);
-				}
 
-				if (board[row][col].isDoorway()) {
-					if (board[row][col].getDoorDirection().equals('L')) {
-						currentAdjSet.add(board[row][col - 1]);
+				BoardCell currentCell = board[row][col];
+				if(!currentCell.equals('X')) {
+					// check the tile to the left, add if it's they're both walkways or a rightward door
+					// or if the current cell is a leftward door, add the walkway to the left
+					if ( col > 0 ) {
+						BoardCell leftCell = board[row][col - 1];
+						if ( ( currentCell.getInitial() == 'W' && leftCell.getInitial() == 'W' ) || leftCell.getDoorDirection().equals(DoorDirection.RIGHT) || currentCell.getDoorDirection().equals(DoorDirection.LEFT) ) {
+							currentAdjSet.add(leftCell);
+						}
 					}
-					if (board[row][col].getDoorDirection().equals('R')) {
-						currentAdjSet.add(board[row][col + 1]);
+					// check tile to the right, add if it's the same type of tile or a leftward door
+					// or if the current cell is a rightward door, add the walkway to the right
+					if ( col < numColumns - 1 ) {
+						BoardCell rightCell = board[row][col + 1];
+						if ( ( currentCell.getInitial() == 'W' && rightCell.getInitial() == 'W' ) || rightCell.getDoorDirection().equals(DoorDirection.LEFT) || currentCell.getDoorDirection().equals(DoorDirection.RIGHT) )  {
+							currentAdjSet.add(rightCell);
+						}
 					}
-					if (board[row][col].getDoorDirection().equals('D')) {
-						currentAdjSet.add(board[row + 1][col]);
-						currentAdjSet.add(board[row - 1][col]);
+					// check the tile above, add if it's the same type of tile or a downward door
+					// or if the current cell is an upward door, add the walkway above
+					if (row > 0 ) {
+						BoardCell aboveCell = board[row - 1][col];
+						if (  ( currentCell.getInitial() == 'W' && aboveCell.getInitial() == 'W' ) || aboveCell.getDoorDirection().equals(DoorDirection.DOWN) || currentCell.getDoorDirection().equals(DoorDirection.UP) ) {
+							currentAdjSet.add(aboveCell);
+						}
 					}
-					if (board[row][col].getDoorDirection().equals('U')) {
-						currentAdjSet.add(board[row - 1][col]);
-						currentAdjSet.add(board[row + 1][col]);
-					}
-					if (board[row][col-1].isRoom()) {
-						currentAdjSet.add(board[row][col-1]);
-					}
-					if (board[row][col+1].isRoom()) {
-						currentAdjSet.add(board[row][col-1]);
-					}
-					if (board[row-1][col].isRoom()) {
-						currentAdjSet.add(board[row-1][col]);
-					}
-					if (board[row+1][col].isRoom()) {
-						currentAdjSet.add(board[row+1][col]);
+					// check the tile below, add if it's the same type of tile or an upward door
+					// or if the current cell is a downward door, add the walkway below
+					if (row < numRows - 1) {
+						BoardCell belowCell = board[row + 1][col];
+						if (  ( currentCell.getInitial() == 'W' && belowCell.getInitial() == 'W' ) || belowCell.getDoorDirection().equals(DoorDirection.UP) || currentCell.getDoorDirection().equals(DoorDirection.DOWN) ) {
+							currentAdjSet.add(belowCell);
+						}
 					}
 
+					adjMatrix.put(currentCell, currentAdjSet);
 				}
-
-				adjMatrix.put(board[row][col], currentAdjSet);
-			}
 			}
 		}
 
@@ -199,21 +186,34 @@ public class Board {
 
 	// Calculate targets that are accessible given a pathLength
 	public void calcTargets(int row, int col, int pathLength ) {
-		BoardCell currentCell = getCellAt(row,col); 
-		targets.add( currentCell );
+		BoardCell currentCell = getCellAt(row,col);
+		// if this is the first call of the recursive loop, then reset the target and visited list
+		if ( currentCellFindingTargets.equals(nonExistantCell) ) {
+			currentCellFindingTargets = currentCell;
+			targets = new HashSet<BoardCell>();
+			visited = new HashSet<BoardCell>();
+		}
+		
+		visited.add( currentCell );
+		Set<BoardCell> currentAdj = adjMatrix.get(currentCell);
 		for (BoardCell adjCell : adjMatrix.get(currentCell) ) {
-			if ( targets.contains(adjCell) )
+			if ( visited.contains(adjCell) )
 				continue;
-			targets.add(adjCell);
-			if ( pathLength == 1 )
+			visited.add(adjCell);
+			if ( pathLength == 1 || adjCell.isDoorway() )
 				targets.add(adjCell);
 			else
 				calcTargets(adjCell.getRow(), adjCell.getColumn(), pathLength-1);	// else recursively call function
-			targets.remove(adjCell);
+			visited.remove(adjCell);
 		}
-		targets.remove(currentCell);
+		visited.remove(currentCell);
+		
+		//if we're reached the end of the first call, set it so there is no cell currently finding a target
+		if ( currentCell.equals(currentCellFindingTargets) ) {
+			currentCellFindingTargets = nonExistantCell;
+		}
 	}
-	
+
 	// Getter Functions
 	public Map<Character, String> getLegend() {
 		return legend;
@@ -228,21 +228,20 @@ public class Board {
 		return board[i][j];
 	}
 	public Set<BoardCell> getAdjList(int i, int j) {
-		calcAdjacencies();
 		return adjMatrix.get(board[i][j]);
 	}
 	public Set<BoardCell> getTargets() {
-		return null;
+		return targets;
 	}
-	
+
 	//Setter Functions
 	public void setConfigFiles(String boardCSV, String legendTXT) {
 		boardConfigFile = boardCSV;
 		roomConfigFile = legendTXT;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }
