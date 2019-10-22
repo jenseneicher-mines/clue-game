@@ -4,13 +4,11 @@
 
 package clueGame;
 
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-
 
 
 public class Board {
@@ -38,6 +36,7 @@ public class Board {
 		return theInstance;
 	}
 
+	// Initialize function to set up game
 	public void initialize() {
 		try {
 			nonExistantCell = new BoardCell(-1,-1, "X");
@@ -45,7 +44,8 @@ public class Board {
 			loadRoomConfig();
 			loadBoardConfig();
 			calcAdjacencies();
-		} catch (BadConfigFormatException e) {
+		}
+		catch (BadConfigFormatException e) {
 			System.out.println("ERROR: " + e);
 		}
 	}
@@ -63,7 +63,7 @@ public class Board {
 		}
 		catch (FileNotFoundException e){
 			System.out.println("File specified was not found:" + e);
-		} 
+		}
 
 		// populate the map based off the first two entries of each line
 		String currentLine;
@@ -71,15 +71,15 @@ public class Board {
 			while (in.hasNext()) {
 				currentLine = in.nextLine();
 				String[] words = currentLine.split(", ");
-				if ( !words[2].equals("Card") && !words[2].equals("Other") )
-					throw new BadConfigFormatException( roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
+				if ( !words[2].equals("Card") && !words[2].equals("Other") ) {
+					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
+				}
 				legend.put(words[0].charAt(0), words[1]);
 			}
 		}
 		catch (NullPointerException e){
 			throw new BadConfigFormatException("This room layout does not match your legend");
 		}
-
 	}
 
 	// read the given csv file for the board and save to the 2D array board
@@ -95,7 +95,7 @@ public class Board {
 			in = new Scanner(read);
 		}
 		catch (FileNotFoundException e){
-			System.out.println("File specified was not found:" + e);
+			System.out.println("File '" + boardConfigFile + "' was not found" + "ERROR: " + e);
 		}
 
 		// go through the file and gather needed information (numRows, numColumns, and the entries)
@@ -105,14 +105,16 @@ public class Board {
 			currentLine = in.nextLine();
 			numRows++;
 			String[] keys = currentLine.split(",");
-			if ( numColumns == 0 )
+			if ( numColumns == 0 ) {
 				numColumns = keys.length;
+			}
 			if(keys.length != numColumns){
 				throw new BadConfigFormatException(boardConfigFile + " has inconsistent columns");
 			}
 			for ( String space : keys ) {
-				if (!legend.containsKey(space.charAt(0)))
+				if (!legend.containsKey(space.charAt(0))) {
 					throw new BadConfigFormatException(boardConfigFile + " contains the room '" + space + "', which is not in the legend.");
+				}
 
 				listOfSpaces.add(space);
 			}
@@ -128,7 +130,6 @@ public class Board {
 				index++;
 			}
 		}
-
 	}
 
 	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix
@@ -176,7 +177,6 @@ public class Board {
 							currentAdjSet.add(belowCell);
 						}
 					}
-
 					adjMatrix.put(currentCell, currentAdjSet);
 				}
 			}
@@ -193,21 +193,24 @@ public class Board {
 			targets = new HashSet<BoardCell>();
 			visited = new HashSet<BoardCell>();
 		}
-		
+
 		visited.add( currentCell );
 		Set<BoardCell> currentAdj = adjMatrix.get(currentCell);
 		for (BoardCell adjCell : adjMatrix.get(currentCell) ) {
-			if ( visited.contains(adjCell) )
+			if ( visited.contains(adjCell) ) {
 				continue;
+			}
 			visited.add(adjCell);
-			if ( pathLength == 1 || adjCell.isDoorway() )
+			if ( pathLength == 1 || adjCell.isDoorway() ) {
 				targets.add(adjCell);
-			else
-				calcTargets(adjCell.getRow(), adjCell.getColumn(), pathLength-1);	// else recursively call function
+			}
+			else {
+				calcTargets(adjCell.getRow(), adjCell.getColumn(), pathLength - 1);    // else recursively call function
+			}
 			visited.remove(adjCell);
 		}
 		visited.remove(currentCell);
-		
+
 		//if we're reached the end of the first call, set it so there is no cell currently finding a target
 		if ( currentCell.equals(currentCellFindingTargets) ) {
 			currentCellFindingTargets = nonExistantCell;
@@ -239,9 +242,4 @@ public class Board {
 		boardConfigFile = boardCSV;
 		roomConfigFile = legendTXT;
 	}
-
-
-
-
-
 }

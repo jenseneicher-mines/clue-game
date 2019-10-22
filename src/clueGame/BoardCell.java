@@ -10,13 +10,13 @@ public class BoardCell {
 	private int column;
 	private char initial;
 	private DoorDirection door;
-	
+
 	//constructor
 	public BoardCell(int row, int column, String label ) {
 		this.row = row;
 		this.column = column;
 		this.initial = label.charAt(0);
-		
+
 		if ( label.length() > 1 ) {
 			char direction = label.charAt(1);
 			if ( direction == 'U' )
@@ -27,34 +27,31 @@ public class BoardCell {
 				door = DoorDirection.LEFT;
 			else if ( direction == 'R' )
 				door = DoorDirection.RIGHT;
-			else if (direction == 'N')
+			else
 				door = DoorDirection.NONE;
 		}
-		else {
-			door = DoorDirection.NONE;
-		}
 	}
-	
+
 	// functions
 	public boolean isWalkway() {
 		if ( initial == 'W' )
 			return true;
 		return false;
 	}
-	
+
 	public boolean isRoom() {
 		if ( initial != 'W' && initial != 'X' )
 			return true;
 		return false;
 	}
-	
+
 	public boolean isDoorway() {
 		if ( door != DoorDirection.NONE )
 			return true;
 		return false;
 	}
 
-	
+
 	// getter functions
 	public DoorDirection getDoorDirection() {
 		return door;
@@ -68,5 +65,5 @@ public class BoardCell {
 	public char getInitial() {
 		return initial;
 	}
-	
+
 }

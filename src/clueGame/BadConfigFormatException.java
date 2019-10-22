@@ -13,29 +13,30 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BadConfigFormatException extends Exception {
-	
+
 	private static final String ERROR_LOG_FILE = "ErrorLog.txt";
-	
+
 	public BadConfigFormatException() {
 		this("Unknown Bad Format in Config...");
 	}
 
 	public BadConfigFormatException(String errorMessage) {
-        super(errorMessage);
-        
-        //get the date
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    	Date date = new Date();
-    	
-    	//output the date and error to the error log
-    	PrintWriter out;
-    	try { 
-    		FileWriter fileWriter = new FileWriter(ERROR_LOG_FILE, true);
-    		out = new PrintWriter(fileWriter);
-    		out.println( dateFormat.format(date) + " --- " + errorMessage );
-    		out.close();
-    	}
-    	catch ( IOException e ) { System.out.println(e.getMessage()); }
-    	
-    }
+		super(errorMessage);
+
+		//get the date
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+
+		//output the date and error to the error log
+		PrintWriter out;
+		try {
+			FileWriter fileWriter = new FileWriter(ERROR_LOG_FILE, true);
+			out = new PrintWriter(fileWriter);
+			out.println( dateFormat.format(date) + " --- " + errorMessage );
+			out.close();
+		}
+		catch ( IOException e ) {
+			System.out.println(e.getMessage());
+		}
+	}
 }
