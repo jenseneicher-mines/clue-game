@@ -113,8 +113,9 @@ public class Board {
 				throw new BadConfigFormatException(boardConfigFile + " has inconsistent columns");
 			}
 			for ( String space : keys ) {
-				if (!legend.containsKey(space.charAt(0)))
+				if (!legend.containsKey(space.charAt(0))) {
 					throw new BadConfigFormatException(boardConfigFile + " contains the room '" + space + "', which is not in the legend.");
+				}
 
 				listOfSpaces.add(space);
 			}
