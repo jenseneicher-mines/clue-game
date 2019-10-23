@@ -244,9 +244,4 @@ public class Board {
 		boardConfigFile = boardCSV;
 		roomConfigFile = legendTXT;
 	}
-
-
-
-
-
 }
