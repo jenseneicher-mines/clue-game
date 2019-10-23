@@ -106,8 +106,9 @@ public class Board {
 			currentLine = in.nextLine();
 			numRows++;
 			String[] keys = currentLine.split(",");
-			if ( numColumns == 0 )
+			if ( numColumns == 0 ) {
 				numColumns = keys.length;
+			}
 			if(keys.length != numColumns){
 				throw new BadConfigFormatException(boardConfigFile + " has inconsistent columns");
 			}
