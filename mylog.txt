@@ -1,3 +1,8 @@
+// Git Log
+// Kai Mizuno & Jensen Eicher
+// Most work done via paired programming
+// 10/23/19
+
 * Added needed brackets to boolean methods in Board Cell
 * Fixed
 * Removed unneccisary else if statement from BoardCell class

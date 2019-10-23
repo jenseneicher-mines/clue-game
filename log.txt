@@ -1,3 +1,110 @@
+// Git Log
+// Kai Mizuno & Jensen Eicher
+// Most work done via paired programming
+// 10/23/19
+
+commit ede7dbba29c2a25930752510391d5989f464852a
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:39:29 2019 -0600
+
+    Added git log file
+
+commit f5fe6206770079e8f7449852ec73904d3b78d9f5
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:36:55 2019 -0600
+
+    Added needed brackets to boolean methods in Board Cell
+
+commit 70490368386dc61069c08a94e2f88d6daca6d91e
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:35:35 2019 -0600
+
+    Fixed
+
+commit f28d98f143c5e8755bf40a40e2ea9104d545a75b
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:35:17 2019 -0600
+
+    Removed unneccisary else if statement from BoardCell class
+
+commit 86a01d9ca3343f7abaa52b7137211c9484cf0574
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:33:57 2019 -0600
+
+    Fixed inconsistent bracket formatting in board class
+
+commit c2d029721cce05ebb2587d26c35a450b6719c91b
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:33:27 2019 -0600
+
+    Added brackets to if statement on line 207
+
+commit 463f096fb8bf40b043501e905b707add143c6f8f
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:32:54 2019 -0600
+
+    Added brackets to if statement on line 203 in board class
+
+commit 2f148593ae5fb0ddfefa155d648e319beee4eaed
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:32:02 2019 -0600
+
+    Added brackets to if statement on line 116 in board class
+
+commit 76ea632d25d6b03cdc595eb12634c43d957756f2
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:31:13 2019 -0600
+
+    Added needed brackets to if statement on line 108 in board class to follow style guidlines
+
+commit 863e49cf3138466212985f7bd844a7da3d0115bb
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:30:12 2019 -0600
+
+    Added brackets to if statement on line 74 in board class (Style guidlines)
+
+commit f4240b0c0742277c25b4940eaab1b3ee07a54b45
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:29:12 2019 -0600
+
+    Changed catched error to properly display what file caused error line 64 in Board class
+
+commit f8e20ba518a37ee40ba8fe33616111f7815b3fab
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:25:18 2019 -0600
+
+    Added comments to Initialize function
+
+commit 56d5b79f2e77802147eaea3b6ae4370182e2fcc7
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:24:08 2019 -0600
+
+    Fixed formatting issue on line 39 of BadConfigFormatException
+
+commit 15385fa0d82862b99d417e1061f5c262515036bf
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Wed Oct 23 17:21:02 2019 -0600
+
+    Reverting prior to changes inc many commits
+
+commit 467e8562e47b8659ff6f29cddf8da8f6956b9b5f
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 22 18:24:05 2019 -0600
+
+    Added comments to initialize function
+
+commit c6ac1635c8b5dd5f3af438b6af84bcd7c7b5f617
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Tue Oct 22 18:12:08 2019 -0600
+
+    Fixed a null pointer error issue stemming from BoardCell, where an else statement got deleted so it wasn't properly assigning a door direction to non-doors. All tests are passing (for me at least)
+
+commit 9d523e6a85d4f4bceda547091dcc67e49c0e7a09
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 22 17:53:20 2019 -0600
+
+    Addressed concerns brought up in code review and refactored
+
 commit 335b2971df405e366aa34d622e9ecb5caf3bae5c
 Author: Kai Mizuno <kmizuno@mymail.mine.edu>
 Date:   Mon Oct 21 20:12:37 2019 -0600
