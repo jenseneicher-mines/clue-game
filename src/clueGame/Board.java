@@ -37,13 +37,13 @@ public class Board {
 	public static Board getInstance() {
 		return theInstance;
 	}
-
+	// initialize function to set up game board
 	public void initialize() {
 		try {
 			nonExistantCell = new BoardCell(-1,-1, "X");
 			currentCellFindingTargets = nonExistantCell;
 			loadRoomConfig();
-			loadBoardConfig();
+			loadBoardConfig();			// calls 3 load functions to properly set up game board
 			calcAdjacencies();
 		} catch (BadConfigFormatException e) {
 			System.out.println("ERROR: " + e);
