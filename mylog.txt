@@ -1,0 +1,27 @@
+* Reverting prior to changes inc many commits
+* Added comments to initialize function
+* Fixed a null pointer error issue stemming from BoardCell, where an else statement got deleted so it wasn't properly assigning a door direction to non-doors. All tests are passing (for me at least)
+* Addressed concerns brought up in code review and refactored
+* Refactored calcAdjancenies. Fixed a bug in calcTargets where all instances of the 'visited' set where instead using the 'targets' set, thus making the function not work properly. Added a check in calcTargets that resets the visited and targets sets if it's the first time looping through the recursive function again (finding a new targets list). Added a check in calcTargets to add any cells it finds that are doorways to the targets list. All tests in Board Adj Target Tests is running correctly.
+* Added alot of logic to calcAdjacencies
+* Finished updating Target Tests
+* Fixed weird file and finished part IItests  (still needs to be submitted)
+* Working on Blue Board Part III. Added Instructor and personal BoardAdjTargetTests J-Unit classes. Updated all but the last 3 personal tests to fit our Game Board. Need to finish those tests and turn in Part 3.
+* Created a gitLog.txt with the current commits
+* Added a check in loadBoardConfig() that throws a BadConfigFormatException if the board config contains a room that isn't in the legend. Added a check in loadRoomConfig() that throws a BadConfigFormatException when the config file contains a room type that isn't 'Card' or 'Other'. Added functionality to BadConfigFormatException so it writes errors to an ErrorLog.txt file with the error's date and message.
+* Exception test now pass but only throw one type of exception, trying to think how we can customize the exceptions for each case. Bad columns, bad room, and bad format
+* Filled out calcAdj and calcTargets
+* Finished adding functionality to board methods to make CTest_FileInitTests and our FileInitTests pass
+* Started creating the loadRoomConfig method, Stuck on how to determine if its a letter or number (newline)
+* Added Game board excel file
+* Imported out csv and txt files for board and legend. Created a JUnitTest file FileInitTests that tests the legend is loaded correctly, the correct number of rows and columns have been read, doorways are correct, and cells have the correct initials
+* Created clueGame package with stubs for classes BadConfigFormatException, Board, BoardCell, and DoorDirection.
+* Added functionality to IntBoard functions: getCell, calcAdjacencies, getAdjList, calctargets, getTargets
+* Added comments for author names to each file. Added a testTargets5 case that tests cell 0,0 with 5 moves. Fixed a bug where each testTargest junit test had Set targets instead of Set<BoardCell> targets variable declaration
+* Added the rest of testTargets() -- now we just have to fill out methods
+* Added one additional targets test
+* Created functions for BoardCell and IntBoard that have no functionality yet, and created test cases in IntBoardTests to test the creation of adjacency lists and target lists
+* Moved BoardCell class to experiment package. Created IntBoard class in experiment package. Created IntBoardTests in tests package.
+* Created Java Project for Eclipse. Made experiment and tests packages. Made BoardCell Class
+* Update gitignore with .classpath and .project
+* Initial commit
