@@ -62,7 +62,7 @@ public class Board {
 			in = new Scanner(read);
 		}
 		catch (FileNotFoundException e){
-			System.out.println("File specified was not found:" + e);
+			System.out.println("File '" + boardConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
 		}
 
 		// populate the map based off the first two entries of each line
