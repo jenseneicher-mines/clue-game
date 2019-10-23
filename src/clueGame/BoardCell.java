@@ -42,8 +42,9 @@ public class BoardCell {
 
 	// functions
 	public boolean isWalkway() {
-		if ( initial == 'W' )
+		if ( initial == 'W' ) {
 			return true;
+		}
 		return false;
 	}
 
