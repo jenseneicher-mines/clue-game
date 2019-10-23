@@ -49,14 +49,16 @@ public class BoardCell {
 	}
 
 	public boolean isRoom() {
-		if ( initial != 'W' && initial != 'X' )
+		if ( initial != 'W' && initial != 'X' ) {
 			return true;
+		}
 		return false;
 	}
 
 	public boolean isDoorway() {
-		if ( door != DoorDirection.NONE )
+		if ( door != DoorDirection.NONE ) {
 			return true;
+		}
 		return false;
 	}
 
