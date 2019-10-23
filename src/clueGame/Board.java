@@ -71,8 +71,9 @@ public class Board {
 			while (in.hasNext()) {
 				currentLine = in.nextLine();
 				String[] words = currentLine.split(", ");
-				if ( !words[2].equals("Card") && !words[2].equals("Other") )
-					throw new BadConfigFormatException( roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
+				if ( !words[2].equals("Card") && !words[2].equals("Other") ) {
+					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
+				}
 				legend.put(words[0].charAt(0), words[1]);
 			}
 		}
