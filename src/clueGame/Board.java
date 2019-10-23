@@ -200,8 +200,9 @@ public class Board {
 		visited.add( currentCell );
 		Set<BoardCell> currentAdj = adjMatrix.get(currentCell);
 		for (BoardCell adjCell : adjMatrix.get(currentCell) ) {
-			if ( visited.contains(adjCell) )
+			if ( visited.contains(adjCell) ) {
 				continue;
+			}
 			visited.add(adjCell);
 			if ( pathLength == 1 || adjCell.isDoorway() )
 				targets.add(adjCell);
