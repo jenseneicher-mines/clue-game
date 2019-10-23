@@ -204,8 +204,9 @@ public class Board {
 				continue;
 			}
 			visited.add(adjCell);
-			if ( pathLength == 1 || adjCell.isDoorway() )
+			if ( pathLength == 1 || adjCell.isDoorway() ) {
 				targets.add(adjCell);
+			}
 			else
 				calcTargets(adjCell.getRow(), adjCell.getColumn(), pathLength-1);	// else recursively call function
 			visited.remove(adjCell);
