@@ -35,8 +35,6 @@ public class BadConfigFormatException extends Exception {
 			out.println( dateFormat.format(date) + " --- " + errorMessage );
 			out.close();
 		}
-		catch ( IOException e ) {
-			System.out.println(e.getMessage());
-		}
+		catch ( IOException e ) { System.out.println(e.getMessage()); }
 	}
 }

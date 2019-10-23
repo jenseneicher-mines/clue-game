@@ -31,9 +31,8 @@ public class BoardCell {
 			else if ( direction == 'R' ) {
 				door = DoorDirection.RIGHT;
 			}
-			else {
+			else if( direction == 'N')
 				door = DoorDirection.NONE;
-			}
 		}
 		else {
 			door = DoorDirection.NONE;
