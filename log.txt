@@ -1,7 +1,3 @@
-// Git Log
-// Kai Mizuno & Jensen Eicher
-// Most work done via paired programming
-
 commit 335b2971df405e366aa34d622e9ecb5caf3bae5c
 Author: Kai Mizuno <kmizuno@mymail.mine.edu>
 Date:   Mon Oct 21 20:12:37 2019 -0600

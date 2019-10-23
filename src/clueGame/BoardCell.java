@@ -19,16 +19,24 @@ public class BoardCell {
 
 		if ( label.length() > 1 ) {
 			char direction = label.charAt(1);
-			if ( direction == 'U' )
+			if ( direction == 'U' ) {
 				door = DoorDirection.UP;
-			else if ( direction == 'D' )
+			}
+			else if ( direction == 'D' ) {
 				door = DoorDirection.DOWN;
-			else if ( direction == 'L' )
+			}
+			else if ( direction == 'L' ) {
 				door = DoorDirection.LEFT;
-			else if ( direction == 'R' )
+			}
+			else if ( direction == 'R' ) {
 				door = DoorDirection.RIGHT;
-			else
+			}
+			else {
 				door = DoorDirection.NONE;
+			}
+		}
+		else {
+			door = DoorDirection.NONE;
 		}
 	}
 
