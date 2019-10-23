@@ -1,3 +1,15 @@
+* Added needed brackets to boolean methods in Board Cell
+* Fixed
+* Removed unneccisary else if statement from BoardCell class
+* Fixed inconsistent bracket formatting in board class
+* Added brackets to if statement on line 207
+* Added brackets to if statement on line 203 in board class
+* Added brackets to if statement on line 116 in board class
+* Added needed brackets to if statement on line 108 in board class to follow style guidlines
+* Added brackets to if statement on line 74 in board class (Style guidlines)
+* Changed catched error to properly display what file caused error line 64 in Board class
+* Added comments to Initialize function
+* Fixed formatting issue on line 39 of BadConfigFormatException
 * Reverting prior to changes inc many commits
 * Added comments to initialize function
 * Fixed a null pointer error issue stemming from BoardCell, where an else statement got deleted so it wasn't properly assigning a door direction to non-doors. All tests are passing (for me at least)
