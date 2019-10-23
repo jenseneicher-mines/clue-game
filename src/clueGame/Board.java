@@ -42,10 +42,10 @@ public class Board {
 			nonExistantCell = new BoardCell(-1,-1, "X");
 			currentCellFindingTargets = nonExistantCell;
 			loadRoomConfig();
-			loadBoardConfig();
+			loadBoardConfig();					// call 2 loading functions and calcAdjacenies function to properly set up game board
 			calcAdjacencies();
 		}
-		catch (BadConfigFormatException e) {
+		catch (BadConfigFormatException e) {		// Catch and display if an incorrectly formatted file is used
 			System.out.println("ERROR: " + e);
 		}
 	}
