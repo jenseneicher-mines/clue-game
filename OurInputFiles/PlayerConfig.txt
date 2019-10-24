@@ -1,0 +1,6 @@
+Baldwin, Green, Computer, 14, 17
+Strong, Red, Computer, 15, 16
+Camp, Blue, Computer, 17, 1
+Wakefield, Yellow, Computer, 18, 9
+Dave, Black, Computer, 16, 20
+Kramp, White, Human, 2, 18

@@ -16,6 +16,8 @@ import java.util.*;
 public class Board {
 
 	public static final int MAX_BOARD_SIZE = 50;
+	public static final int MAX_PLAYERS = 6;
+	public static final int MAX_WEAPONS = 6;
 	//instance variables
 	private int numRows;
 	private int numColumns;
@@ -28,6 +30,8 @@ public class Board {
 	private BoardCell currentCellFindingTargets;
 	private String boardConfigFile;
 	private String roomConfigFile;
+	private String playerConfigFile;
+	private String weaponConfigFile;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -39,14 +43,24 @@ public class Board {
 	}
 	// initialize function to set up game board
 	public void initialize() {
+		
+		nonExistantCell = new BoardCell(-1,-1, "X");
+		currentCellFindingTargets = nonExistantCell;
+		loadConfigFiles();
+		calcAdjacencies();
+		
+	}
+	
+	// load function that calls all load config functions
+	public void loadConfigFiles() {
 		try {
-			nonExistantCell = new BoardCell(-1,-1, "X");
-			currentCellFindingTargets = nonExistantCell;
 			loadRoomConfig();
-			loadBoardConfig();			// calls 3 load functions to properly set up game board
-			calcAdjacencies();
-		} catch (BadConfigFormatException e) {
-			System.out.println("ERROR: " + e);
+			loadBoardConfig();
+			loadPlayerConfig();
+			loadWeaponConfig();
+		}
+		catch ( BadConfigFormatException e ) {
+			System.out.println("ERROR: " + e.getMessage());
 		}
 	}
 
@@ -133,6 +147,18 @@ public class Board {
 		}
 
 	}
+	
+	
+	// load the player config into an array containing players
+	public void loadPlayerConfig() {
+		
+	}
+	
+	// load the weapon config into an array containing all the weapons
+	public void loadWeaponConfig() {
+		
+	}
+	
 
 	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix
 	public void calcAdjacencies() {
@@ -238,10 +264,20 @@ public class Board {
 	public Set<BoardCell> getTargets() {
 		return targets;
 	}
+	public Player[] getPlayers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	//Setter Functions
 	public void setConfigFiles(String boardCSV, String legendTXT) {
 		boardConfigFile = boardCSV;
 		roomConfigFile = legendTXT;
 	}
+	public void setFourConfigFiles(String boardCSV, String legendTXT, String peopleTXT, String weaponsTXT) {
+		setConfigFiles(boardCSV,legendTXT);
+		playerConfigFile = peopleTXT;
+		weaponConfigFile = weaponsTXT;
+	}
+	
 }
