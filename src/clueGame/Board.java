@@ -14,20 +14,29 @@ import java.util.*;
 
 
 public class Board {
-
+	//constants
 	public static final int MAX_BOARD_SIZE = 50;
 	public static final int MAX_PLAYERS = 6;
 	public static final int MAX_WEAPONS = 6;
+	public static final int MAX_ROOMS = 9;
+	
 	//instance variables
 	private int numRows;
 	private int numColumns;
 	private BoardCell[][] board;
 	private Map<Character, String> legend;
 	private Map<BoardCell, Set<BoardCell>> adjMatrix;
+	private Player[] playerList;
+	private String[] weaponList;
+	private String[] roomList;
+	
+	// calcTargets variables
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
 	private BoardCell nonExistantCell;
 	private BoardCell currentCellFindingTargets;
+	
+	// config variables
 	private String boardConfigFile;
 	private String roomConfigFile;
 	private String playerConfigFile;
@@ -151,6 +160,44 @@ public class Board {
 	
 	// load the player config into an array containing players
 	public void loadPlayerConfig() {
+		playerList = new Player[MAX_PLAYERS];
+		
+		// read in the file
+		FileReader read = null;
+		Scanner in = null;
+		try {
+			read = new FileReader(roomConfigFile);
+			in = new Scanner(read);
+		}
+		catch (FileNotFoundException e){
+			System.out.println("File '" + boardConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
+		}
+		
+		// loop through the config file making new players
+		String currentLine;
+		int index = 0;
+		while (in.hasNext()) {
+			currentLine = in.nextLine();
+			String[] words = currentLine.split(", ");
+			
+			String name = words[0];
+			String color = words[1];
+			String playerType = words[2];
+			int row = Integer.parseInt(words[3]);
+			int col = Integer.parseInt(words[4]);
+			// make a new player based off the given type
+			Player newPlayer;
+			if ( playerType == "Computer" ) {
+				newPlayer = new ComputerPlayer(name, color, row, col);
+			} else {
+				newPlayer = new HumanPlayer(name,color,row,col);
+			}
+			
+			// add to player list
+			playerList[0] = newPlayer;
+			index++;
+			
+		}
 		
 	}
 	
