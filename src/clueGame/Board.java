@@ -29,6 +29,7 @@ public class Board {
 	private Player[] playerList;
 	private String[] weaponList;
 	private String[] roomList;
+	private String[] deck;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets;
@@ -172,11 +173,11 @@ public class Board {
 		FileReader read = null;
 		Scanner in = null;
 		try {
-			read = new FileReader(roomConfigFile);
+			read = new FileReader(playerConfigFile);
 			in = new Scanner(read);
 		}
 		catch (FileNotFoundException e){
-			System.out.println("File '" + boardConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
+			System.out.println("File '" + playerConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
 		}
 		
 		// loop through the config file making new players
@@ -237,6 +238,19 @@ public class Board {
 		}
 	}
 	
+	public void createDeck(){
+		for( int i = 0; i < weaponList.length; i++ ){
+			deck[i] = weaponList[i];
+		}
+		for( int i = 0; i < roomList.length; i++ ){
+			deck[i+weaponList.length] = weaponList[i];
+		}
+		for( int i = 0; i < playerList.length; i++ ){
+			String player = playerList[i].toString();
+			deck[i+weaponList.length+roomList.length] = String.valueOf(player);
+		}
+		Collections.shuffle(Arrays.asList(deck));
+	}
 
 	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix
 	public void calcAdjacencies() {
