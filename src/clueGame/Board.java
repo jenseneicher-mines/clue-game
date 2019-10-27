@@ -90,6 +90,7 @@ public class Board {
 
 		// populate the map based off the first two entries of each line
 		String currentLine;
+		int index = 0;
 		try {
 			while (in.hasNext()) {
 				currentLine = in.nextLine();
@@ -97,7 +98,12 @@ public class Board {
 				if ( !words[2].equals("Card") && !words[2].equals("Other") ) {
 					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
 				}
+				if ( roomList.length > MAX_ROOMS ) {
+					throw new BadConfigFormatException(roomConfigFile + " contains too many rooms");
+				}
 				legend.put(words[0].charAt(0), words[1]);
+				roomList[index] = words[0];
+				index++;
 			}
 		}
 		catch (NullPointerException e){
@@ -194,7 +200,7 @@ public class Board {
 			}
 			
 			// add to player list
-			playerList[0] = newPlayer;
+			playerList[index] = newPlayer;
 			index++;
 			
 		}
@@ -202,8 +208,33 @@ public class Board {
 	}
 	
 	// load the weapon config into an array containing all the weapons
-	public void loadWeaponConfig() {
-		
+	public void loadWeaponConfig() throws BadConfigFormatException {
+		FileReader read = null;
+		Scanner in = null;
+		try {
+			read = new FileReader(weaponConfigFile);
+			in = new Scanner(read);
+		}
+		catch (FileNotFoundException e){
+			System.out.println("File '" + weaponConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
+		}
+
+		// populate the map based off the first two entries of each line
+		String currentLine;
+		int index = 0;
+		try {
+			while (in.hasNext()) {
+				String words = in.nextLine();
+				if ( words.length() == 0 || weaponList.length > MAX_WEAPONS) {
+					throw new BadConfigFormatException(weaponConfigFile + " has incorrect weapons ");
+				}
+				weaponList[index] = words;
+				index++;
+			}
+		}
+		catch (NullPointerException e){
+			throw new BadConfigFormatException("This weapon file has incorrect format");
+		}
 	}
 	
 
