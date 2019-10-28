@@ -15,7 +15,7 @@ public class Player {
 	public Player(String playerName, String color, int row, int col) {
 		super();
 		this.playerName = playerName;
-		this.color = convertColor(color);
+		this.color = convertColor(color.toUpperCase());
 		this.row = row;
 		this.col = col;
 	}

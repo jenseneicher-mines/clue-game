@@ -23,13 +23,9 @@ public class gameSetupTests {
 		// set the file names to use my config files
 		board.setFourConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");		
 		// Initialize will load BOTH config files 
-		board.initialize();
+		board.initializeFour();
 	}
 	
-	@Before
-	public void setUpTest() {
-		
-	}
 
 	// Test Loading People
 	// Player config should have the format:
@@ -60,12 +56,12 @@ public class gameSetupTests {
 		assertEquals(1, playerThree.getCol());
 		
 		// test 6th player
-		Player playerSix = listOfPlayers[2];
+		Player playerSix = listOfPlayers[5];
 		assertEquals("Kramp", playerSix.getplayerName());
 		assertEquals(Color.WHITE, playerSix.getColor());
 		assertTrue(playerSix instanceof HumanPlayer);
-		assertEquals(2, playerThree.getRow());
-		assertEquals(18, playerThree.getCol());
+		assertEquals(2, playerSix.getRow());
+		assertEquals(18, playerSix.getCol());
 	}
 
 }

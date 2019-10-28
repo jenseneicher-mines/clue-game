@@ -60,16 +60,31 @@ public class Board {
 		calcAdjacencies();
 		
 	}
+	public void initializeFour() {
+		nonExistantCell = new BoardCell(-1,-1, "X");
+		currentCellFindingTargets = nonExistantCell;
+		loadFourConfigs();
+		calcAdjacencies();
+	}
 	
 	// load function that calls all load config functions
 	public void loadConfigFiles() {
 		try {
 			loadRoomConfig();
 			loadBoardConfig();
+		}
+		catch ( BadConfigFormatException e ) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
+	
+	public void loadFourConfigs() {
+		loadConfigFiles();
+		try {
 			loadPlayerConfig();
 			loadWeaponConfig();
 		}
-		catch ( BadConfigFormatException e ) {
+		catch (BadConfigFormatException e ) {
 			System.out.println("ERROR: " + e.getMessage());
 		}
 	}
@@ -101,7 +116,7 @@ public class Board {
 					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
 				}
 				legend.put(words[0].charAt(0), words[1]);
-				roomList[index] = words[0];
+				//roomList[index] = words[0];
 				index++;
 			}
 		}
@@ -192,7 +207,7 @@ public class Board {
 			int col = Integer.parseInt(words[4]);
 			// make a new player based off the given type
 			Player newPlayer;
-			if ( playerType == "Computer" ) {
+			if ( playerType.equals("Computer") ) {
 				newPlayer = new ComputerPlayer(name, color, row, col);
 			} else {
 				newPlayer = new HumanPlayer(name,color,row,col);
@@ -359,8 +374,7 @@ public class Board {
 		return targets;
 	}
 	public Player[] getPlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		return playerList;
 	}
 
 	//Setter Functions
