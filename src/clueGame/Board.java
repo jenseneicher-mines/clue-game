@@ -86,10 +86,10 @@ public class Board {
 			in = new Scanner(read);
 		}
 		catch (FileNotFoundException e){
-			System.out.println("File '" + boardConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
+			System.out.println("File '" + roomConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
 		}
 
-		// populate the map based off the first two entries of each line
+		// populate the map based off the first two entries of each line and create room list
 		String currentLine;
 		int index = 0;
 		try {
@@ -220,7 +220,7 @@ public class Board {
 			System.out.println("File '" + weaponConfigFile + "' was not found" + "ERROR: " + e);   // Catch and display file if incorrect format was used
 		}
 
-		// populate the map based off the first two entries of each line
+		// create a list of weapons from given config file
 		String currentLine;
 		int index = 0;
 		try {
@@ -237,7 +237,8 @@ public class Board {
 			throw new BadConfigFormatException("This weapon file has incorrect format");
 		}
 	}
-	
+
+	// create a deck of cards containing players, rooms, and weapons then shuffle
 	public void createDeck(){
 		for( int i = 0; i < weaponList.length; i++ ){
 			deck[i] = weaponList[i];
