@@ -91,6 +91,7 @@ public class Board {
 
 		// populate the map based off the first two entries of each line and create room list
 		String currentLine;
+		roomList = new String[MAX_ROOMS];
 		int index = 0;
 		try {
 			while (in.hasNext()) {
@@ -98,9 +99,6 @@ public class Board {
 				String[] words = currentLine.split(", ");
 				if ( !words[2].equals("Card") && !words[2].equals("Other") ) {
 					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
-				}
-				if ( roomList.length > MAX_ROOMS ) {
-					throw new BadConfigFormatException(roomConfigFile + " contains too many rooms");
 				}
 				legend.put(words[0].charAt(0), words[1]);
 				roomList[index] = words[0];
@@ -210,6 +208,7 @@ public class Board {
 	
 	// load the weapon config into an array containing all the weapons
 	public void loadWeaponConfig() throws BadConfigFormatException {
+		weaponList = new String[MAX_WEAPONS];
 		FileReader read = null;
 		Scanner in = null;
 		try {
@@ -226,7 +225,7 @@ public class Board {
 		try {
 			while (in.hasNext()) {
 				String words = in.nextLine();
-				if ( words.length() == 0 || weaponList.length > MAX_WEAPONS) {
+				if ( words.length() == 0 ) {
 					throw new BadConfigFormatException(weaponConfigFile + " has incorrect weapons ");
 				}
 				weaponList[index] = words;
@@ -240,6 +239,8 @@ public class Board {
 
 	// create a deck of cards containing players, rooms, and weapons then shuffle
 	public void createDeck(){
+		deck = new String[MAX_ROOMS+MAX_PLAYERS+MAX_WEAPONS];
+
 		for( int i = 0; i < weaponList.length; i++ ){
 			deck[i] = weaponList[i];
 		}
