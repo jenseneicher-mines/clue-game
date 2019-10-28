@@ -66,6 +66,7 @@ public class Board {
 		currentCellFindingTargets = nonExistantCell;
 		loadFourConfigs();
 		calcAdjacencies();
+		createDeck();
 	}
 	
 	// load function that calls all load config functions
@@ -117,7 +118,9 @@ public class Board {
 					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
 				}
 				legend.put(words[0].charAt(0), words[1]);
-				//roomList[index] = words[1];
+				if ( index < MAX_ROOMS ) {
+					roomList[index] = words[1];
+				}
 				index++;
 			}
 		}
@@ -253,21 +256,26 @@ public class Board {
 		}
 	}
 
-	// create a deck of cards containing players, rooms, and weapons then shuffle
+	// create a deck of cards containing players, rooms, and weapons
 	public void createDeck(){
-		deck = new String[MAX_ROOMS+MAX_PLAYERS+MAX_WEAPONS];
-
-		for( int i = 0; i < weaponList.length; i++ ){
-			deck[i] = weaponList[i];
+		deck = new HashSet<Card>();
+		
+		// loop through all the players creating cards of them
+		for ( Player person : playerList ) {
+			Card newPerson = new Card( person.getplayerName(), CardType.PERSON );
+			deck.add(newPerson);
 		}
-		for( int i = 0; i < roomList.length; i++ ){
-			deck[i+weaponList.length] = weaponList[i];
+		// loop through all the weapons creating cards of them
+		for ( String weapon : weaponList ) {
+			Card newWeapon = new Card( weapon, CardType.WEAPON );
+			deck.add(newWeapon);
 		}
-		for( int i = 0; i < playerList.length; i++ ){
-			String player = playerList[i].toString();
-			deck[i+weaponList.length+roomList.length] = String.valueOf(player);
+		// loop through all the rooms creating cards of them
+		for ( String room : roomList ) {
+			Card newRoom = new Card( room, CardType.ROOM );
+			deck.add(newRoom);
 		}
-		Collections.shuffle(Arrays.asList(deck));
+	
 	}
 
 	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix

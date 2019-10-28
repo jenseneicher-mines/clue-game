@@ -101,13 +101,37 @@ public class gameSetupTests {
 		// check 1 room, player, and weapon and check if the deck has each of those
 		// check if Baldwin is in the deck
 		Card testPlayer = new Card( "Baldwin", CardType.PERSON );
-		assertTrue(deck.contains(testPlayer));
+		Boolean foundPlayer = false;
+		for ( Card card : deck ) {
+			if ( card.equals(testPlayer) ) {
+				foundPlayer = true;
+				break;
+			}
+		}
+		assertTrue( foundPlayer );
+		
+		
 		// check if Library is in the deck
 		Card testRoom = new Card("Library", CardType.ROOM);
-		assertTrue(deck.contains(testRoom));
+		Boolean foundRoom = false;
+		for ( Card card : deck ) {
+			if ( card.equals(testRoom) ) {
+				foundRoom = true;
+				break;
+			}
+		}
+		assertTrue( foundRoom );
+		
 		// check if Clicker is in the deck
 		Card testWeapon = new Card("Clicker", CardType.WEAPON);
-		assertTrue(deck.contains(testWeapon));
+		Boolean foundWeapon = false;
+		for ( Card card : deck ) {
+			if ( card.equals(testWeapon) ) {
+				foundWeapon = true;
+				break;
+			}
+		}
+		assertTrue( foundWeapon );
 	}
 	
 
