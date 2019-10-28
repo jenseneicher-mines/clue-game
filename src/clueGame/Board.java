@@ -19,6 +19,7 @@ public class Board {
 	public static final int MAX_PLAYERS = 6;
 	public static final int MAX_WEAPONS = 6;
 	public static final int MAX_ROOMS = 9;
+	public static final int MAX_DECK_SIZE = MAX_PLAYERS + MAX_WEAPONS + MAX_ROOMS;
 	
 	//instance variables
 	private int numRows;
@@ -29,7 +30,7 @@ public class Board {
 	private Player[] playerList;
 	private String[] weaponList;
 	private String[] roomList;
-	private String[] deck;
+	private Set<Card> deck;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets;
@@ -116,7 +117,7 @@ public class Board {
 					throw new BadConfigFormatException(roomConfigFile + " contains a room type '" + words[2] + "'. However, the only vaild types are 'Card' or 'Other'");
 				}
 				legend.put(words[0].charAt(0), words[1]);
-				//roomList[index] = words[0];
+				//roomList[index] = words[1];
 				index++;
 			}
 		}
@@ -386,6 +387,9 @@ public class Board {
 		setConfigFiles(boardCSV,legendTXT);
 		playerConfigFile = peopleTXT;
 		weaponConfigFile = weaponsTXT;
+	}
+	public Set<Card> getDeck() {
+		return deck;
 	}
 	
 }

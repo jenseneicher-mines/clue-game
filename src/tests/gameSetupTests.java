@@ -6,8 +6,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.awt.Color;
+import java.util.Set;
 
 import clueGame.Board;
+import clueGame.Card;
+import clueGame.CardType;
 import clueGame.Player;
 import clueGame.ComputerPlayer;
 import clueGame.HumanPlayer;
@@ -63,5 +66,49 @@ public class gameSetupTests {
 		assertEquals(2, playerSix.getRow());
 		assertEquals(18, playerSix.getCol());
 	}
+	
+	// Test loading deck of cards
+	// Program should have loaded in weapon config, and have lists full of every possible player, weapon and room
+	// we will have a list of cards for the Deck
+	// check for the correct amount of cards in the deck, the correct number of each type of card, and test the deck has some of the expected cards
+	@Test
+	public void testDeckCreation() {
+		Set<Card> deck = board.getDeck();
+		
+		// test the total cards in the deck to make sure it is MAX_DECK_SIZE ( MAX_PLAYERS + MAX_WEAPONS + MAX_ROOMS) (21)
+		assertEquals(deck.size(), Board.MAX_DECK_SIZE);
+		
+		// test to make sure we have the correct number of each type of card
+		int numPeople = 0;
+		int numWeapons = 0;
+		int numRooms = 0;
+		for ( Card card : deck ) {
+			if ( card.getType() == CardType.PERSON ) {
+				numPeople++;
+			}
+			else if ( card.getType() == CardType.WEAPON ) {
+				numWeapons++;
+			}
+			else if ( card.getType() == CardType.ROOM ) {
+				numRooms++;
+			}
+		}
+		assertEquals(numPeople, Board.MAX_PLAYERS);
+		assertEquals(numWeapons, Board.MAX_WEAPONS);
+		assertEquals(numRooms, Board.MAX_ROOMS);
+		
+		
+		// check 1 room, player, and weapon and check if the deck has each of those
+		// check if Baldwin is in the deck
+		Card testPlayer = new Card( "Baldwin", CardType.PERSON );
+		assertTrue(deck.contains(testPlayer));
+		// check if Library is in the deck
+		Card testRoom = new Card("Library", CardType.ROOM);
+		assertTrue(deck.contains(testRoom));
+		// check if Clicker is in the deck
+		Card testWeapon = new Card("Clicker", CardType.WEAPON);
+		assertTrue(deck.contains(testWeapon));
+	}
+	
 
 }
