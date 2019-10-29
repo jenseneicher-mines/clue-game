@@ -67,6 +67,7 @@ public class Board {
 		loadFourConfigs();
 		calcAdjacencies();
 		createDeck();
+		dealCards();
 	}
 	
 	// load function that calls all load config functions
@@ -276,6 +277,21 @@ public class Board {
 			deck.add(newRoom);
 		}
 	
+	}
+	
+	// deal an even amount of cards to everyone with no duplicates
+	public void dealCards() {
+		
+		int playerIndex = 0;
+		// loop until every card is dealt
+		for ( Card currentCard : deck ) {
+			playerList[playerIndex].addNewCardTohand(currentCard);
+			playerIndex++;
+			if ( playerIndex >= MAX_PLAYERS ) {
+				playerIndex = 0;
+			}
+		}
+		
 	}
 
 	// Calculates adjacency list for each grid cell and stores the result in a hashMap adjMatrix

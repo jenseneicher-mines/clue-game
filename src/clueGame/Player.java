@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Player {
@@ -20,6 +21,7 @@ public class Player {
 		this.color = convertColor(color.toUpperCase());
 		this.row = row;
 		this.col = col;
+		this.currentHand = new HashSet<Card>();
 	}
 
 	// Be sure to trim the color, we don't want spaces around the name
@@ -52,6 +54,9 @@ public class Player {
 
 	public Set<Card> getCurrentHand() {
 		return currentHand;
+	}
+	public void addNewCardTohand(Card newCard) {
+		currentHand.add(newCard);
 	}
 
 }
