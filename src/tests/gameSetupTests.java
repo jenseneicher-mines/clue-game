@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import clueGame.Board;
@@ -133,6 +135,77 @@ public class gameSetupTests {
 		}
 		assertTrue( foundWeapon );
 	}
+	
+	
+	// Test Dealing cards
+	// loop through every player, checking each of their cards and populating variables for the following tests
+	// Check to make sure each player has roughly the same number of cards
+	// Make sure all cards have been delt (counting all player's cards adds up to the deck size)
+	// there is no more than 1 instance of each card
+	@Test
+	public void testDealing() {
+		Player[] playerList = board.getPlayers();
+		
+		int totalCards = 0;
+		Map<Card, Integer> instancesOfEachCard = new HashMap<Card, Integer>();  // associating each card with how many instances of the card we find
+		
+		// variables for checking player card counts being close to each other
+		int playersChecked = 0;
+		int firstPlayerCardCount = -1; // every player should be with
+		int secondPlayerCardCount = -1;
+		Boolean playersHaveSameNumberOfCards = true;
+		
+		// loop through every player, storing information
+		for ( Player currentPlayer : playerList ) {
+			int currentPlayerCardCount = currentPlayer.getCurrentHand().size();
+			
+			// if it's the first player being checked, store their card count
+			if ( playersChecked == 0 ) {
+				firstPlayerCardCount = currentPlayerCardCount;
+			}
+			// if we find a second card count, store it
+			else if ( secondPlayerCardCount == -1 && currentPlayerCardCount != firstPlayerCardCount ) {
+				secondPlayerCardCount = currentPlayerCardCount;
+			}
+			// check to make sure every difference between our card counts is only 1 or 0
+			else if ( secondPlayerCardCount != -1 ) {
+				if ( Math.abs( firstPlayerCardCount - secondPlayerCardCount ) > 1 || Math.abs( currentPlayerCardCount - secondPlayerCardCount ) > 1 || Math.abs( currentPlayerCardCount - firstPlayerCardCount ) > 1 ) {
+					playersHaveSameNumberOfCards = false;
+				}
+			}
+			
+			// loop through each card in the player's deck and populate the map for card instances (for card count check)
+			for ( Card currentCard : currentPlayer.getCurrentHand() ) {
+				if ( instancesOfEachCard.containsKey(currentCard) ) {
+					int count = instancesOfEachCard.get(currentCard);
+					instancesOfEachCard.put(currentCard, count++ );
+				}
+				else {
+					instancesOfEachCard.put(currentCard, 1 );
+				}
+			}
+			
+			// increment total cards and players checked
+			totalCards += currentPlayerCardCount;
+			playersChecked++;
+		}
+		
+		// check our boolean for if the players have roughly the same number of cards
+		assertTrue(playersHaveSameNumberOfCards);
+		
+		// make sure totalCards calculated from the previous for loop equals total cards in deck
+		assertEquals(totalCards, Board.MAX_DECK_SIZE);
+		
+		// loop through our map of card instances, and if any have a value > 1, set boolean to false
+		Boolean oneOfEachCard = true;
+		for ( Map.Entry<Card, Integer> entry : instancesOfEachCard.entrySet() ) {
+			if ( entry.getValue() > 1 ) {
+				oneOfEachCard = false;
+			}
+		}
+		assertTrue(oneOfEachCard);
+	}
+	
 	
 
 }

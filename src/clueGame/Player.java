@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
+import java.util.Set;
 
 public class Player {
 
@@ -9,6 +10,7 @@ public class Player {
 	private Color color;
 	private int row;
 	private int col;
+	private Set<Card> currentHand;
 
 
 	// constructor
@@ -46,6 +48,10 @@ public class Player {
 	}
 	public int getCol() {
 		return col;
+	}
+
+	public Set<Card> getCurrentHand() {
+		return currentHand;
 	}
 
 }
