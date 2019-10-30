@@ -1,3 +1,39 @@
+commit 0512154a9b23a2140c48c194365f0cfc50ed9e4f
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 29 16:55:15 2019 -0600
+
+    Started on skeleton for GUI
+
+commit baa4d8c6ba955e9fdba9a0b18792026ad4e70af6
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 29 10:38:25 2019 -0600
+
+    Added a dealcards function that loops through the deck and deals to every player, making the testDealing Junit tests pass
+
+commit 5f09825e079d320cc189b2b0e42b91a88772d0ef
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Oct 29 10:22:03 2019 -0600
+
+    Created testDealing JUnit with 3 failing tests to check that the deck is fully dealt, that each player has roughly the same number of cards, and there is no duplicate cards
+
+commit 73b820d0abc1621855f1c4cc639d96fa22eb9f6d
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Mon Oct 28 17:54:40 2019 -0600
+
+    Finished adding functionality and fixing bugs so that testDeckCreation passes.
+
+commit 05af3ede9eb9e9817010b2261e951e3611c7fc8f
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Mon Oct 28 17:19:45 2019 -0600
+
+    Created the tests for deck creations testing the deck size, amount of each card type in the deck, and that th expected cards are in the deck
+
+commit 4423cb616596f374bfcf630a056251b9fafb2425
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Mon Oct 28 16:49:10 2019 -0600
+
+    Fixed all bugs so that testPeople works
+
 commit f5a874fdffbe1522bc32f90f1666740c012312c3
 Author: Jensen Eicher <jeicher@mymail.mines.edu>
 Date:   Mon Oct 28 15:29:49 2019 -0600

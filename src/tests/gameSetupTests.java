@@ -101,38 +101,30 @@ public class gameSetupTests {
 		
 		
 		// check 1 room, player, and weapon and check if the deck has each of those
-		// check if Baldwin is in the deck
+		// loop through the deck, and update the boolean if one of the 3 cards is found
+		// in the end all 3 should be found
 		Card testPlayer = new Card( "Baldwin", CardType.PERSON );
+		Card testRoom = new Card("Library", CardType.ROOM);
+		Card testWeapon = new Card("Clicker", CardType.WEAPON);
 		Boolean foundPlayer = false;
+		Boolean foundRoom = false;
+		Boolean foundWeapon = false;
 		for ( Card card : deck ) {
 			if ( card.equals(testPlayer) ) {
 				foundPlayer = true;
-				break;
 			}
-		}
-		assertTrue( foundPlayer );
-		
-		
-		// check if Library is in the deck
-		Card testRoom = new Card("Library", CardType.ROOM);
-		Boolean foundRoom = false;
-		for ( Card card : deck ) {
-			if ( card.equals(testRoom) ) {
+			else if ( card.equals(testRoom) ) {
 				foundRoom = true;
-				break;
 			}
-		}
-		assertTrue( foundRoom );
-		
-		// check if Clicker is in the deck
-		Card testWeapon = new Card("Clicker", CardType.WEAPON);
-		Boolean foundWeapon = false;
-		for ( Card card : deck ) {
-			if ( card.equals(testWeapon) ) {
+			else if ( card.equals(testWeapon) ) {
 				foundWeapon = true;
-				break;
 			}
 		}
+		// check if Baldwin (Player) is in the deck
+		assertTrue( foundPlayer );
+		// check if Library (room) is in the deck
+		assertTrue( foundRoom );
+		// check if Clicker (weapon) is in the deck
 		assertTrue( foundWeapon );
 	}
 	
@@ -150,17 +142,18 @@ public class gameSetupTests {
 		Map<Card, Integer> instancesOfEachCard = new HashMap<Card, Integer>();  // associating each card with how many instances of the card we find
 		
 		// variables for checking player card counts being close to each other
-		int playersChecked = 0;
+		// players should have roughly the same amount of cards, so we need to check to make sure there are at most 2 different amounts of cards in players hands and that they are within 1 of each other
+		// Ex: If there are 21 cards and 6 players, the amount of cards any player can have is either 3 or 4. There are only 2 options and they have a difference of 1
 		int firstPlayerCardCount = -1; // every player should be with
 		int secondPlayerCardCount = -1;
 		Boolean playersHaveSameNumberOfCards = true;
 		
-		// loop through every player, storing information
+		// loop through every player, storing information used for all 3 tests
 		for ( Player currentPlayer : playerList ) {
 			int currentPlayerCardCount = currentPlayer.getCurrentHand().size();
 			
 			// if it's the first player being checked, store their card count
-			if ( playersChecked == 0 ) {
+			if ( firstPlayerCardCount == -1 ) {
 				firstPlayerCardCount = currentPlayerCardCount;
 			}
 			// if we find a second card count, store it
@@ -187,7 +180,6 @@ public class gameSetupTests {
 			
 			// increment total cards and players checked
 			totalCards += currentPlayerCardCount;
-			playersChecked++;
 		}
 		
 		// check our boolean for if the players have roughly the same number of cards
