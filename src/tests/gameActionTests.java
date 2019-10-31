@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.Before;
@@ -137,6 +138,25 @@ public class gameActionTests {
 	}
 	
 	// Test Checking an Accusation
-	//
+	// Test that expected accusations are correct, have wrong person, weapon, and room
+	@Test
+	public void testAccusation() {
+		// set an expected solution
+		String correctPerson = "Baldwin";
+		String correctWeapon = "Clicker";
+		String correctRoom = "Kitchen";
+		board.setSolution( correctPerson, correctWeapon, correctRoom );
+		ArrayList<String> correctSolution = board.getSolution();
+		
+		// test an accusation that is correct
+		assertTrue(board.checkAccusation(correctPerson, correctWeapon, correctRoom));
+		// test an accusation with a wrong person
+		assertFalse(board.checkAccusation("Strong", correctWeapon, correctRoom));
+		// test an accusation with a wrong weapon
+		assertFalse(board.checkAccusation(correctPerson, "Keyboard", correctRoom));
+		// test an accusation with a wrong room
+		assertFalse(board.checkAccusation(correctPerson, correctWeapon, "Hall"));
+		
+	}
 
 }

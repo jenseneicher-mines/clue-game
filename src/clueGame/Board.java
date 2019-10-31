@@ -415,5 +415,17 @@ public class Board {
 	public Set<Card> getDeck() {
 		return deck;
 	}
+	public ArrayList<String> getSolution() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public boolean checkAccusation(String string, String string2, String string3) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public void setSolution(String string, String string2, String string3) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
