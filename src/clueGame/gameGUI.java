@@ -10,54 +10,43 @@ public class gameGUI extends JPanel {
     private JTextField name;
 
     public gameGUI(){
-        setLayout(new GridLayout(2,0));
-        JPanel panel1 = mainPanel();
+        setLayout(new GridLayout(2,1));
+        JPanel panel1 = middlePanel();
         add(panel1);
-        JPanel panel2 = topPanel();
-        add(panel2);
         JPanel panel3 = bottomPanel();
         add(panel3);
-        JPanel panel4 = createButtonPanel();
-        add(panel4);
     }
 
 
-    private JPanel mainPanel() {
+    private JPanel middlePanel() {
         JPanel panel = new JPanel();
         // Use a grid layout, 1 row, 2 elements (label, text)
-        panel.setLayout(new GridLayout(2,1));
-        panel.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
-        panel.setMaximumSize(new Dimension(20,400));
-        return panel;
-    }
-
-    private JPanel topPanel() {
-        JPanel panel = new JPanel();
-        // Use a grid layout, 1 row, 2 elements (label, text)
-        panel.setLayout(new GridLayout(1,2));
-        JLabel nameLabel = new JLabel("Name");
+        panel.setLayout(new GridLayout(1,3));
+        JLabel nameLabel = new JLabel("Whose Turn?");
         panel.add(nameLabel);
-        panel.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
+
+        // no layout specified, so this is flow
+        JButton nextPlayer = new JButton("Next Player");
+        JButton makeAccusation = new JButton("Make an Accusation");
+        panel.setBorder(new TitledBorder (new EtchedBorder(), ""));
+        panel.add(nextPlayer);
+        panel.add(makeAccusation);
         return panel;
     }
 
     private JPanel bottomPanel() {
         JPanel panel = new JPanel();
         // Use a grid layout, 1 row, 2 elements (label, text)
-        panel.setLayout(new GridLayout(1,2));
-        JLabel nameLabel = new JLabel("Name");
+        panel.setLayout(new GridLayout(1,3));
+        JLabel nameLabel = new JLabel("Die Roll: ");
         panel.add(nameLabel);
-        panel.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
-        return panel;
-    }
-
-    private JPanel createButtonPanel() {
+        panel.setBorder(new TitledBorder (new EtchedBorder(), ""));
         // no layout specified, so this is flow
-        JButton nextPlayer = new JButton("Next Player");
-        JButton makeAccusation = new JButton("Make an Accusation");
-        JPanel panel = new JPanel();
-        panel.add(nextPlayer);
-        panel.add(makeAccusation);
+        JTextField guess = new JTextField("Guess: ");
+        panel.add(guess);
+        JLabel guessResponse = new JLabel("Guess Response: ");
+        panel.add(guessResponse);
+        panel.setMaximumSize( new Dimension(10,15));
         return panel;
     }
 
@@ -66,7 +55,7 @@ public class gameGUI extends JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Clue");
-        frame.setSize(800, 650);
+        frame.setSize(700, 200);
         // Create the JPanel and add it to the JFrame
         gameGUI gui = new gameGUI();
         frame.add(gui, BorderLayout.CENTER);
