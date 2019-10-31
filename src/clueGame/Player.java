@@ -12,7 +12,7 @@ public class Player {
 	private int row;
 	private int col;
 	private Set<Card> currentHand;
-
+	private String lastVisitedRoom;
 
 	// constructor
 	public Player(String playerName, String color, int row, int col) {
@@ -55,8 +55,16 @@ public class Player {
 	public Set<Card> getCurrentHand() {
 		return currentHand;
 	}
+	// setter functions
 	public void addNewCardTohand(Card newCard) {
 		currentHand.add(newCard);
+	}
+	public void setLocation(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+	public void setLastVisitedRoom( String room ) {
+		this.lastVisitedRoom = room;;
 	}
 
 }

@@ -1,8 +1,12 @@
-commit 0512154a9b23a2140c48c194365f0cfc50ed9e4f
-Author: Jensen Eicher <jeicher@mymail.mines.edu>
-Date:   Tue Oct 29 16:55:15 2019 -0600
+// Clue Players Part 1
+// Kai Mizuno & Jensen Eicher
+// Most work done via paired programming
 
-    Started on skeleton for GUI
+commit 4dfb7a5cb1a688e2d3e8ecfc9a8cd01df9302533
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Tue Oct 29 18:30:29 2019 -0600
+
+    Refactored gameSetupTests so it uses a few less for loops in the deck creation test to increase time efficiency
 
 commit baa4d8c6ba955e9fdba9a0b18792026ad4e70af6
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
@@ -20,19 +24,19 @@ commit 73b820d0abc1621855f1c4cc639d96fa22eb9f6d
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
 Date:   Mon Oct 28 17:54:40 2019 -0600
 
-    Finished adding functionality and fixing bugs so that testDeckCreation passes.
+    Finished adding functionality and fixing bugs so that testDeckCreation passes. Program creates string lists for weapons and rooms and uses those along with the already created player list in createDeck function to create new cards and put those in a Set called deck
 
 commit 05af3ede9eb9e9817010b2261e951e3611c7fc8f
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
 Date:   Mon Oct 28 17:19:45 2019 -0600
 
-    Created the tests for deck creations testing the deck size, amount of each card type in the deck, and that th expected cards are in the deck
+    Created the J-Unit tests for deck creations testing the deck size, amount of each card type in the deck, and that the expected cards are in the deck
 
 commit 4423cb616596f374bfcf630a056251b9fafb2425
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
 Date:   Mon Oct 28 16:49:10 2019 -0600
 
-    Fixed all bugs so that testPeople works
+    Fixed all bugs so that testPeople works. Main issue was just that we were still returning null on our getPlayerList function.
 
 commit f5a874fdffbe1522bc32f90f1666740c012312c3
 Author: Jensen Eicher <jeicher@mymail.mines.edu>
@@ -45,18 +49,6 @@ Author: Jensen Eicher <jeicher@mymail.mines.edu>
 Date:   Mon Oct 28 15:16:39 2019 -0600
 
     Added comments and fixed some exception handling issues
-
-commit 9bab9d36e53c06c7585a196486ede8ae46fb08b4
-Author: Jensen Eicher <jeicher@mymail.mines.edu>
-Date:   Sun Oct 27 17:14:21 2019 -0600
-
-    Added createDeck method that adds every weapon, room, and player to an array (deck) and shuffles it
-
-commit fb7c7010dbd40b1a6c736e213260cb437501e589
-Author: Jensen Eicher <jeicher@mymail.mines.edu>
-Date:   Sun Oct 27 16:56:52 2019 -0600
-
-    Finished logic to load weaponList and roomList into their specified arrays
 
 commit db5f4275fbcd22b054817f7ab552de6a13014775
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
