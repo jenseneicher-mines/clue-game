@@ -3,6 +3,9 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
@@ -89,6 +92,7 @@ public class gameActionTests {
 		startLocation = board.getCellAt(currentRow, currentCol);
 		BoardCell doorCell = board.getCellAt(currentRow + 1, currentCol );
 		for ( int i = 0; i < 200; i++ ) {
+			computerPlayer.setLastVisitedRoom(' ');
 			BoardCell newLocation = computerPlayer.getTarget(targets);
 			// ensure no other space is chosen
 			if ( newLocation != doorCell ) {
@@ -129,7 +133,7 @@ public class gameActionTests {
 			}
 		}
 		// ensure each option is randomly chosen some number of times
-		countGoal = 35;
+		countGoal = 20;
 		assert(countMoveDoor > countGoal);
 		assert(countMoveUp > countGoal);
 		assert(countMoveRight > countGoal);
@@ -156,6 +160,63 @@ public class gameActionTests {
 		// test an accusation with a wrong room
 		assertFalse(board.checkAccusation(correctPerson, correctWeapon, "Hall"));
 		
+	}
+	
+	// Test having the computer create a suggestion
+	@Test
+	public void testComputerSuggestion() {
+		ComputerPlayer computerPlayer = (ComputerPlayer) board.getPlayers()[0];
+		computerPlayer.setLastVisitedRoom('K');
+		
+		// TEST: Make sure expected suggestions are made with multiple people/weapons still not seen
+		// loop with initial sets of unknown cards (everything but the player's hand)
+		// make sure the current room is always picked, and all the other unknowns are picked evenly
+		Map<String, Integer> suggestionsFound = new HashMap<String,Integer>();
+		for ( int i = 0; i < 200; i++ ) {
+			String[] suggestionList = computerPlayer.makeSuggestion();
+			String personSuggested = suggestionList[0];
+			String weaponSuggested = suggestionList[1];
+			if ( suggestionsFound.containsKey(personSuggested) ) {
+				suggestionsFound.put(personSuggested, suggestionsFound.get(personSuggested)+1);
+			}
+			else {
+				suggestionsFound.put(personSuggested, 1);
+			}
+			if ( suggestionsFound.containsKey(weaponSuggested) ) {
+				suggestionsFound.put(weaponSuggested, suggestionsFound.get(weaponSuggested)+1);
+			}
+			else {
+				suggestionsFound.put(weaponSuggested, 1);
+			}
+			
+			// make sure the room is the one the player is in
+			char roomInitial = computerPlayer.getLastVisitedRoom();
+			if ( roomInitial != suggestionList[2].charAt(0) ) {
+				fail("The room the player is ('" + roomInitial +"') was not chosen for the suggestion. " + suggestionList[2] + " was incorrectly chosen.");
+			}
+		}
+		// check each person and weapon not seen before to make sure they have all been randomly chosen evenly
+		for ( Map.Entry<String, Integer> suggestion : suggestionsFound.entrySet() ) {
+			assertTrue( suggestion.getValue() > 15 );
+		}
+		
+		// TEST: Make sure when there is only 1 person and 1 weapon not seen, it is selected
+		// set the unseen sets in Player to be sets with only 1 value in them
+		Set<String> unseenPerson = new HashSet<String>();
+		unseenPerson.add("Baldwin");
+		Set<String> unseenWeapon = new HashSet<String>();
+		unseenWeapon.add("Clicker");
+		computerPlayer.setUnseenPlayersAndWeapons(unseenPerson, unseenWeapon);
+		// make sure every time a suggestion goes, the expected person and weapon is selected
+		for ( int i = 0; i < 200; i++ ) {
+			String[] suggestionList = computerPlayer.makeSuggestion();
+			if ( suggestionList[0] != "Baldwin" ) {
+				fail("Even though there is only 1 unseen person, that person was not selected for the suggestion.");
+			}
+			if ( suggestionList[1] != "Clicker" ) {
+				fail("Even though there is only 1 unseen person, that person was not selected for the suggestion.");
+			}
+		}
 	}
 
 }

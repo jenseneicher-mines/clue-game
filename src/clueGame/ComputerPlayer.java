@@ -10,6 +10,11 @@ public class ComputerPlayer extends Player {
 		super(playerName, color, row, col);
 	}
 	
+	public String[] makeSuggestion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	// getTarget
 	// if no rooms in target list, select random target location
 	// if there's a room that was not just visited, go to that room
@@ -29,14 +34,19 @@ public class ComputerPlayer extends Player {
 		
 		// if we found a new room, return it as the new target without finding a new random location
 		if ( foundNewRoom ) {
+			lastVisitedRoom = newLocation.getInitial();
 			return newLocation;
 		}
 		// otherwise we want to pick a random new location from the targets
 		else {
 			Random rand = new Random();
 			int randomIndex = rand.nextInt(targetListForRandomSelection.size());
-			return targetListForRandomSelection.get(randomIndex);
+			newLocation = targetListForRandomSelection.get(randomIndex);
+			lastVisitedRoom = newLocation.getInitial();
+			return newLocation;
 		}
 	}
+
+	
 
 }
