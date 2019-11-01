@@ -68,6 +68,11 @@ public class ComputerPlayer extends Player {
 		}
 	}
 
+	public Card disproveSuggestion( String[] suggestionList ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 
 }

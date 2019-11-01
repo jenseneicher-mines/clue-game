@@ -15,12 +15,15 @@ import org.junit.Test;
 
 import clueGame.Board;
 import clueGame.BoardCell;
+import clueGame.Card;
+import clueGame.CardType;
 import clueGame.ComputerPlayer;
 import clueGame.Player;
 
 public class gameActionTests {
 
 	private static Board board;
+	private ComputerPlayer computerPlayer;
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		// Board is singleton, get the only instance
@@ -30,13 +33,17 @@ public class gameActionTests {
 		// Initialize will load BOTH config files 
 		board.initializeFour();
 	}
+	
+	@Before
+	public void setUp() {
+		computerPlayer = (ComputerPlayer) board.getPlayers()[0];
+	}
 
 	// Test the logic behind what space computer players choose to move to
 	// Make sure if no rooms can be moved to, or can move to a room they just visited, the computer chooses a random space
 	// Test if the computer can move to a room they did not just visit, they move to that room
 	@Test
 	public void testComputerTargets() {
-		ComputerPlayer computerPlayer = (ComputerPlayer) board.getPlayers()[0];
 		int currentRow = computerPlayer.getRow();
 		int currentCol = computerPlayer.getCol();
 		
@@ -166,7 +173,6 @@ public class gameActionTests {
 	// Test having the computer create a suggestion
 	@Test
 	public void testComputerSuggestion() {
-		ComputerPlayer computerPlayer = (ComputerPlayer) board.getPlayers()[0];
 		computerPlayer.setLastVisitedRoom('K');
 		
 		// TEST: Make sure expected suggestions are made with multiple people/weapons still not seen
@@ -218,6 +224,51 @@ public class gameActionTests {
 				fail("Even though there is only 1 unseen person, that person was not selected for the suggestion.");
 			}
 		}
+	}
+	
+	
+	// test having players disprove a suggestion
+	// depending on how many cards the player has of the suggested set, the player will return the appropriate card
+	@Test
+	public void testDisprove() {
+		Set<Card> knownHand = new HashSet<Card>();
+		Card personCard = new Card( "Baldwin", CardType.PERSON);
+		Card weaponCard = new Card( "Clicker", CardType.WEAPON );
+		Card roomCard = new Card( "Kitchen", CardType.ROOM );
+		knownHand.add(  personCard );
+		knownHand.add( weaponCard );
+		knownHand.add( roomCard );
+		
+		// test that the card returned when there is only 1 matching card is the matching card
+		String[] oneMatchingCard = { "Baldin", "Red Pen", "Den" };
+		Card disprovedCard = computerPlayer.disproveSuggestion( oneMatchingCard );
+		assertTrue( personCard.equals(disprovedCard) );
+		
+		// test that when there are multiple matching cards, a random one of the matching cards is returned
+		String[] multipleMatchingCards = { "Baldin", "Clicker", "Den" };
+		int personCardCount = 0;
+		int weaponCardCount = 0;
+		int otherCardCount = 0; // this one should remain 0 since the 3rd card being passed is not is the suggested set
+		for ( int i = 0; i < 200; i++ ) {
+			disprovedCard = computerPlayer.disproveSuggestion( oneMatchingCard );
+			if ( personCard.equals(disprovedCard) ) {
+				personCardCount++;
+			}
+			else if ( weaponCard.equals(disprovedCard) ) {
+				weaponCardCount++;
+			}
+			else {
+				otherCardCount++;
+			}
+		}
+		assertTrue( personCardCount > 50 );
+		assertTrue( weaponCardCount > 50 );
+		assertTrue( otherCardCount == 0 );
+		
+		// test that when there are no matching cards, null is returned
+		String[] noMatchingCards = { "Strong", "Library", "Den" };
+		disprovedCard = computerPlayer.disproveSuggestion( oneMatchingCard );
+		assertEquals( disprovedCard, null );
 	}
 
 }

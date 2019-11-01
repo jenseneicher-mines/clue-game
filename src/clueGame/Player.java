@@ -90,5 +90,8 @@ public class Player {
 		this.peopleNotSeen = player;
 		this.weaponsNotSeen = weapon;
 	}
+	public void setCurrentHand(Set<Card> newHand) {
+		this.currentHand = newHand;
+	}
 
 }
