@@ -20,6 +20,7 @@ public class Board {
 	public static final int MAX_WEAPONS = 6;
 	public static final int MAX_ROOMS = 9;
 	public static final int MAX_DECK_SIZE = MAX_PLAYERS + MAX_WEAPONS + MAX_ROOMS;
+	public static final int CARDS_IN_SOLUTION_HAND = 3;
 	
 	//instance variables
 	private int numRows;
@@ -31,6 +32,7 @@ public class Board {
 	private String[] weaponList;
 	private String[] roomList;
 	private Set<Card> deck;
+	private String[] solutionHand;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets;
@@ -281,14 +283,33 @@ public class Board {
 	
 	// deal an even amount of cards to everyone with no duplicates
 	public void dealCards() {
-		
+		solutionHand = new String[CARDS_IN_SOLUTION_HAND];
 		int playerIndex = 0;
+		Boolean dealtSolutionPerson = false;
+		Boolean dealtSolutionWeapon = false;
+		Boolean dealtSolutionRoom = false;
 		// loop until every card is dealt
+		// the first player, weapon, and room should be added to the solution hand
 		for ( Card currentCard : deck ) {
-			playerList[playerIndex].addNewCardTohand(currentCard);
-			playerIndex++;
-			if ( playerIndex >= MAX_PLAYERS ) {
-				playerIndex = 0;
+			
+			if ( !dealtSolutionPerson && currentCard.getType() == CardType.PERSON ) {
+				solutionHand[0] = currentCard.getCardName();
+				dealtSolutionPerson = true;
+			} 
+			else if ( !dealtSolutionWeapon && currentCard.getType() == CardType.WEAPON ) {
+				solutionHand[1] = currentCard.getCardName();
+				dealtSolutionWeapon = true;
+			}
+			else if ( !dealtSolutionRoom && currentCard.getType() == CardType.ROOM ) {
+				solutionHand[2] = currentCard.getCardName();
+				dealtSolutionRoom = true;
+			}
+			else {
+				playerList[playerIndex].addNewCardTohand(currentCard);
+				playerIndex++;
+				if ( playerIndex >= MAX_PLAYERS ) {
+					playerIndex = 0;
+				}
 			}
 		}
 		
@@ -378,6 +399,14 @@ public class Board {
 			currentCellFindingTargets = nonExistantCell;
 		}
 	}
+	
+	// check the player's accusation against the correct solution set and return true if it's a correct guess and false if not
+	public boolean checkAccusation(String person, String weapon, String room) {
+		if ( solutionHand[0] == person && solutionHand[1] == weapon && solutionHand[2] == room ) {
+			return true;
+		}
+		return false;
+	}
 
 	// Getter Functions
 	public Map<Character, String> getLegend() {
@@ -401,6 +430,12 @@ public class Board {
 	public Player[] getPlayers() {
 		return playerList;
 	}
+	public Set<Card> getDeck() {
+		return deck;
+	}
+	public String[] getSolution() {
+		return this.solutionHand;
+	}
 
 	//Setter Functions
 	public void setConfigFiles(String boardCSV, String legendTXT) {
@@ -412,20 +447,14 @@ public class Board {
 		playerConfigFile = peopleTXT;
 		weaponConfigFile = weaponsTXT;
 	}
-	public Set<Card> getDeck() {
-		return deck;
-	}
-	public ArrayList<String> getSolution() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public boolean checkAccusation(String string, String string2, String string3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public void setSolution(String string, String string2, String string3) {
-		// TODO Auto-generated method stub
-		
+	
+	
+	
+	// Functions currently only being using for J-Unit tests
+	public void setSolution(String player, String weapon, String room) {
+		this.solutionHand[0] = player;
+		this.solutionHand[1] = weapon;
+		this.solutionHand[2] = room;
 	}
 	
 }

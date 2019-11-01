@@ -186,7 +186,7 @@ public class gameSetupTests {
 		assertTrue(playersHaveSameNumberOfCards);
 		
 		// make sure totalCards calculated from the previous for loop equals total cards in deck
-		assertEquals(totalCards, Board.MAX_DECK_SIZE);
+		assertEquals(totalCards, Board.MAX_DECK_SIZE - Board.CARDS_IN_SOLUTION_HAND);
 		
 		// loop through our map of card instances, and if any have a value > 1, set boolean to false
 		Boolean oneOfEachCard = true;

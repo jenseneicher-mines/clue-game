@@ -145,7 +145,7 @@ public class gameActionTests {
 		String correctWeapon = "Clicker";
 		String correctRoom = "Kitchen";
 		board.setSolution( correctPerson, correctWeapon, correctRoom );
-		ArrayList<String> correctSolution = board.getSolution();
+		String[] correctSolution = board.getSolution();
 		
 		// test an accusation that is correct
 		assertTrue(board.checkAccusation(correctPerson, correctWeapon, correctRoom));
