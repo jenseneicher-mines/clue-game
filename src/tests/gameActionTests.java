@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -202,9 +203,9 @@ public class gameActionTests {
 		
 		// TEST: Make sure when there is only 1 person and 1 weapon not seen, it is selected
 		// set the unseen sets in Player to be sets with only 1 value in them
-		Set<String> unseenPerson = new HashSet<String>();
+		ArrayList<String> unseenPerson = new ArrayList<String>();
 		unseenPerson.add("Baldwin");
-		Set<String> unseenWeapon = new HashSet<String>();
+		ArrayList<String> unseenWeapon = new ArrayList<String>();
 		unseenWeapon.add("Clicker");
 		computerPlayer.setUnseenPlayersAndWeapons(unseenPerson, unseenWeapon);
 		// make sure every time a suggestion goes, the expected person and weapon is selected

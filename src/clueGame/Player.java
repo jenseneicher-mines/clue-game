@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,9 +13,9 @@ public class Player {
 	private int row;
 	private int col;
 	private Set<Card> currentHand;
-	private Set<String> peopleNotSeen;
-	private Set<String> weaponsNotSeen;
-	private Set<String> roomsNotSeen;
+	protected ArrayList<String> peopleNotSeen;
+	protected ArrayList<String> weaponsNotSeen;
+	protected ArrayList<String> roomsNotSeen;
 	protected char lastVisitedRoom;
 
 	// constructor
@@ -25,9 +26,9 @@ public class Player {
 		this.row = row;
 		this.col = col;
 		this.currentHand = new HashSet<Card>();
-		this.peopleNotSeen = new HashSet<String>();
-		this.weaponsNotSeen = new HashSet<String>();
-		this.roomsNotSeen = new HashSet<String>();
+		this.peopleNotSeen = new ArrayList<String>();
+		this.weaponsNotSeen = new ArrayList<String>();
+		this.roomsNotSeen = new ArrayList<String>();
 	}
 
 	// Be sure to trim the color, we don't want spaces around the name
@@ -75,8 +76,17 @@ public class Player {
 	public void setLastVisitedRoom( char room ) {
 		this.lastVisitedRoom = room;;
 	}
+	public void addToPeopleNotSeen ( String person ) {
+		peopleNotSeen.add(person);
+	}
+	public void addToWeaponsNotSeen ( String weapon ) {
+		weaponsNotSeen.add(weapon);
+	}
+	public void addToRoomsNotSeen ( String room ) {
+		roomsNotSeen.add(room);
+	}
 	// J-Unit functions:
-	public void setUnseenPlayersAndWeapons(Set<String> player, Set<String> weapon) {
+	public void setUnseenPlayersAndWeapons(ArrayList<String> player, ArrayList<String> weapon) {
 		this.peopleNotSeen = player;
 		this.weaponsNotSeen = weapon;
 	}

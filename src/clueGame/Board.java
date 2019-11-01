@@ -291,21 +291,47 @@ public class Board {
 		// loop until every card is dealt
 		// the first player, weapon, and room should be added to the solution hand
 		for ( Card currentCard : deck ) {
-			
+			// if it's the first person/weapon/room, add it to the solution hand and to every player's unseen sets
+			String cardName = currentCard.getCardName();
 			if ( !dealtSolutionPerson && currentCard.getType() == CardType.PERSON ) {
-				solutionHand[0] = currentCard.getCardName();
+				solutionHand[0] = cardName;
 				dealtSolutionPerson = true;
+				for ( Player player : playerList ) {
+					player.addToPeopleNotSeen(cardName);
+				}
 			} 
 			else if ( !dealtSolutionWeapon && currentCard.getType() == CardType.WEAPON ) {
-				solutionHand[1] = currentCard.getCardName();
+				solutionHand[1] = cardName;
 				dealtSolutionWeapon = true;
+				for ( Player player : playerList ) {
+					player.addToWeaponsNotSeen(cardName);
+				}
 			}
 			else if ( !dealtSolutionRoom && currentCard.getType() == CardType.ROOM ) {
-				solutionHand[2] = currentCard.getCardName();
+				solutionHand[2] = cardName;
 				dealtSolutionRoom = true;
+				for ( Player player : playerList ) {
+					player.addToRoomsNotSeen(cardName);
+				}
 			}
+			// if the card was not put in the solution hand, add it to a player's hand
 			else {
 				playerList[playerIndex].addNewCardTohand(currentCard);
+				// add card to the corresponding NotSeen list for everyone else
+				for ( int i = 0; i < MAX_PLAYERS; i++ ) {
+					if ( i != playerIndex ) {
+						Player player = playerList[i];
+						if ( currentCard.getType() == CardType.PERSON ) {
+							player.addToPeopleNotSeen(cardName);
+						} 
+						else if ( currentCard.getType() == CardType.WEAPON ) {
+							player.addToWeaponsNotSeen(cardName);
+						}
+						else if ( currentCard.getType() == CardType.ROOM ) {
+							player.addToRoomsNotSeen(cardName);
+						}
+					}
+				}
 				playerIndex++;
 				if ( playerIndex >= MAX_PLAYERS ) {
 					playerIndex = 0;

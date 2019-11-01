@@ -11,8 +11,29 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public String[] makeSuggestion() {
-		// TODO Auto-generated method stub
-		return null;
+		Random rand = new Random();
+		String[] suggestion = new String[Board.CARDS_IN_SOLUTION_HAND];
+		
+		// if there's only 1 unknown person, set it to the suggestion, otherwise pick a random unknown person
+		if ( peopleNotSeen.size() == 1 ) {
+			suggestion[0] = peopleNotSeen.get(0);
+		}
+		else {
+			suggestion[0] = peopleNotSeen.get(rand.nextInt( peopleNotSeen.size() ));
+		}
+		
+		// if there's only 1 unknown person, set it to the suggestion, otherwise pick a random unknown person
+		if ( weaponsNotSeen.size() == 1 ) {
+			suggestion[1] = weaponsNotSeen.get(0);
+		}
+		else {
+			suggestion[1] = weaponsNotSeen.get(rand.nextInt( peopleNotSeen.size() ));
+		}
+		
+		// always set the room to be the currently visited room
+		suggestion[2] = Character.toString(lastVisitedRoom); 
+		
+		return suggestion;
 	}
 	
 	// getTarget
