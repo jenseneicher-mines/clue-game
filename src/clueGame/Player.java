@@ -12,7 +12,7 @@ public class Player {
 	private int row;
 	private int col;
 	private Set<Card> currentHand;
-	private String lastVisitedRoom;
+	protected char lastVisitedRoom;
 
 	// constructor
 	public Player(String playerName, String color, int row, int col) {
@@ -63,7 +63,7 @@ public class Player {
 		this.row = row;
 		this.col = col;
 	}
-	public void setLastVisitedRoom( String room ) {
+	public void setLastVisitedRoom( char room ) {
 		this.lastVisitedRoom = room;;
 	}
 

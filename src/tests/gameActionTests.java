@@ -41,9 +41,9 @@ public class gameActionTests {
 		board.calcTargets(currentRow, currentCol, 1); // calculate the targets for when the computer moves 1 space (4 options)
 		Set<BoardCell> targets = board.getTargets();
 		BoardCell startLocation = board.getCellAt(currentRow, currentCol);
-		BoardCell upwardCell = board.getCellAt(currentRow + 1, currentCol );
-		BoardCell downwardCell = board.getCellAt(currentRow - 1, currentCol );
-		BoardCell leftCell = board.getCellAt(currentRow, currentCol -1);
+		BoardCell upwardCell = board.getCellAt(currentRow - 1, currentCol );
+		BoardCell downwardCell = board.getCellAt(currentRow + 1, currentCol );
+		BoardCell leftCell = board.getCellAt(currentRow, currentCol - 1);
 		BoardCell rightCell = board.getCellAt(currentRow , currentCol + 1 );
 		int countMoveUp = 0;
 		int countMoveDown = 0;
@@ -87,8 +87,7 @@ public class gameActionTests {
 		board.calcTargets(currentRow, currentCol, 1); // calculate the targets for when the computer moves 1 space (4 options)
 		targets = board.getTargets();
 		startLocation = board.getCellAt(currentRow, currentCol);
-		BoardCell doorCell = board.getCellAt(currentRow - 1, currentCol );
-		int countMoveDoor = 0;
+		BoardCell doorCell = board.getCellAt(currentRow + 1, currentCol );
 		for ( int i = 0; i < 200; i++ ) {
 			BoardCell newLocation = computerPlayer.getTarget(targets);
 			// ensure no other space is chosen
@@ -99,18 +98,18 @@ public class gameActionTests {
 		
 		// Keep the player at the last location, but set the lastVisitedRoom for it to be the kitchen
 		// Test: Make sure the player selects a random location since the only door it has access to goes to a room it already visited
-		computerPlayer.setLastVisitedRoom( "Kitchen" );
-		upwardCell = board.getCellAt(currentRow + 1, currentCol );
-		leftCell = board.getCellAt(currentRow, currentCol -1);
+		computerPlayer.setLastVisitedRoom( 'K' );
+		upwardCell = board.getCellAt(currentRow - 1, currentCol );
+		leftCell = board.getCellAt(currentRow, currentCol - 1);
 		rightCell = board.getCellAt(currentRow , currentCol + 1 );
-		countMoveDoor = 0;
+		int countMoveDoor = 0;
 		countMoveLeft = 0;
 		countMoveRight = 0;
 		countMoveUp = 0;
 		for ( int i = 0; i < 200; i++ ) {
 			BoardCell newLocation = computerPlayer.getTarget(targets);
 			// ensure no other space is chosen
-			if ( newLocation != upwardCell && newLocation != downwardCell && newLocation != leftCell && newLocation != rightCell  ) {
+			if ( newLocation != doorCell && newLocation != upwardCell && newLocation != leftCell && newLocation != rightCell  ) {
 				fail("Invalid cell selected");
 			}
 			// counters to ensure every valid option is chosen
