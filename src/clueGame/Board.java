@@ -63,15 +63,9 @@ public class Board {
 		currentPlayer = 0;
 		loadConfigFiles();
 		calcAdjacencies();
-		
-	}
-	public void initializeFour() {
-		nonExistantCell = new BoardCell(-1,-1, "X");
-		currentCellFindingTargets = nonExistantCell;
-		loadFourConfigs();
-		calcAdjacencies();
 		createDeck();
 		dealCards();
+		
 	}
 	
 	// load function that calls all load config functions
@@ -79,22 +73,14 @@ public class Board {
 		try {
 			loadRoomConfig();
 			loadBoardConfig();
+			loadPlayerConfig();
+			loadWeaponConfig();
 		}
 		catch ( BadConfigFormatException e ) {
 			System.out.println("ERROR: " + e.getMessage());
 		}
 	}
 	
-	public void loadFourConfigs() {
-		loadConfigFiles();
-		try {
-			loadPlayerConfig();
-			loadWeaponConfig();
-		}
-		catch (BadConfigFormatException e ) {
-			System.out.println("ERROR: " + e.getMessage());
-		}
-	}
 
 	// read the given txt file and convert the contents to the Map legend
 	public void loadRoomConfig() throws BadConfigFormatException {
@@ -486,12 +472,9 @@ public class Board {
 	}
 
 	//Setter Functions
-	public void setConfigFiles(String boardCSV, String legendTXT) {
+	public void setConfigFiles(String boardCSV, String legendTXT, String peopleTXT, String weaponsTXT) {
 		boardConfigFile = boardCSV;
 		roomConfigFile = legendTXT;
-	}
-	public void setFourConfigFiles(String boardCSV, String legendTXT, String peopleTXT, String weaponsTXT) {
-		setConfigFiles(boardCSV,legendTXT);
 		playerConfigFile = peopleTXT;
 		weaponConfigFile = weaponsTXT;
 	}
