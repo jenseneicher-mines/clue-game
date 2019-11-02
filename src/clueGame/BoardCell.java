@@ -4,6 +4,7 @@
 
 package clueGame;
 
+
 public class BoardCell {
 	//instance variables
 	private int row;

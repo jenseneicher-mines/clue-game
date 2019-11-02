@@ -32,7 +32,7 @@ public class Board {
 	private String[] weaponList;
 	private String[] roomList;
 	private Set<Card> deck;
-	private String[] solutionHand;
+	private Solution correctSolution;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets;
@@ -242,7 +242,6 @@ public class Board {
 		}
 
 		// create a list of weapons from given config file
-		String currentLine;
 		int index = 0;
 		try {
 			while (in.hasNext()) {
@@ -283,7 +282,7 @@ public class Board {
 	
 	// deal an even amount of cards to everyone with no duplicates
 	public void dealCards() {
-		solutionHand = new String[CARDS_IN_SOLUTION_HAND];
+		correctSolution = new Solution();
 		int playerIndex = 0;
 		Boolean dealtSolutionPerson = false;
 		Boolean dealtSolutionWeapon = false;
@@ -292,26 +291,25 @@ public class Board {
 		// the first player, weapon, and room should be added to the solution hand
 		for ( Card currentCard : deck ) {
 			// if it's the first person/weapon/room, add it to the solution hand and to every player's unseen sets
-			String cardName = currentCard.getCardName();
 			if ( !dealtSolutionPerson && currentCard.getType() == CardType.PERSON ) {
-				solutionHand[0] = cardName;
+				correctSolution.person = currentCard;
 				dealtSolutionPerson = true;
 				for ( Player player : playerList ) {
-					player.addToPeopleNotSeen(cardName);
+					player.addToPeopleNotSeen(currentCard);
 				}
 			} 
-			else if ( !dealtSolutionWeapon && currentCard.getType() == CardType.WEAPON ) {
-				solutionHand[1] = cardName;
-				dealtSolutionWeapon = true;
-				for ( Player player : playerList ) {
-					player.addToWeaponsNotSeen(cardName);
-				}
-			}
 			else if ( !dealtSolutionRoom && currentCard.getType() == CardType.ROOM ) {
-				solutionHand[2] = cardName;
+				correctSolution.room = currentCard;
 				dealtSolutionRoom = true;
 				for ( Player player : playerList ) {
-					player.addToRoomsNotSeen(cardName);
+					player.addToRoomsNotSeen(currentCard);
+				}
+			}
+			else if ( !dealtSolutionWeapon && currentCard.getType() == CardType.WEAPON ) {
+				correctSolution.weapon = currentCard;
+				dealtSolutionWeapon = true;
+				for ( Player player : playerList ) {
+					player.addToWeaponsNotSeen(currentCard);
 				}
 			}
 			// if the card was not put in the solution hand, add it to a player's hand
@@ -322,13 +320,13 @@ public class Board {
 					if ( i != playerIndex ) {
 						Player player = playerList[i];
 						if ( currentCard.getType() == CardType.PERSON ) {
-							player.addToPeopleNotSeen(cardName);
+							player.addToPeopleNotSeen(currentCard);
 						} 
-						else if ( currentCard.getType() == CardType.WEAPON ) {
-							player.addToWeaponsNotSeen(cardName);
-						}
 						else if ( currentCard.getType() == CardType.ROOM ) {
-							player.addToRoomsNotSeen(cardName);
+							player.addToRoomsNotSeen(currentCard);
+						}
+						else if ( currentCard.getType() == CardType.WEAPON ) {
+							player.addToWeaponsNotSeen(currentCard);
 						}
 					}
 				}
@@ -427,8 +425,8 @@ public class Board {
 	}
 	
 	// check the player's accusation against the correct solution set and return true if it's a correct guess and false if not
-	public boolean checkAccusation(String person, String weapon, String room) {
-		if ( solutionHand[0] == person && solutionHand[1] == weapon && solutionHand[2] == room ) {
+	public boolean checkAccusation(Solution guess) {
+		if ( correctSolution.person == guess.person && correctSolution.weapon == guess.weapon && correctSolution.room == guess.room ) {
 			return true;
 		}
 		return false;
@@ -459,8 +457,8 @@ public class Board {
 	public Set<Card> getDeck() {
 		return deck;
 	}
-	public String[] getSolution() {
-		return this.solutionHand;
+	public Solution getSolution() {
+		return this.correctSolution;
 	}
 
 	//Setter Functions
@@ -477,10 +475,8 @@ public class Board {
 	
 	
 	// Functions currently only being using for J-Unit tests
-	public void setSolution(String player, String weapon, String room) {
-		this.solutionHand[0] = player;
-		this.solutionHand[1] = weapon;
-		this.solutionHand[2] = room;
+	public void setSolution( Solution newSolution ) {
+		this.correctSolution = newSolution;
 	}
 	
 }

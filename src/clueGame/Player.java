@@ -14,10 +14,10 @@ public class Player {
 	private int row;
 	private int col;
 	private Set<Card> currentHand;
-	protected ArrayList<String> peopleNotSeen;
-	protected ArrayList<String> weaponsNotSeen;
-	protected ArrayList<String> roomsNotSeen;
-	protected char lastVisitedRoom;
+	protected ArrayList<Card> peopleNotSeen;
+	protected ArrayList<Card> weaponsNotSeen;
+	protected ArrayList<Card> roomsNotSeen;
+	protected String lastVisitedRoom;
 
 	// constructor
 	public Player(String playerName, String color, int row, int col) {
@@ -26,19 +26,26 @@ public class Player {
 		this.color = convertColor(color.toUpperCase());
 		this.row = row;
 		this.col = col;
+		this.lastVisitedRoom = "X";
 		this.currentHand = new HashSet<Card>();
-		this.peopleNotSeen = new ArrayList<String>();
-		this.weaponsNotSeen = new ArrayList<String>();
-		this.roomsNotSeen = new ArrayList<String>();
+		this.peopleNotSeen = new ArrayList<Card>();
+		this.weaponsNotSeen = new ArrayList<Card>();
+		this.roomsNotSeen = new ArrayList<Card>();
 	}
 	
 	// when a suggestion is made, a matching card is picked from each player's hand to show to the player who gave the suggestion
-	public Card disproveSuggestion( Card[] suggestionList ) {
+	public Card disproveSuggestion( Solution suggestionList ) {
 		ArrayList<Card> matchingCards = new ArrayList<Card>();
 		// find all of the matching cards
-		for ( Card possibleMatch : suggestionList ) {
-			if ( currentHand.contains(possibleMatch) ) {
-				matchingCards.add(possibleMatch);
+		for ( Card card : currentHand ) {
+			if ( card.equals(suggestionList.person) ) {
+				matchingCards.add(card);
+			}
+			else if ( card.equals(suggestionList.room) ) {
+				matchingCards.add(card);
+			}
+			else if ( card.equals(suggestionList.weapon) ) {
+				matchingCards.add(card);
 			}
 		}
 		
@@ -88,7 +95,7 @@ public class Player {
 	public Set<Card> getCurrentHand() {
 		return currentHand;
 	}
-	public char getLastVisitedRoom() {
+	public String getLastVisitedRoom() {
 		return lastVisitedRoom;
 	}
 	
@@ -100,20 +107,20 @@ public class Player {
 		this.row = row;
 		this.col = col;
 	}
-	public void setLastVisitedRoom( char room ) {
+	public void setLastVisitedRoom( String room ) {
 		this.lastVisitedRoom = room;;
 	}
-	public void addToPeopleNotSeen ( String person ) {
+	public void addToPeopleNotSeen ( Card person ) {
 		peopleNotSeen.add(person);
 	}
-	public void addToWeaponsNotSeen ( String weapon ) {
+	public void addToWeaponsNotSeen ( Card weapon ) {
 		weaponsNotSeen.add(weapon);
 	}
-	public void addToRoomsNotSeen ( String room ) {
+	public void addToRoomsNotSeen ( Card room ) {
 		roomsNotSeen.add(room);
 	}
 	// J-Unit functions:
-	public void setUnseenPlayersAndWeapons(ArrayList<String> player, ArrayList<String> weapon) {
+	public void setUnseenPlayersAndWeapons(ArrayList<Card> player, ArrayList<Card> weapon) {
 		this.peopleNotSeen = player;
 		this.weaponsNotSeen = weapon;
 	}
