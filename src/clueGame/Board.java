@@ -33,6 +33,7 @@ public class Board {
 	private String[] roomList;
 	private Set<Card> deck;
 	private Solution correctSolution;
+	private int currentPlayer;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets;
@@ -59,6 +60,7 @@ public class Board {
 		
 		nonExistantCell = new BoardCell(-1,-1, "X");
 		currentCellFindingTargets = nonExistantCell;
+		currentPlayer = 0;
 		loadConfigFiles();
 		calcAdjacencies();
 		
@@ -431,6 +433,11 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public Card handleSuggestion(Solution cantDisprove) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	// Getter Functions
 	public Map<Character, String> getLegend() {
@@ -478,5 +485,12 @@ public class Board {
 	public void setSolution( Solution newSolution ) {
 		this.correctSolution = newSolution;
 	}
+	public void setPlayers ( Player[] newPlayers ) {
+		this.playerList = newPlayers;
+	}
+	public void setCurrentPlayer(int player) {
+		this.currentPlayer = player;
+	}
+	
 	
 }

@@ -287,6 +287,8 @@ public class gameActionTests {
 	}
 	
 	// make sure the behavior to handle a suggestion is working correctly
+	// The board function handleSuggestion passes in a solution has the player create a suggestion, then makes each other player respond in order until a card is found
+	// make sure the expected card is returned for each handling (or null if that's expected)
 	@Test
 	public void testHandlingSuggestion() {
 		// create a few players with known cards
@@ -310,14 +312,47 @@ public class gameActionTests {
 		computerPlayer2.setCurrentHand(knownHand);
 		
 		// set the board to only have these 3 players
+		board.setPlayers(new Player[] { humanPlayer, computerPlayer1, computerPlayer2 });
 		
 		// create 3 cards that nobody can disprove
-		Card wrongPerson = new Card( "Dave", CardType.PERSON);
-		Card wrongWeapon = new Card( "Keyboard", CardType.WEAPON );
-		Card wrongRoom = new Card( "Tackroom", CardType.ROOM );
+		Card unknownPerson = new Card( "Dave", CardType.PERSON);
+		Card unknownRoom = new Card( "Tackroom", CardType.ROOM );
+		Card unknownWeapon = new Card( "Keyboard", CardType.WEAPON );
 		
 		
-		// TEST: 
+		// TEST: Have the board handle a suggestion that no players can disprove (returns null)
+		board.setCurrentPlayer(0); // set the current player to be human so they are the one making the suggestion
+		Solution suggestion = new Solution(unknownPerson, unknownRoom, unknownWeapon);
+		Card returnedCard = board.handleSuggestion( suggestion );
+		assertEquals( returnedCard, null );
+		
+		// TEST: handle a suggestion where only the human player can disprove while they are making the suggestion (returns null)
+		suggestion = new Solution(personCard, unknownRoom, unknownWeapon);
+		returnedCard = board.handleSuggestion( suggestion );
+		assertEquals( returnedCard, null );
+		
+		// TEST: handle a suggestion where both the computers can disprove when the player makes the suggestion (computer player 1's card should be returned)
+		suggestion = new Solution(computer1_PersonCard, computer2_RoomCard, unknownWeapon);
+		returnedCard = board.handleSuggestion( suggestion );
+		assertEquals( returnedCard, computer1_PersonCard );
+		
+		// TEST: handle a suggestion where only the accusing computer player can disprove (returns null)
+		board.setCurrentPlayer(1); // set the current player to be computer1 so they are the one making the suggestion
+		suggestion = new Solution(computer1_PersonCard, unknownRoom, unknownWeapon);
+		returnedCard = board.handleSuggestion( suggestion );
+		assertEquals( returnedCard, null );
+		
+		// TEST: handle a suggestion only the human can disprove, with a computer as the current player (returns the human's card)
+		suggestion = new Solution(personCard, unknownRoom, unknownWeapon);
+		returnedCard = board.handleSuggestion( suggestion );
+		assertEquals( returnedCard, personCard );
+		
+		// TEST: handle a suggestion where computer 2 makes a suggestion that both computer 1 and the human can disprove (human's card should be returned)
+		board.setCurrentPlayer(2); // set the current player to be computer2 so they are the one making the suggestion
+		suggestion = new Solution(computer1_PersonCard, roomCard, unknownWeapon);
+		returnedCard = board.handleSuggestion( suggestion );
+		assertEquals( returnedCard, roomCard );
+		
 	}
 
 }
