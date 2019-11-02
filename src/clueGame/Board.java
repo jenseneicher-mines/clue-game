@@ -434,8 +434,25 @@ public class Board {
 		return false;
 	}
 	
-	public Card handleSuggestion(Solution cantDisprove) {
-		// TODO Auto-generated method stub
+	// have the board loop through every player when a suggestion is made
+	// once it finds a match, it returns the card to show the player who made the suggestion
+	public Card handleSuggestion(Solution suggestion) {
+		int playerBeingChecked = currentPlayer + 1;
+		Card matchingCard;
+		while ( playerBeingChecked != currentPlayer ) {
+			matchingCard = playerList[playerBeingChecked].disproveSuggestion(suggestion);
+			if ( matchingCard != null ) {
+				return matchingCard;
+			}
+			
+			if ( playerBeingChecked == playerList.length - 1 ) {
+				playerBeingChecked = 0;
+			} 
+			else {
+				playerBeingChecked++;
+			}
+		}
+		
 		return null;
 	}
 
