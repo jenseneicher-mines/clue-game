@@ -232,25 +232,31 @@ public class gameActionTests {
 	@Test
 	public void testDisprove() {
 		Set<Card> knownHand = new HashSet<Card>();
+		// set the player's hand so we can easily test that the expected cards are provided for the disprove
 		Card personCard = new Card( "Baldwin", CardType.PERSON);
 		Card weaponCard = new Card( "Clicker", CardType.WEAPON );
 		Card roomCard = new Card( "Kitchen", CardType.ROOM );
 		knownHand.add(  personCard );
 		knownHand.add( weaponCard );
 		knownHand.add( roomCard );
+		computerPlayer.setCurrentHand(knownHand);
 		
-		// test that the card returned when there is only 1 matching card is the matching card
-		String[] oneMatchingCard = { "Baldin", "Red Pen", "Den" };
+		Card wrongPerson = new Card("Strong", CardType.PERSON);
+		Card wrongRoom = new Card("Den", CardType.ROOM);
+		Card wrongWeapon = new Card("Red Pen", CardType.WEAPON);
+		
+		// TEST that the card returned when there is only 1 matching card is the matching card
+		Card[] oneMatchingCard = { personCard, wrongWeapon, wrongRoom };
 		Card disprovedCard = computerPlayer.disproveSuggestion( oneMatchingCard );
 		assertTrue( personCard.equals(disprovedCard) );
 		
-		// test that when there are multiple matching cards, a random one of the matching cards is returned
-		String[] multipleMatchingCards = { "Baldin", "Clicker", "Den" };
+		// TEST that when there are multiple matching cards, a random one of the matching cards is returned
+		Card[] multipleMatchingCards = { personCard, weaponCard, wrongRoom };
 		int personCardCount = 0;
 		int weaponCardCount = 0;
 		int otherCardCount = 0; // this one should remain 0 since the 3rd card being passed is not is the suggested set
 		for ( int i = 0; i < 200; i++ ) {
-			disprovedCard = computerPlayer.disproveSuggestion( oneMatchingCard );
+			disprovedCard = computerPlayer.disproveSuggestion( multipleMatchingCards );
 			if ( personCard.equals(disprovedCard) ) {
 				personCardCount++;
 			}
@@ -265,9 +271,9 @@ public class gameActionTests {
 		assertTrue( weaponCardCount > 50 );
 		assertTrue( otherCardCount == 0 );
 		
-		// test that when there are no matching cards, null is returned
-		String[] noMatchingCards = { "Strong", "Library", "Den" };
-		disprovedCard = computerPlayer.disproveSuggestion( oneMatchingCard );
+		// TEST that when there are no matching cards, null is returned
+		Card[] noMatchingCards = { wrongPerson, wrongWeapon, wrongRoom };
+		disprovedCard = computerPlayer.disproveSuggestion( noMatchingCards );
 		assertEquals( disprovedCard, null );
 	}
 

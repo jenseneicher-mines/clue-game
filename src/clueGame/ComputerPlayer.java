@@ -36,6 +36,8 @@ public class ComputerPlayer extends Player {
 		return suggestion;
 	}
 	
+	
+	
 	// getTarget
 	// if no rooms in target list, select random target location
 	// if there's a room that was not just visited, go to that room
@@ -68,10 +70,7 @@ public class ComputerPlayer extends Player {
 		}
 	}
 
-	public Card disproveSuggestion( String[] suggestionList ) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	
 

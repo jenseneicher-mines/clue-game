@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class Player {
@@ -29,6 +30,32 @@ public class Player {
 		this.peopleNotSeen = new ArrayList<String>();
 		this.weaponsNotSeen = new ArrayList<String>();
 		this.roomsNotSeen = new ArrayList<String>();
+	}
+	
+	// when a suggestion is made, a matching card is picked from each player's hand to show to the player who gave the suggestion
+	public Card disproveSuggestion( Card[] suggestionList ) {
+		ArrayList<Card> matchingCards = new ArrayList<Card>();
+		// find all of the matching cards
+		for ( Card possibleMatch : suggestionList ) {
+			if ( currentHand.contains(possibleMatch) ) {
+				matchingCards.add(possibleMatch);
+			}
+		}
+		
+		// if there is more than one matching card, return a random card
+		int numMatchingCards = matchingCards.size();
+		if ( numMatchingCards > 1 ) {
+			Random rand = new Random();
+			return matchingCards.get(rand.nextInt(numMatchingCards));
+		}
+		// if there is only 1 matching card, return that card
+		else if ( numMatchingCards == 1 ) {
+			return matchingCards.get(0);
+		}
+		// if there is no matching cards, return null
+		else {
+			return null;
+		}
 	}
 
 	// Be sure to trim the color, we don't want spaces around the name
