@@ -5,15 +5,18 @@
 package clueGame;
 
 
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import javax.swing.JPanel;
 
 
-public class Board {
+
+public class Board extends JPanel {
 	//constants
 	public static final int MAX_BOARD_SIZE = 50;
 	public static final int MAX_PLAYERS = 6;
@@ -78,6 +81,16 @@ public class Board {
 		}
 		catch ( BadConfigFormatException e ) {
 			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
+	
+	// paint the board
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		for ( int column = 0; column < numColumns; column++ ) {
+			for (int row = 0; row < numRows; row++) {
+				board[row][column].draw(g);
+			}
 		}
 	}
 	

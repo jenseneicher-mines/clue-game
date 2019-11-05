@@ -14,11 +14,16 @@ public class gameGUI extends JPanel {
     private String name = "Placeholder";
     private int dieRoll = -1;
     private String guessResp = "Placeholder";
-
+    private static Board board;
 
     public gameGUI(){
         //set up each panel and arrange them in correct order
-        setLayout(new GridLayout(2,1));
+        setLayout(new GridLayout(3,1));
+        board = Board.getInstance();
+        board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");		
+		// Initialize will load BOTH config files 
+		board.initialize();
+        add(board);
         JPanel panel1 = middlePanel();
         add(panel1);
         JPanel panel3 = bottomPanel();
@@ -81,7 +86,7 @@ public class gameGUI extends JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Clue");
-        frame.setSize(550, 175);
+        frame.setSize(550, 700);
         // Create the JPanel and add it to the JFrame
         gameGUI gui = new gameGUI();
         frame.add(gui, BorderLayout.CENTER);
