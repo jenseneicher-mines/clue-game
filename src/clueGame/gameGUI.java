@@ -1,3 +1,5 @@
+// Jensen Eicher & Kai Mizuno
+
 package clueGame;
 
 import javax.swing.*;
@@ -9,9 +11,9 @@ import javax.swing.border.TitledBorder;
 
 public class gameGUI extends JPanel {
     //TEST VARIABLES ONLY FOR SHOWING DISPLAY
-    private String name = "Mark";
-    private int dieRoll = 3;
-    private String guessResp = "No";
+    private String name = "Placeholder";
+    private int dieRoll = -1;
+    private String guessResp = "Placeholder";
 
 
     public gameGUI(){

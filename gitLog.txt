@@ -1,12 +1,84 @@
-// Clue Players Part 1
+// Players Part 2
 // Kai Mizuno & Jensen Eicher
-// Most work done via paired programming
+
+commit 91e072f27e1fcc98dd68e29e17bc791a31c26228
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 2 16:30:05 2019 -0600
+
+    Finished refactoring. Updated lingering variables that were still using Strings instead of Cards. Changed it so we only have 1 version of initialization and loadConfigs, and had to go back and change every test to match that change. All tests are passing
+
+commit 9897d21823e6e361f8002bc0dc32c13d6f964291
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 2 16:22:45 2019 -0600
+
+    implemented handleSuggestion function in Board that takes a given suggestion and loops through all the players in order to find a card to disprove the suggestion. all gameActionTests are passing now
+
+commit 04b888b62792e2bb0183d920a61cb0e9e11c4bf8
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 2 16:12:54 2019 -0600
+
+    wrote testHandlingSuggestion J-Unit tests. it has the board handle various suggestions and ensure the expected result is returned. currently failing
+
+commit 706be2cab1352d4db6bd0fde89ef2888117a068e
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 2 12:51:40 2019 -0600
+
+    Created disproveSuggestion function in Player class that takes in a list of cards that were suggested and will return a random card if there is multiple matches, the only match if there is only 1 match, or null if there is no matches. This makes the testDisprove tests pass in gameActionTests
+
+
+commit b2b152ff5e965b015cb00488888b725362cbdf77
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Thu Oct 31 22:12:05 2019 -0600
+
+    Created testDisprove J-Unit test that tests having a player disprove a given suggestion. Checks that if there is only 1 matching card, that card is picked, if there are multiple matching cards then a random card is picked, and if there are no matching cards null is returned. Tests are currently failing with no implementation
+
+commit c01e3ca1f4e9f2be84fded9a703c526cad5ad85f
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Thu Oct 31 21:30:43 2019 -0600
+
+    testComputerSuggestion tests are now passing. created arrayLists for people, weapons, and rooms not yet seen by the player, which is initially populated when dealing cards. Computer player has a function makeSuggestion which returns a list of the suggested person, weapon, and room based off the contents of it's 'not seen' arrays
+
+commit b643e3fb80739758c409c3fd7508e9cd624f48ef
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Thu Oct 31 20:48:27 2019 -0600
+
+    Created testComputerSuggestion J-Unit test that tests that when a computer makes a suggestion where they have multiple options for persons and weapons: a random person and weapon is chosen and the room is always the room the player is in. It also checks that when the computer player has only 1 unseen person/weapon left it will always pick that unseen option. Tests are currently failing with no implementation.
+
+commit 80a75981b7a7f3e1d1bc9540dc0aa14b94d1eca2
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Thu Oct 31 19:49:26 2019 -0600
+
+    Made a solutionHand list in board that holds the information for the 3 solutions. Made a checkAccusation function that takes in 3 guesses and compares them to the correct solution. These changes make the testAccusation tests pass. Also changed dealCards function so upon initialization it will pick out a random person, weapon, and room as the solution.
+
+commit f3de41509935af82430c788be51e797fafb4aeb8
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Thu Oct 31 19:26:53 2019 -0600
+
+    Added a getTarget function to the computer player which checks if the computer has access to a doorway it did not just visit, and if so it returns that space as the new target. Otherwise it chooses a random new location as the target. This makes the tests made for gameActionTests (testComputerTargets) work
+
+commit 2dfc5399d2c6cb9aa2aa7e787c6e490af446cb79
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Thu Oct 31 10:40:58 2019 -0600
+
+    Added testAccusation test case to gameActionTests J-Unit class. Makes sure that correct and incorrect accusations are processed correctly
+
+commit ccfc0c5834f560f4df393fdc9a4bc474e6d086a2
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Thu Oct 31 10:24:12 2019 -0600
+
+    Created gameActionTests J-Unit file. Created failing tests for testing target location which makes sure the computer player picks random locations when there is no available door or there is a door that connects to an already visited room. Also makes sure if it's close to a room it hasn't visited and has access to its door it will go to that door.
 
 commit 4dfb7a5cb1a688e2d3e8ecfc9a8cd01df9302533
 Author: Kai Mizuno <kmizuno@mymail.mine.edu>
 Date:   Tue Oct 29 18:30:29 2019 -0600
 
     Refactored gameSetupTests so it uses a few less for loops in the deck creation test to increase time efficiency
+
+commit 0512154a9b23a2140c48c194365f0cfc50ed9e4f
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Oct 29 16:55:15 2019 -0600
+
+    Started on skeleton for GUI
 
 commit baa4d8c6ba955e9fdba9a0b18792026ad4e70af6
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
@@ -24,19 +96,19 @@ commit 73b820d0abc1621855f1c4cc639d96fa22eb9f6d
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
 Date:   Mon Oct 28 17:54:40 2019 -0600
 
-    Finished adding functionality and fixing bugs so that testDeckCreation passes. Program creates string lists for weapons and rooms and uses those along with the already created player list in createDeck function to create new cards and put those in a Set called deck
+    Finished adding functionality and fixing bugs so that testDeckCreation passes.
 
 commit 05af3ede9eb9e9817010b2261e951e3611c7fc8f
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
 Date:   Mon Oct 28 17:19:45 2019 -0600
 
-    Created the J-Unit tests for deck creations testing the deck size, amount of each card type in the deck, and that the expected cards are in the deck
+    Created the tests for deck creations testing the deck size, amount of each card type in the deck, and that th expected cards are in the deck
 
 commit 4423cb616596f374bfcf630a056251b9fafb2425
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
 Date:   Mon Oct 28 16:49:10 2019 -0600
 
-    Fixed all bugs so that testPeople works. Main issue was just that we were still returning null on our getPlayerList function.
+    Fixed all bugs so that testPeople works
 
 commit f5a874fdffbe1522bc32f90f1666740c012312c3
 Author: Jensen Eicher <jeicher@mymail.mines.edu>
@@ -49,6 +121,18 @@ Author: Jensen Eicher <jeicher@mymail.mines.edu>
 Date:   Mon Oct 28 15:16:39 2019 -0600
 
     Added comments and fixed some exception handling issues
+
+commit 9bab9d36e53c06c7585a196486ede8ae46fb08b4
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Sun Oct 27 17:14:21 2019 -0600
+
+    Added createDeck method that adds every weapon, room, and player to an array (deck) and shuffles it
+
+commit fb7c7010dbd40b1a6c736e213260cb437501e589
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Sun Oct 27 16:56:52 2019 -0600
+
+    Finished logic to load weaponList and roomList into their specified arrays
 
 commit db5f4275fbcd22b054817f7ab552de6a13014775
 Author: Kai Mizuno <Mizuno.PK@gmail.com>
