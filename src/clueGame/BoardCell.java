@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public class BoardCell {
-	public static final int PIXEL_SIZE_OF_CELL = 10;
+	public static final int PIXEL_SIZE_OF_CELL = 20;
 	
 	//instance variables
 	private int row;
@@ -89,20 +89,19 @@ public class BoardCell {
 		
 		// draw door direction
 		if ( isDoorway() ) {
-			double doorWidth = 5/10;
+			double doorWidth = 0.1;
 			g.setColor(Color.BLUE);
 			if ( door == DoorDirection.DOWN ) {
-				//g.fillRect((int) (pixelRow + (1 - doorWidth)*PIXEL_SIZE_OF_CELL), pixelColumn, PIXEL_SIZE_OF_CELL, (int) (doorWidth)*PIXEL_SIZE_OF_CELL);
-				g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
+				g.fillRect(pixelColumn, (int) (pixelRow + (1 - doorWidth)*PIXEL_SIZE_OF_CELL), PIXEL_SIZE_OF_CELL, (int) (doorWidth*PIXEL_SIZE_OF_CELL ));
 			}
 			else if ( door == DoorDirection.LEFT ) {
-				g.fillRect( pixelColumn , pixelRow, (int) doorWidth*PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
+				g.fillRect( pixelColumn , pixelRow, (int) (doorWidth*PIXEL_SIZE_OF_CELL), PIXEL_SIZE_OF_CELL);
 			}
 			else if (door == DoorDirection.RIGHT) {
-				g.fillRect( pixelColumn , (int) (pixelRow + (1 - doorWidth)*PIXEL_SIZE_OF_CELL), (int) doorWidth*PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
+				g.fillRect( (int) (pixelColumn + (1 - doorWidth)*PIXEL_SIZE_OF_CELL), pixelRow, (int) (doorWidth*PIXEL_SIZE_OF_CELL), PIXEL_SIZE_OF_CELL);
 			}
 			else {
-				g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, (int) (doorWidth)*PIXEL_SIZE_OF_CELL);
+				g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, (int) (doorWidth*PIXEL_SIZE_OF_CELL));
 			}
 		}
 	}

@@ -9,7 +9,7 @@ import javax.swing.JPanel;import javax.swing.JTextField;import javax.swing.borde
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-public class gameGUI extends JPanel {
+public class gameGUI extends JFrame {
     //TEST VARIABLES ONLY FOR SHOWING DISPLAY
     private String name = "Placeholder";
     private int dieRoll = -1;
@@ -17,17 +17,21 @@ public class gameGUI extends JPanel {
     private static Board board;
 
     public gameGUI(){
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Clue");
+        setSize(550, 700);
+    	
         //set up each panel and arrange them in correct order
-        setLayout(new GridLayout(3,1));
+        //setLayout(new GridLayout(3,1));
         board = Board.getInstance();
         board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");		
 		// Initialize will load BOTH config files 
 		board.initialize();
-        add(board);
+        add(board, BorderLayout.NORTH);
         JPanel panel1 = middlePanel();
-        add(panel1);
+        add(panel1, BorderLayout.CENTER);
         JPanel panel3 = bottomPanel();
-        add(panel3);
+        add(panel3, BorderLayout.SOUTH);
     }
 
 
@@ -83,15 +87,10 @@ public class gameGUI extends JPanel {
 
     public static void main(String[] args) {
         // Create a JFrame
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Clue");
-        frame.setSize(550, 700);
-        // Create the JPanel and add it to the JFrame
-        gameGUI gui = new gameGUI();
-        frame.add(gui, BorderLayout.CENTER);
+    	gameGUI gui = new gameGUI();
+        
         // show it
-        frame.setVisible(true);
+        gui.setVisible(true);
     }
 
 
