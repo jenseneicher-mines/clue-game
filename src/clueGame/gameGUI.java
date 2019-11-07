@@ -88,8 +88,8 @@ public class gameGUI extends JFrame {
     public static void main(String[] args) {
         // Create a JFrame
     	gameGUI gui = new gameGUI();
-        
         // show it
+        gui.pack();
         gui.setVisible(true);
     }
 
