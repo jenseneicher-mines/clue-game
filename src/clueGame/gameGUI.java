@@ -16,27 +16,39 @@ public class gameGUI extends JFrame {
 	private String guessResp = "Placeholder";
 	private static Board board;
 
-	public gameGUI(){
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Clue");
-		setSize(550, 700);
-		//set up each panel and arrange them in correct order
-		//setLayout(new GridLayout(3,1));
-		board = Board.getInstance();
-		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
-		// Initialize will load BOTH config files 
-		board.initialize();
-		FlowLayout layout = new FlowLayout();
-		layout.setHgap(50);
-		layout.setVgap(250);
-		board.setLayout(layout);
-		add(board, BorderLayout.NORTH);
-		JPanel panel1 = middlePanel();
-		add(panel1, BorderLayout.CENTER);
-		JPanel panel3 = bottomPanel();
-		add(panel3, BorderLayout.SOUTH);
-	}
+    public gameGUI(){
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Clue");
+        setSize(550, 700);
+        //set up each panel and arrange them in correct order
+        //setLayout(new GridLayout(3,1));
+        JMenuBar menu = menueBar();
+        add(menu);
 
+        board = Board.getInstance();
+        board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
+        // Initialize will load BOTH config files
+        board.initialize();
+        FlowLayout layout = new FlowLayout();
+        layout.setHgap(50);
+        layout.setVgap(250);
+        board.setLayout(layout);
+        add(board, BorderLayout.NORTH);
+        JPanel panel1 = middlePanel();
+        add(panel1, BorderLayout.CENTER);
+        JPanel panel3 = bottomPanel();
+        add(panel3, BorderLayout.SOUTH);
+    }
+
+    private JMenuBar menueBar() {
+        JMenuBar menu = new JMenuBar();
+        var file = new JMenu("File");
+        menu.add(file);
+        JMenuItem notesMenuItem = new JMenuItem("Detective Notes");
+        file.add(notesMenuItem);
+        setJMenuBar(menu);
+        return menu;
+    }
 
 	private JPanel middlePanel() {
 		JPanel panel = new JPanel();
