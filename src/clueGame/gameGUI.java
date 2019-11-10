@@ -81,6 +81,16 @@ public class gameGUI extends JFrame {
 	}
 
 
+    private JMenuBar menueBar() {
+        JMenuBar menu = new JMenuBar();
+        JMenu file = new JMenu("File");
+        menu.add(file);
+        JMenuItem notesMenuItem = new JMenuItem("Detective Notes");
+        file.add(notesMenuItem);
+        setJMenuBar(menu);
+        return menu;
+    }
+
 	private JPanel middlePanel() {
 		JPanel panel = new JPanel();
 		// Use a grid layout, 1 row, 2 elements (label, text)
