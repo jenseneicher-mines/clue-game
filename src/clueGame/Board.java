@@ -39,7 +39,7 @@ public class Board extends JPanel {
 	private int currentPlayer;
 	
 	// calcTargets variables
-	private Set<BoardCell> targets;
+	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Set<BoardCell> visited;
 	private BoardCell nonExistantCell;
 	private BoardCell currentCellFindingTargets;
@@ -61,7 +61,7 @@ public class Board extends JPanel {
 	// initialize function to set up game board
 	public void initialize() {
 		
-		nonExistantCell = new BoardCell(-1,-1, "X");
+		nonExistantCell = new BoardCell(-1,-1, "X", false);
 		currentCellFindingTargets = nonExistantCell;
 		currentPlayer = 0;
 		loadConfigFiles();
@@ -87,10 +87,28 @@ public class Board extends JPanel {
 	// paint the board
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		// paint all of the Board Cells and doors
 		for ( int column = 0; column < numColumns; column++ ) {
 			for (int row = 0; row < numRows; row++) {
-				board[row][column].draw(g);
+				if ( targets.contains(board[row][column]) ) {
+					board[row][column].draw(g, true);
+				}
+				else {
+					board[row][column].draw(g, false);
+				}
 			}
+		}
+		
+		// paint all the room names
+		for ( int column = 0; column < numColumns; column++ ) {
+			for (int row = 0; row < numRows; row++) {
+				board[row][column].drawRoomNames(g);
+			}
+		}
+		
+		// paint all of the players
+		for ( Player p : playerList ) {
+			p.draw(g);
 		}
 	}
 	
@@ -177,7 +195,23 @@ public class Board extends JPanel {
 		board = new BoardCell[numRows][numColumns];
 		for ( int row = 0; row < numRows; row++ ) {
 			for ( int col = 0; col < numColumns; col++ ) {
-				BoardCell currentCell = new BoardCell(row, col, listOfSpaces.get(index));
+				BoardCell currentCell = new BoardCell(row, col, listOfSpaces.get(index), false);
+				
+				if ( 
+						( row == 2 && col == 1 ) ||
+						( row == 2 && col == 7 ) ||
+						( row == 2 && col == 14 ) ||
+						( row == 2 && col == 20 ) ||
+						( row == 11 && col == 1 ) ||
+						( row == 21 && col == 1 ) ||
+						( row == 21 && col == 6 ) ||
+						( row == 21 && col == 12 ) ||
+						( row == 21 && col == 20 )
+						) {
+					currentCell.setDrawsRoomName(true);
+				}
+					
+				
 				board[row][col] = currentCell;
 				index++;
 			}
@@ -399,7 +433,7 @@ public class Board extends JPanel {
 		// if this is the first call of the recursive loop, then reset the target and visited list
 		if ( currentCellFindingTargets.equals(nonExistantCell) ) {
 			currentCellFindingTargets = currentCell;
-			targets = new HashSet<BoardCell>();
+			//targets = new HashSet<BoardCell>();
 			visited = new HashSet<BoardCell>();
 		}
 
@@ -477,11 +511,26 @@ public class Board extends JPanel {
 	public Player[] getPlayers() {
 		return playerList;
 	}
+	public String[] getRooms() {
+		return roomList;
+	}
+	public String[] getWeapons() {
+		return weaponList;
+	}
 	public Set<Card> getDeck() {
 		return deck;
 	}
 	public Solution getSolution() {
 		return this.correctSolution;
+	}
+	// returns the room name based off the first letter of the room's name
+	public String getRoomName( char firstLetter ) {
+		for ( String room : roomList ) {
+			if ( room.charAt(0) == firstLetter ) {
+				return room;
+			}
+		}
+		return null;
 	}
 
 	//Setter Functions

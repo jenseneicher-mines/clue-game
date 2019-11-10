@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +13,9 @@ public class Player {
 	private String playerName;
 	private Color color;
 	private int row;
-	private int col;
+	private int column;
+	private int pixelRow;
+	private int pixelColumn;
 	private Set<Card> currentHand;
 	protected ArrayList<Card> peopleNotSeen;
 	protected ArrayList<Card> weaponsNotSeen;
@@ -20,12 +23,14 @@ public class Player {
 	protected String lastVisitedRoom;
 
 	// constructor
-	public Player(String playerName, String color, int row, int col) {
+	public Player(String playerName, String color, int row, int column) {
 		super();
 		this.playerName = playerName;
 		this.color = convertColor(color.toUpperCase());
 		this.row = row;
-		this.col = col;
+		this.column = column;
+		this.pixelRow = BoardCell.PIXEL_SIZE_OF_CELL * row;
+		this.pixelColumn = BoardCell.PIXEL_SIZE_OF_CELL * column;
 		this.lastVisitedRoom = "X";
 		this.currentHand = new HashSet<Card>();
 		this.peopleNotSeen = new ArrayList<Card>();
@@ -64,6 +69,14 @@ public class Player {
 			return null;
 		}
 	}
+	
+	// Draw function so the player is shown on screen
+	public void draw(Graphics g) {
+		g.setColor(this.color);
+		g.fillOval(pixelColumn, pixelRow, BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
+		g.setColor(Color.BLACK);
+		g.drawOval(pixelColumn, pixelRow, BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
+	}
 
 	// Be sure to trim the color, we don't want spaces around the name
 	public Color convertColor(String strColor) {
@@ -90,7 +103,7 @@ public class Player {
 		return row;
 	}
 	public int getCol() {
-		return col;
+		return column;
 	}
 	public Set<Card> getCurrentHand() {
 		return currentHand;
@@ -105,7 +118,7 @@ public class Player {
 	}
 	public void setLocation(int row, int col) {
 		this.row = row;
-		this.col = col;
+		this.column = col;
 	}
 	public void setLastVisitedRoom( String room ) {
 		this.lastVisitedRoom = room;;

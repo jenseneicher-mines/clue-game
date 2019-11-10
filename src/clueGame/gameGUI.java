@@ -4,6 +4,9 @@ package clueGame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;import javax.swing.JFrame;import javax.swing.JLabel;
 import javax.swing.JPanel;import javax.swing.JTextField;import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -15,26 +18,66 @@ public class gameGUI extends JFrame {
 	private int dieRoll = -1;
 	private String guessResp = "Placeholder";
 	private static Board board;
+	private DetectiveNotes dNotes;
 
 	public gameGUI(){
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Clue");
-		setSize(550, 700);
-		//set up each panel and arrange them in correct order
-		//setLayout(new GridLayout(3,1));
 		board = Board.getInstance();
 		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
-		// Initialize will load BOTH config files 
 		board.initialize();
+		board.calcTargets(7,5,1); // TESTING IF THE TARGETS ARE DRAWN CYAN AS EXPECTED
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Clue");
+		setSize(new Dimension(550, 900));
+		
+		// set up the menu
+		dNotes = new DetectiveNotes();
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		menuBar.add(createFileMenu());
+		
+		//set up each panel and arrange them in correct order
+		//setLayout(new GridLayout(3,1));
 		FlowLayout layout = new FlowLayout();
 		layout.setHgap(50);
 		layout.setVgap(250);
 		board.setLayout(layout);
 		add(board, BorderLayout.NORTH);
+		//myCardsPanel c = new myCardsPanel();
+		//add(c, BorderLayout.EAST);
 		JPanel panel1 = middlePanel();
 		add(panel1, BorderLayout.CENTER);
 		JPanel panel3 = bottomPanel();
 		add(panel3, BorderLayout.SOUTH);
+	}
+	
+	private JMenu createFileMenu() {
+		JMenu menu = new JMenu("File");
+		menu.add(createDetectiveNotesItem());
+		menu.add(createFileExitItem());
+		return menu;
+	}
+	private JMenuItem createDetectiveNotesItem() {
+		JMenuItem item = new JMenuItem("Detective Notes");
+		class MenuItemListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				dNotes.setVisible(true);
+			}
+			
+		}
+		item.addActionListener(new MenuItemListener());
+		return item;
+	}
+	private JMenuItem createFileExitItem() {
+		JMenuItem item = new JMenuItem("Exit");
+		class MenuItemListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+			
+		}
+		item.addActionListener(new MenuItemListener());
+		return item;
 	}
 
 
@@ -87,6 +130,13 @@ public class gameGUI extends JFrame {
 		panel.setLayout(layout);
 		return panel;
 	}
+	
+	public class myCardsPanel extends JPanel {
+		public myCardsPanel() {
+			setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
+		}
+	}
+	
 
 	public static void main(String[] args) {
 		// Create a JFrame

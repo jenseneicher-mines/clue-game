@@ -18,14 +18,16 @@ public class BoardCell {
 	private int pixelColumn;
 	private char initial;
 	private DoorDirection door;
+	private boolean drawsRoomName;
 
 	//constructor
-	public BoardCell(int row, int column, String label ) {
+	public BoardCell(int row, int column, String label, boolean drawsRoomName ) {
 		this.row = row;
 		this.pixelRow = this.row * PIXEL_SIZE_OF_CELL;
 		this.column = column;
 		this.pixelColumn = this.column * PIXEL_SIZE_OF_CELL;
 		this.initial = label.charAt(0);
+		this.drawsRoomName = drawsRoomName;
 
 		if ( label.length() > 1 ) {
 			char direction = label.charAt(1);
@@ -71,23 +73,26 @@ public class BoardCell {
 		}
 		return false;
 	}
-	public void draw(Graphics g) {
+	public void draw(Graphics g, boolean isTarget) {
 		// Draw a filled rectangle depending on cell status
 		if ( !isWalkway() ) {
 			g.setColor(Color.GRAY);
 		} 
+		else if (isTarget) {
+			g.setColor(Color.CYAN);
+		}
 		else {
 			g.setColor(Color.YELLOW);
 		}
 		g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
+		
+		// if it's a walkway, also draw a black border for the tile
 		if ( isWalkway() ) {
 			g.setColor(Color.BLACK);
 		}
 		g.drawRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
 		
-		
-		
-		// draw door direction
+		// draw door direction if it's a doorway
 		if ( isDoorway() ) {
 			double doorWidth = 0.1;
 			g.setColor(Color.BLUE);
@@ -102,7 +107,17 @@ public class BoardCell {
 			}
 			else {
 				g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, (int) (doorWidth*PIXEL_SIZE_OF_CELL));
-			}
+			} 
+		}
+			
+	}
+	// function to draw all the room names after the cells have been drawn, so that the names are on top of every cell
+	public void drawRoomNames(Graphics g) {
+		// draw the room name if needed
+		if ( drawsRoomName ) {
+			g.setColor(Color.BLUE);
+			String roomName = Board.getInstance().getRoomName(this.initial);
+			g.drawString(roomName, pixelColumn, pixelRow);
 		}
 	}
 
@@ -119,6 +134,10 @@ public class BoardCell {
 	}
 	public char getInitial() {
 		return initial;
+	}
+
+	public void setDrawsRoomName(boolean b) {
+		this.drawsRoomName = b;
 	}
 
 }

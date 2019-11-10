@@ -46,7 +46,7 @@ public class ComputerPlayer extends Player {
 	// if there's a room that was just visited, target is randomly selected
 	public BoardCell pickLocation(Set<BoardCell> targets) {
 		Boolean foundNewRoom = false;
-		BoardCell newLocation = new BoardCell(-1,-1,"X");
+		BoardCell newLocation = new BoardCell(-1,-1,"X", false);
 		ArrayList<BoardCell> targetListForRandomSelection = new ArrayList<BoardCell>(); // populate an array list with targets so that we can easily pick a random target later
 		// loop through the potential targets, looking for if there is a room
 		for ( BoardCell potentialTarget : targets ) {
