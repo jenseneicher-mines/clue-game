@@ -5,6 +5,7 @@
 package clueGame;
 
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -60,7 +61,6 @@ public class Board extends JPanel {
 	}
 	// initialize function to set up game board
 	public void initialize() {
-		
 		nonExistantCell = new BoardCell(-1,-1, "X", false);
 		currentCellFindingTargets = nonExistantCell;
 		currentPlayer = 0;
@@ -68,8 +68,9 @@ public class Board extends JPanel {
 		calcAdjacencies();
 		createDeck();
 		dealCards();
-		
+		setPreferredSize(new Dimension(BoardCell.PIXEL_SIZE_OF_CELL * numColumns, BoardCell.PIXEL_SIZE_OF_CELL * numRows));
 	}
+	
 	
 	// load function that calls all load config functions
 	public void loadConfigFiles() {
@@ -530,6 +531,17 @@ public class Board extends JPanel {
 				return room;
 			}
 		}
+		return null;
+	}
+	// getter function for finding and returning the human player for GUI interaction
+	public Player getHumanPlayer() {
+		
+		for ( Player p : playerList ) {
+			if ( p instanceof HumanPlayer ) {
+				return p;
+			}
+		}
+		
 		return null;
 	}
 

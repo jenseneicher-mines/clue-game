@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.JButton;import javax.swing.JFrame;import javax.swing.JLabel;
 import javax.swing.JPanel;import javax.swing.JTextField;import javax.swing.border.EtchedBorder;
@@ -19,6 +20,8 @@ public class gameGUI extends JFrame {
 	private String guessResp = "Placeholder";
 	private static Board board;
 	private DetectiveNotes dNotes;
+	public static int SCREEN_WIDTH = 550;
+	public static int SCREEN_HEIGHT = 900;
 
 	public gameGUI(){
 		board = Board.getInstance();
@@ -28,7 +31,7 @@ public class gameGUI extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
-		setSize(new Dimension(550, 900));
+		setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		
 		// set up the menu
 		dNotes = new DetectiveNotes();
@@ -37,18 +40,19 @@ public class gameGUI extends JFrame {
 		menuBar.add(createFileMenu());
 		
 		//set up each panel and arrange them in correct order
-		//setLayout(new GridLayout(3,1));
-		FlowLayout layout = new FlowLayout();
-		layout.setHgap(50);
-		layout.setVgap(250);
-		board.setLayout(layout);
-		add(board, BorderLayout.NORTH);
-		//myCardsPanel c = new myCardsPanel();
-		//add(c, BorderLayout.EAST);
-		JPanel panel1 = middlePanel();
-		add(panel1, BorderLayout.CENTER);
-		JPanel panel3 = bottomPanel();
-		add(panel3, BorderLayout.SOUTH);
+		//FlowLayout layout = new FlowLayout();
+		//layout.setHgap(50);
+		//layout.setVgap(250);
+		//board.setLayout(layout);
+		
+		
+		add(board, BorderLayout.CENTER);
+		add(myCardsPanel(), BorderLayout.EAST);
+		add(controlPanel(), BorderLayout.SOUTH);
+		//JPanel panel1 = middlePanel();
+		//add(panel1);
+		//JPanel panel3 = bottomPanel();
+		//add(panel3);
 	}
 	
 	private JMenu createFileMenu() {
@@ -90,62 +94,95 @@ public class gameGUI extends JFrame {
         setJMenuBar(menu);
         return menu;
     }
-
-	private JPanel middlePanel() {
-		JPanel panel = new JPanel();
-		// Use a grid layout, 1 row, 2 elements (label, text)
-		panel.setLayout(new GridLayout(1,4));
-		//Create label for displaying whose turn and their name
-		JLabel Label = new JLabel("<html> Whose turn? &nbsp" + "<br>" + name + "<html>");
-		panel.add(Label);
-		//set boarder layout for formatting
-		Label.setBorder(new TitledBorder (new EtchedBorder(), ""));
+    
+    public JPanel controlPanel() {
+    	
+    	JPanel control = new JPanel();
+    	control.setLayout(new GridLayout(2,4));
+    	
+    	JLabel whoseTurn = new JLabel(name);
+    	whoseTurn.setBorder(new TitledBorder ( new EtchedBorder(), "Whose turn?"));
+		control.add(whoseTurn);
+		
 		// Create a button for next player (will add listener)
 		JButton nextPlayer = new JButton("Next Player");
+		control.add(nextPlayer);
 		//Create a button for making an accusation
 		JButton makeAccusation = new JButton("Make an Accusation");
-		panel.setBorder(new TitledBorder (new EtchedBorder(), ""));
-		panel.add(nextPlayer);
-		panel.add(makeAccusation);
-		//Create layout for easy formatting
-		FlowLayout layout = new FlowLayout();
-		layout.setHgap(50);
-		layout.setVgap(10);
-		panel.setLayout(layout);
-		return panel;
-	}
-
-	private JPanel bottomPanel() {
-		JPanel panel = new JPanel();
-		// Use a grid layout, 1 row, 6 elements (label, text)
-		panel.setLayout(new GridLayout(1,6));
-		JLabel die = new JLabel("Die Roll: " + dieRoll + " ");
-		panel.add(die);
-		//set a boarder for die
-		die.setBorder(new TitledBorder (new EtchedBorder(), ""));
+		control.add(makeAccusation);
+		
+		// display the die roll
+		JLabel die = new JLabel("Roll: " + dieRoll + " ");
+		die.setBorder(new TitledBorder ( new EtchedBorder(), "Die"));
+		control.add(die);
+		
 		// Get Guess from user
 		JTextField guess = new JTextField("Enter Your Guess Here");
-		panel.add(guess);
+		control.add(guess);
 		//Set a boarder for guess
-		guess.setBorder(new TitledBorder (new LineBorder(Color.BLACK), "Guess"));
+		guess.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
+    	
+		
 		// Display Response
-		JLabel guessR = new JLabel("<html> Guess Response: &nbsp" + "<br>" + guessResp + " <html>");
-		panel.add(guessR);
+		JLabel guessR = new JLabel(guessResp);
+		control.add(guessR);
 		//set boarder for Guess Response
-		guessR.setBorder(new TitledBorder (new EtchedBorder(), ""));
-		//Layout for easy formatting
-		FlowLayout layout = new FlowLayout();
-		layout.setHgap(50);
-		layout.setVgap(10);
-		panel.setLayout(layout);
-		return panel;
+		guessR.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
+		
+    	return control;
+    }
+    
+    
+	public JPanel myCardsPanel() {
+		JPanel cards = new JPanel();
+		cards.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
+		cards.setPreferredSize(new Dimension(100, 200));
+		cards.setLayout(new GridLayout(3,1));
+		
+		// get the player's cards
+		Set<Card> playerHand = board.getHumanPlayer().getCurrentHand();
+		
+		// add the person card
+		String personCards = "<html>";
+		for ( Card c : playerHand ) {
+			if ( c.getType() == CardType.PERSON ) {
+				personCards = personCards + c.getCardName() + "<br>";
+			}
+		}
+		personCards += "<html>";
+		JLabel personList = new JLabel(personCards);
+		personList.setBorder(new TitledBorder (new EtchedBorder(), "People"));
+		cards.add(personList);
+		
+		// add the room cards
+		String roomCards = "<html>";
+		for ( Card c : playerHand ) {
+			if ( c.getType() == CardType.ROOM ) {
+				roomCards = roomCards + c.getCardName() + "<br>";
+			}
+		}
+		roomCards += "<html>";
+		JLabel roomList = new JLabel(roomCards);
+		roomList.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));
+		cards.add(roomList);
+		
+		// add the weapon cards
+		String weaponCards = "<html>";
+		for ( Card c : playerHand ) {
+			if ( c.getType() == CardType.WEAPON ) {
+				weaponCards = weaponCards + c.getCardName() + "<br>";
+			}
+		}
+		weaponCards += "<html>";
+		JLabel weaponList = new JLabel(weaponCards);
+		weaponList.setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));
+		cards.add(weaponList);
+		
+		
+		
+		return cards;
 	}
 	
-	public class myCardsPanel extends JPanel {
-		public myCardsPanel() {
-			setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
-		}
-	}
 	
 
 	public static void main(String[] args) {
