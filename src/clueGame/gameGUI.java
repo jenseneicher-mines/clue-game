@@ -188,6 +188,7 @@ public class gameGUI extends JFrame {
 	public static void main(String[] args) {
 		// Create a JFrame
 		gameGUI gui = new gameGUI();
+		JOptionPane.showMessageDialog(gui,"Your are " + board.getHumanPlayer().getplayerName() + " press OK then click Next Player to begin", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 		// show it
 		gui.pack();
 		gui.setVisible(true);
