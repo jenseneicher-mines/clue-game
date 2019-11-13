@@ -1,5 +1,69 @@
-// Players Part 2
-// Kai Mizuno & Jensen Eicher
+commit a56e65be497e5415fa72793055d3204be784b5ab
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Nov 12 18:36:55 2019 -0700
+
+    Shuffled deck successfully and changed type to arraylist while keeping no duplicate constraint
+
+commit 813bb2290dc44ba66bed1022789a2e7ddc4a9654
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Tue Nov 12 17:57:41 2019 -0700
+
+    Added splash screen that displays player name and short instructions
+
+commit 5291e90bf66936b88772741c0c581b87b70022a1
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Nov 12 10:49:00 2019 -0700
+
+    Refactored the GUI so the control panel is now a single panel instead of two. Pretty much only using grid layouts now. Added the My Cards panel to the GUI that gets the players cards and displays them
+
+commit 42f2e00d6f02bf4eb90eda44b08a57c6e98379e4
+Merge: c5766bf cf2ab81
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 9 21:00:18 2019 -0700
+
+    Merge branch 'master' of https://github.com/MizunoPK/ClueGame
+
+commit c5766bf4a1814fb93759e33f66cf467503a82891
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 9 20:53:19 2019 -0700
+
+    Editted GUI so the target cells are now drawn as cyan, players are drawn as circles at their respectvie locations, room names are drawn, there's a menu bar with an exit button and access to detective notes. Detective notes are set up with check boxes for every possible card and dropdown menus for the player's guesses
+
+commit cf2ab815c6a246c35544257df529f1517d6adf6a
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Sat Nov 9 19:14:51 2019 -0700
+
+    Added JMenuBar with JMenuItem Detective Notes
+
+commit 831a6caf3e70141824feea3b79551d18ba96cd2b
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Thu Nov 7 17:44:02 2019 -0700
+
+    Added the changes to the constructor of gameGUI to properly format the JFrame
+
+commit 69a5d98cf856b2ad085a582c9a3cb2f6aee65da7
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Thu Nov 7 12:51:05 2019 -0700
+
+    Added gui.pack() to main method of gameG
+
+commit 81447c6393ed3dff009414c4dcdc5c4c0657a8d8
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Thu Nov 7 10:44:56 2019 -0700
+
+    coverted gui to be a JFrame
+
+commit ef0156061d3ebac60ef1c8ed9f5c004cb90b94c6
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Nov 5 10:48:25 2019 -0700
+
+    Working on Clue Board GUI. Set it up so the board has a paintComponent that loops through every board cell and calls the corresponding board cell's draw function
+
+commit 0819fc3e54c8a920fe52a1ab6abd6d1ceb2b2364
+Author: Kai Mizuno <Mizuno.PK@gmail.com>
+Date:   Tue Nov 5 09:27:37 2019 -0700
+
+    Changed variables in gameGUI to be placeholders
 
 commit 91e072f27e1fcc98dd68e29e17bc791a31c26228
 Author: Kai Mizuno <kmizuno@mymail.mine.edu>
@@ -19,12 +83,23 @@ Date:   Sat Nov 2 16:12:54 2019 -0600
 
     wrote testHandlingSuggestion J-Unit tests. it has the board handle various suggestions and ensure the expected result is returned. currently failing
 
+commit 459f5e6bbc88605d2bdd6b8c4e02abdf368a5034
+Author: Kai Mizuno <kmizuno@mymail.mine.edu>
+Date:   Sat Nov 2 15:39:38 2019 -0600
+
+    Did a lot of refactoring. Pretty much turned every array/set that just tracked strings and changed them to track cards, for the sake of consistency. Set up Solution class to contain public cards for person, room, and weapon. Changed every place that looks at the solution, suggestion, or accusation to use the Solution object instead of the list of strings we were using. Currently gameActionTests is working, but need to go back and fix all the other test files as well.
+
 commit 706be2cab1352d4db6bd0fde89ef2888117a068e
 Author: Kai Mizuno <kmizuno@mymail.mine.edu>
 Date:   Sat Nov 2 12:51:40 2019 -0600
 
     Created disproveSuggestion function in Player class that takes in a list of cards that were suggested and will return a random card if there is multiple matches, the only match if there is only 1 match, or null if there is no matches. This makes the testDisprove tests pass in gameActionTests
 
+commit 52535900d4cabab590ab3e148c3befbecf774bde
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Fri Nov 1 16:10:09 2019 -0600
+
+    Finished GUI part 1
 
 commit b2b152ff5e965b015cb00488888b725362cbdf77
 Author: Kai Mizuno <kmizuno@mymail.mine.edu>
@@ -55,6 +130,12 @@ Author: Kai Mizuno <kmizuno@mymail.mine.edu>
 Date:   Thu Oct 31 19:26:53 2019 -0600
 
     Added a getTarget function to the computer player which checks if the computer has access to a doorway it did not just visit, and if so it returns that space as the new target. Otherwise it chooses a random new location as the target. This makes the tests made for gameActionTests (testComputerTargets) work
+
+commit 6b82459f5d64cc8e4aa8e40ff96b90b3130f3aa9
+Author: Jensen Eicher <jeicher@mymail.mines.edu>
+Date:   Thu Oct 31 10:43:44 2019 -0600
+
+    Refining GUI
 
 commit 2dfc5399d2c6cb9aa2aa7e787c6e490af446cb79
 Author: Kai Mizuno <Mizuno.PK@gmail.com>

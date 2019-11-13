@@ -186,7 +186,6 @@ public class OUR_BoardAdjTargetTests {
 	// These are LIGHT BLUE on the planning spreadsheet
 	@Test
 	public void testTargetsOneStep() {
-		System.out.println("stuff");
 		board.calcTargets(24, 10, 1);
 		Set<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());

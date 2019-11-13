@@ -444,7 +444,7 @@ public class Board extends JPanel {
 		// if this is the first call of the recursive loop, then reset the target and visited list
 		if ( currentCellFindingTargets.equals(nonExistantCell) ) {
 			currentCellFindingTargets = currentCell;
-			//targets = new HashSet<BoardCell>();
+			targets = new HashSet<BoardCell>();
 			visited = new HashSet<BoardCell>();
 		}
 

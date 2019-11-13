@@ -27,7 +27,7 @@ public class gameGUI extends JFrame {
 		board = Board.getInstance();
 		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
 		board.initialize();
-		board.calcTargets(7,5,1); // TESTING IF THE TARGETS ARE DRAWN CYAN AS EXPECTED
+		board.calcTargets(7,5,3); // TESTING IF THE TARGETS ARE DRAWN CYAN AS EXPECTED
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
@@ -185,7 +185,7 @@ public class gameGUI extends JFrame {
 	public static void main(String[] args) {
 		// Create a JFrame
 		gameGUI gui = new gameGUI();
-		JOptionPane.showMessageDialog(gui,"Your are " + board.getHumanPlayer().getplayerName() + " press OK then click Next Player to begin", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(gui,"Your are " + board.getHumanPlayer().getplayerName() + ", press OK then click Next Player to begin", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 		// show it
 		gui.pack();
 		gui.setVisible(true);

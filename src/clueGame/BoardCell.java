@@ -78,12 +78,13 @@ public class BoardCell {
 		if ( !isWalkway() ) {
 			g.setColor(Color.GRAY);
 		} 
-		else if (isTarget) {
-			g.setColor(Color.CYAN);
-		}
 		else {
 			g.setColor(Color.YELLOW);
 		}
+		if (isTarget) {
+			g.setColor(Color.CYAN);
+		}
+		
 		g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
 		
 		// if it's a walkway, also draw a black border for the tile
