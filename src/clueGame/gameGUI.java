@@ -12,6 +12,7 @@ import javax.swing.JButton;import javax.swing.JFrame;import javax.swing.JLabel;
 import javax.swing.JPanel;import javax.swing.JTextField;import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
 
 public class gameGUI extends JFrame {
 	//TEST VARIABLES ONLY FOR SHOWING DISPLAY
@@ -106,11 +107,13 @@ public class gameGUI extends JFrame {
 		
 		// Create a button for next player (will add listener)
 		JButton nextPlayer = new JButton("Next Player");
+		nextPlayer.addActionListener(new GameControl());
 		control.add(nextPlayer);
 		//Create a button for making an accusation
 		JButton makeAccusation = new JButton("Make an Accusation");
 		control.add(makeAccusation);
-		
+		makeAccusation.addActionListener(new GameControl());
+
 		// display the die roll
 		JLabel die = new JLabel("Roll: " + dieRoll + " ");
 		die.setBorder(new TitledBorder ( new EtchedBorder(), "Die"));
@@ -131,8 +134,7 @@ public class gameGUI extends JFrame {
 		
     	return control;
     }
-    
-    
+
 	public JPanel myCardsPanel() {
 		JPanel cards = new JPanel();
 		cards.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
@@ -179,8 +181,18 @@ public class gameGUI extends JFrame {
 		cards.add(weaponList);
 		return cards;
 	}
-	
-	
+
+	private class GameControl implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent actionEvent) {
+			if(actionEvent.getSource() == "Next Player");{
+				//call functions
+			}
+			if(actionEvent.getSource() == "Make an Accusation");{
+				//call functions
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		// Create a JFrame
