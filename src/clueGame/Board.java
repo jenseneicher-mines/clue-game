@@ -35,7 +35,8 @@ public class Board extends JPanel {
 	private Player[] playerList;
 	private String[] weaponList;
 	private String[] roomList;
-	private Set<Card> deck;
+	private Set<Card> uniqueDeck;
+	private ArrayList<Card> deck;
 	private Solution correctSolution;
 	private int currentPlayer;
 	
@@ -296,24 +297,33 @@ public class Board extends JPanel {
 
 	// create a deck of cards containing players, rooms, and weapons
 	public void createDeck(){
-		deck = new HashSet<Card>();
-		
+		uniqueDeck = new HashSet<Card>();
+		deck = new ArrayList<Card>();
+
 		// loop through all the players creating cards of them
 		for ( Player person : playerList ) {
 			Card newPerson = new Card( person.getplayerName(), CardType.PERSON );
-			deck.add(newPerson);
+			uniqueDeck.add(newPerson);
 		}
 		// loop through all the weapons creating cards of them
 		for ( String weapon : weaponList ) {
 			Card newWeapon = new Card( weapon, CardType.WEAPON );
-			deck.add(newWeapon);
+			uniqueDeck.add(newWeapon);
 		}
 		// loop through all the rooms creating cards of them
 		for ( String room : roomList ) {
 			Card newRoom = new Card( room, CardType.ROOM );
-			deck.add(newRoom);
+			uniqueDeck.add(newRoom);
 		}
-	
+
+		// shuffle deck since sets use sudo random not truly random
+		Card[] newDeck = new Card[uniqueDeck.size()];
+		uniqueDeck.toArray(newDeck);
+		List<Card> newerDeck = Arrays.asList(newDeck);
+		Collections.shuffle(newerDeck);
+		for( Card it : newerDeck ){
+			deck.add(it);
+		}
 	}
 	
 	// deal an even amount of cards to everyone with no duplicates
@@ -518,7 +528,7 @@ public class Board extends JPanel {
 	public String[] getWeapons() {
 		return weaponList;
 	}
-	public Set<Card> getDeck() {
+	public ArrayList<Card> getDeck() {
 		return deck;
 	}
 	public Solution getSolution() {

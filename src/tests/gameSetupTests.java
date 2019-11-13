@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -75,7 +76,7 @@ public class gameSetupTests {
 	// check for the correct amount of cards in the deck, the correct number of each type of card, and test the deck has some of the expected cards
 	@Test
 	public void testDeckCreation() {
-		Set<Card> deck = board.getDeck();
+		ArrayList<Card> deck = board.getDeck();
 		
 		// test the total cards in the deck to make sure it is MAX_DECK_SIZE ( MAX_PLAYERS + MAX_WEAPONS + MAX_ROOMS) (21)
 		assertEquals(deck.size(), Board.MAX_DECK_SIZE);

@@ -177,9 +177,6 @@ public class gameGUI extends JFrame {
 		JLabel weaponList = new JLabel(weaponCards);
 		weaponList.setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));
 		cards.add(weaponList);
-		
-		
-		
 		return cards;
 	}
 	
