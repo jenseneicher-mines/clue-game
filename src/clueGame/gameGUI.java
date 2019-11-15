@@ -29,7 +29,7 @@ public class gameGUI extends JFrame {
 		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
 		board.initialize();
 		board.calcTargets(7,5,3); // TESTING IF THE TARGETS ARE DRAWN CYAN AS EXPECTED
-		
+		dieRoll = board.rollDie(dieRoll);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
 		setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));

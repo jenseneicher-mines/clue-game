@@ -5,19 +5,21 @@
 package clueGame;
 
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.util.Random;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 
-
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener{
 	//constants
 	public static final int MAX_BOARD_SIZE = 50;
 	public static final int MAX_PLAYERS = 6;
@@ -500,6 +502,11 @@ public class Board extends JPanel {
 		return null;
 	}
 
+	public int rollDie(int die){
+		die = (int)(5.0 * Math.random() + 1);
+		return die;
+	}
+
 	// Getter Functions
 	public Map<Character, String> getLegend() {
 		return legend;
@@ -562,9 +569,16 @@ public class Board extends JPanel {
 		playerConfigFile = peopleTXT;
 		weaponConfigFile = weaponsTXT;
 	}
-	
-	
-	
+
+	public boolean containsClick(int mouseX, int mouseY){
+		Rectangle rect = new Rectangle(BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
+		if(rect.contains(new Point(mouseX,mouseY))){
+			return true;
+		}
+		return false;
+	}
+
+
 	// Functions currently only being using for J-Unit tests
 	public void setSolution( Solution newSolution ) {
 		this.correctSolution = newSolution;
@@ -575,6 +589,36 @@ public class Board extends JPanel {
 	public void setCurrentPlayer(int player) {
 		this.currentPlayer = player;
 	}
-	
-	
+
+	@Override
+	public void mouseClicked(MouseEvent mouseEvent) {
+		for( BoardCell in : targets){
+			if( containsClick(mouseEvent.getX(), mouseEvent.getY()) && (in.getRow() == mouseEvent.getX() && in.getColumn() == mouseEvent.getY())){
+				// set player locaiton
+				repaint();
+			}
+			JPanel error = new JPanel();
+			JOptionPane.showMessageDialog(error,"Incorrect selection");
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent mouseEvent) {
+
+	}
 }
