@@ -41,6 +41,7 @@ public class Board extends JPanel implements MouseListener{
 	private ArrayList<Card> deck;
 	private Solution correctSolution;
 	private int currentPlayer;
+	private boolean hasMoved;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
@@ -67,6 +68,7 @@ public class Board extends JPanel implements MouseListener{
 		nonExistantCell = new BoardCell(-1,-1, "X", false);
 		currentCellFindingTargets = nonExistantCell;
 		currentPlayer = 0;
+		hasMoved = false;
 		loadConfigFiles();
 		calcAdjacencies();
 		createDeck();
@@ -91,7 +93,8 @@ public class Board extends JPanel implements MouseListener{
 	// paint the board
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// paint all of the Board Cells and doors
+		addMouseListener(this);
+		// paint acll of the Board Cells and doors
 		for ( int column = 0; column < numColumns; column++ ) {
 			for (int row = 0; row < numRows; row++) {
 				if ( targets.contains(board[row][column]) ) {
@@ -502,8 +505,8 @@ public class Board extends JPanel implements MouseListener{
 		return null;
 	}
 
-	public int rollDie(int die){
-		die = (int)(5.0 * Math.random() + 1);
+	public int rollDie(){
+		int die = (int)(5.0 * Math.random() + 1);
 		return die;
 	}
 
@@ -541,6 +544,9 @@ public class Board extends JPanel implements MouseListener{
 	public Solution getSolution() {
 		return this.correctSolution;
 	}
+	public boolean getHasMoved(){
+		return hasMoved;
+	}
 	// returns the room name based off the first letter of the room's name
 	public String getRoomName( char firstLetter ) {
 		for ( String room : roomList ) {
@@ -570,8 +576,9 @@ public class Board extends JPanel implements MouseListener{
 		weaponConfigFile = weaponsTXT;
 	}
 
-	public boolean containsClick(int mouseX, int mouseY){
-		Rectangle rect = new Rectangle(BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
+	public boolean containsClick(int mouseX, int mouseY, BoardCell targets){
+		//check to see if clicked location was in the cell of a target
+		Rectangle rect = new Rectangle(targets.getPixelColumn(), targets.getPixelRow(), BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
 		if(rect.contains(new Point(mouseX,mouseY))){
 			return true;
 		}
@@ -589,17 +596,39 @@ public class Board extends JPanel implements MouseListener{
 	public void setCurrentPlayer(int player) {
 		this.currentPlayer = player;
 	}
+	public void setHasMoved(boolean moved){
+		hasMoved = moved;
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
-		for( BoardCell in : targets){
-			if( containsClick(mouseEvent.getX(), mouseEvent.getY()) && (in.getRow() == mouseEvent.getX() && in.getColumn() == mouseEvent.getY())){
-				// set player locaiton
-				repaint();
+		boolean isError = true;
+		// loop through targets and see if a mouse clicked on one
+		if((hasMoved == false)  && (playerList[currentPlayer].getplayerName() == getHumanPlayer().getplayerName())) {
+			for (BoardCell in : targets) {
+				if (containsClick(mouseEvent.getX(), mouseEvent.getY(), in)) {
+					// target was found so no error
+					isError = false;
+					hasMoved = true;
+					// move the player
+					movePlayer(in.getColumn(), in.getRow());
+				}
 			}
-			JPanel error = new JPanel();
-			JOptionPane.showMessageDialog(error,"Incorrect selection");
+			if (isError) {
+				// display error if no target was found
+				JPanel error = new JPanel();
+				JOptionPane.showMessageDialog(error, "Incorrect selection");
+			}
 		}
+	}
+
+	public void movePlayer(int x, int y){
+		//update player with new information
+		getHumanPlayer().setLocation(x,y);
+		// calculate its new targets for next round
+		calcTargets(x,y,rollDie());
+		//repaint gui with new location
+		repaint();
 	}
 
 	@Override

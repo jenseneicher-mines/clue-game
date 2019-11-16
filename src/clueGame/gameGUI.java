@@ -29,7 +29,7 @@ public class gameGUI extends JFrame {
 		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
 		board.initialize();
 		board.calcTargets(7,5,3); // TESTING IF THE TARGETS ARE DRAWN CYAN AS EXPECTED
-		dieRoll = board.rollDie(dieRoll);
+		dieRoll = board.rollDie();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
 		setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -39,7 +39,7 @@ public class gameGUI extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
-		
+
 		//set up each panel and arrange them in correct order
 		//FlowLayout layout = new FlowLayout();
 		//layout.setHgap(50);
@@ -187,6 +187,7 @@ public class gameGUI extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 			if(actionEvent.getSource() == "Next Player");{
 				//call functions
+				board.setHasMoved(false);
 			}
 			if(actionEvent.getSource() == "Make an Accusation");{
 				//call functions
