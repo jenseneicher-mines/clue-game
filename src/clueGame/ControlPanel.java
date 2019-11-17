@@ -99,6 +99,8 @@ public class ControlPanel extends JPanel {
 	 private class AccusationListener implements ActionListener {
 		 public void actionPerformed(ActionEvent e) {
 			 // call functions
+			 //board.openGuessDialog();
+			 board.openAccusationDialog();
 			 updateControlPanel();
 		 }
 	 }

@@ -67,6 +67,20 @@ public class Board extends JPanel implements MouseListener{
 	private int previousRow = -1;
 	private int previousColumn = -1;
 	private BoardCell newLocation;
+	
+	// variables for the dialogs
+	private JDialog makeAGuessDialog;
+	private JLabel currentRoom;
+	private JComboBox<String> weaponDropdownGuess;
+	private JComboBox<String> personDropdownGuess;
+	private JButton submitButtonGuess;
+	private JButton cancelButtonGuess;
+	private JDialog makeAnAccusationDialog;
+	private JComboBox<String> roomDropdownAccusation;
+	private JComboBox<String> weaponDropdownAccusation;
+	private JComboBox<String> personDropdownAccusation;
+	private JButton submitButtonAccusation;
+	private JButton cancelButtonAccusation;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -85,10 +99,15 @@ public class Board extends JPanel implements MouseListener{
 		createDeck();
 		dealCards();
 		
+		// set up the JPanel stuff for the board
 		boardWidth = BoardCell.PIXEL_SIZE_OF_CELL * numColumns;
 		boardHeight = BoardCell.PIXEL_SIZE_OF_CELL * numRows;
 		setPreferredSize(new Dimension(boardWidth, boardHeight));
 		addMouseListener(this);
+		
+		// set up the JDialogs for when the player is making a guess/accusation
+		setUpGuessDialog();
+		setUpAccusationDialog();
 		
 		// set the first player to be 1 before the human so that the first time "Next Player" is pressed
 		// the game starts on the human
@@ -99,6 +118,102 @@ public class Board extends JPanel implements MouseListener{
 			currentPlayer = playerList.length - 1;
 		}
 	}
+	
+	public void setUpGuessDialog() {
+		makeAGuessDialog = new JDialog();
+		makeAGuessDialog.setTitle("Make a Guess");
+		
+		makeAGuessDialog.setLayout(new GridLayout(4,2));
+		
+		makeAGuessDialog.setSize(new Dimension(300,300));
+		
+		// Set up different panels for the room row for each dialog
+		// guess dialog should show "Your room: " and don't give an option for the room
+		makeAGuessDialog.add(new JLabel("Your room:"));
+		currentRoom = new JLabel("Nowhere");
+		makeAGuessDialog.add(currentRoom);
+		
+		// make the person label
+		makeAGuessDialog.add(new JLabel("Person:"));
+		
+		// make the person dropdown
+		personDropdownGuess = new JComboBox<String>();
+		for ( Player person : playerList ) {
+			personDropdownGuess.addItem(person.getplayerName());
+		}
+		makeAGuessDialog.add(personDropdownGuess);
+		
+		// make the weapon label
+		makeAGuessDialog.add(new JLabel("Weapon:"));
+		
+		// make the weapon dropdown
+		weaponDropdownGuess = new JComboBox<String>();
+		for ( String weapon : weaponList ) {
+			weaponDropdownGuess.addItem(weapon);
+		}
+		makeAGuessDialog.add(weaponDropdownGuess);
+		
+		// make the submit button
+		submitButtonGuess = new JButton("Submit");
+		makeAGuessDialog.add(submitButtonGuess);
+		
+		// make the cancel button
+		cancelButtonGuess = new JButton("Cancel");
+		makeAGuessDialog.add(cancelButtonGuess);
+	}
+	public void setUpAccusationDialog() {
+		makeAnAccusationDialog = new JDialog();
+		makeAnAccusationDialog.setTitle("Make an Accusation");
+		
+		makeAnAccusationDialog.setLayout(new GridLayout(4,2));
+		
+		makeAnAccusationDialog.setSize(new Dimension(300,300));
+		
+		// Set up different panels for the room row for each dialog
+		// accusation dialog should shown "Room:" and give a dropdown menu for room options
+		makeAnAccusationDialog.add(new JLabel("Room:"));
+		roomDropdownAccusation = new JComboBox<String>();
+		for ( String room : roomList ) {
+			roomDropdownAccusation.addItem(room);
+		}
+		makeAnAccusationDialog.add(roomDropdownAccusation);
+		
+		// make the person label
+		makeAnAccusationDialog.add(new JLabel("Person:"));
+		
+		// make the person dropdown
+		personDropdownAccusation = new JComboBox<String>();
+		for ( Player person : playerList ) {
+			personDropdownAccusation.addItem(person.getplayerName());
+		}
+		makeAnAccusationDialog.add(personDropdownAccusation);
+		
+		// make the weapon label
+		makeAnAccusationDialog.add(new JLabel("Weapon:"));
+		
+		// make the weapon dropdown
+		weaponDropdownAccusation = new JComboBox<String>();
+		for ( String weapon : weaponList ) {
+			weaponDropdownAccusation.addItem(weapon);
+		}
+		makeAnAccusationDialog.add(weaponDropdownAccusation);
+		
+		// make the submit button
+		submitButtonAccusation = new JButton("Submit");
+		makeAnAccusationDialog.add(submitButtonAccusation);
+		
+		// make the cancel button
+		cancelButtonAccusation = new JButton("Cancel");
+		makeAnAccusationDialog.add(cancelButtonAccusation);
+	}
+	
+	public void openAccusationDialog() {
+		makeAnAccusationDialog.setVisible(true);
+	}
+	public void openGuessDialog() {
+		makeAGuessDialog.setVisible(true);
+	}
+	
 	
 	
 	// load function that calls all load config functions
