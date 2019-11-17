@@ -15,21 +15,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 
 public class gameGUI extends JFrame {
-	//TEST VARIABLES ONLY FOR SHOWING DISPLAY
-	private String name = "Placeholder";
-	private int dieRoll = -1;
-	private String guessResp = "Placeholder";
 	private static Board board;
 	private DetectiveNotes dNotes;
-	public static int SCREEN_WIDTH = 550;
+	public static int SCREEN_WIDTH = 800;
 	public static int SCREEN_HEIGHT = 900;
 
 	public gameGUI(){
 		board = Board.getInstance();
 		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");
 		board.initialize();
-		board.calcTargets(7,5,3); // TESTING IF THE TARGETS ARE DRAWN CYAN AS EXPECTED
-		dieRoll = board.rollDie();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
 		setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -40,20 +34,12 @@ public class gameGUI extends JFrame {
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
 
-		//set up each panel and arrange them in correct order
-		//FlowLayout layout = new FlowLayout();
-		//layout.setHgap(50);
-		//layout.setVgap(250);
-		//board.setLayout(layout);
-		
-		
 		add(board, BorderLayout.CENTER);
 		add(myCardsPanel(), BorderLayout.EAST);
-		add(controlPanel(), BorderLayout.SOUTH);
-		//JPanel panel1 = middlePanel();
-		//add(panel1);
-		//JPanel panel3 = bottomPanel();
-		//add(panel3);
+		ControlPanel cp = new ControlPanel();
+		cp.setPreferredSize(new Dimension(board.getBoardWidth(), SCREEN_HEIGHT - board.getBoardHeight()));
+		add(cp, BorderLayout.SOUTH);
+		
 	}
 	
 	private JMenu createFileMenu() {
@@ -95,50 +81,11 @@ public class gameGUI extends JFrame {
         setJMenuBar(menu);
         return menu;
     }
-    
-    public JPanel controlPanel() {
-    	
-    	JPanel control = new JPanel();
-    	control.setLayout(new GridLayout(2,4));
-    	
-    	JLabel whoseTurn = new JLabel(name);
-    	whoseTurn.setBorder(new TitledBorder ( new EtchedBorder(), "Whose turn?"));
-		control.add(whoseTurn);
-		
-		// Create a button for next player (will add listener)
-		JButton nextPlayer = new JButton("Next Player");
-		nextPlayer.addActionListener(new GameControl());
-		control.add(nextPlayer);
-		//Create a button for making an accusation
-		JButton makeAccusation = new JButton("Make an Accusation");
-		control.add(makeAccusation);
-		makeAccusation.addActionListener(new GameControl());
-
-		// display the die roll
-		JLabel die = new JLabel("Roll: " + dieRoll + " ");
-		die.setBorder(new TitledBorder ( new EtchedBorder(), "Die"));
-		control.add(die);
-		
-		// Get Guess from user
-		JTextField guess = new JTextField("Enter Your Guess Here");
-		control.add(guess);
-		//Set a boarder for guess
-		guess.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
-    	
-		
-		// Display Response
-		JLabel guessR = new JLabel(guessResp);
-		control.add(guessR);
-		//set boarder for Guess Response
-		guessR.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
-		
-    	return control;
-    }
 
 	public JPanel myCardsPanel() {
 		JPanel cards = new JPanel();
 		cards.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
-		cards.setPreferredSize(new Dimension(100, 200));
+		cards.setPreferredSize(new Dimension(SCREEN_WIDTH - board.getBoardWidth(), board.getBoardHeight()));
 		cards.setLayout(new GridLayout(3,1));
 		
 		// get the player's cards
@@ -198,7 +145,7 @@ public class gameGUI extends JFrame {
 	public static void main(String[] args) {
 		// Create a JFrame
 		gameGUI gui = new gameGUI();
-		JOptionPane.showMessageDialog(gui,"Your are " + board.getHumanPlayer().getplayerName() + ", press OK then click Next Player to begin", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(gui,"Your are " + board.getHumanPlayer().getplayerName() + " (" + board.getHumanPlayer().getColorName() + "), press OK then click Next Player to begin", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 		// show it
 		gui.pack();
 		gui.setVisible(true);

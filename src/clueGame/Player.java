@@ -11,6 +11,7 @@ import java.util.Set;
 public class Player {
 
 	private String playerName;
+	private String colorName;
 	private Color color;
 	private int row;
 	private int column;
@@ -26,6 +27,7 @@ public class Player {
 	public Player(String playerName, String color, int row, int column) {
 		super();
 		this.playerName = playerName;
+		this.colorName = color;
 		this.color = convertColor(color.toUpperCase());
 		this.row = row;
 		this.column = column;
@@ -99,6 +101,9 @@ public class Player {
 	public Color getColor() {
 		return color;
 	}
+	public String getColorName() {
+		return colorName;
+	}
 	public int getRow() {
 		return row;
 	}
@@ -119,6 +124,8 @@ public class Player {
 	public void setLocation(int row, int col) {
 		this.row = row;
 		this.column = col;
+		this.pixelRow = BoardCell.PIXEL_SIZE_OF_CELL * row;
+		this.pixelColumn = BoardCell.PIXEL_SIZE_OF_CELL * column;
 	}
 	public void setLastVisitedRoom( String room ) {
 		this.lastVisitedRoom = room;;

@@ -27,6 +27,7 @@ public class Board extends JPanel implements MouseListener{
 	public static final int MAX_ROOMS = 9;
 	public static final int MAX_DECK_SIZE = MAX_PLAYERS + MAX_WEAPONS + MAX_ROOMS;
 	public static final int CARDS_IN_SOLUTION_HAND = 3;
+	public static final int MAX_MOVEMENT = 6;
 	
 	//instance variables
 	private int numRows;
@@ -41,7 +42,9 @@ public class Board extends JPanel implements MouseListener{
 	private ArrayList<Card> deck;
 	private Solution correctSolution;
 	private int currentPlayer;
-	private boolean hasMoved;
+	private int humanPlayerIndex;
+	private boolean hasMoved = false;
+	private int dieRoll = 0;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
@@ -54,6 +57,16 @@ public class Board extends JPanel implements MouseListener{
 	private String roomConfigFile;
 	private String playerConfigFile;
 	private String weaponConfigFile;
+	
+	// variables for control
+	private int boardWidth;
+	private int boardHeight;
+	private Random rand = new Random();
+	private String lastGuess;
+	private String lestGuessResponse;
+	private int previousRow = -1;
+	private int previousColumn = -1;
+	private BoardCell newLocation;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -67,13 +80,24 @@ public class Board extends JPanel implements MouseListener{
 	public void initialize() {
 		nonExistantCell = new BoardCell(-1,-1, "X", false);
 		currentCellFindingTargets = nonExistantCell;
-		currentPlayer = 0;
-		hasMoved = false;
 		loadConfigFiles();
 		calcAdjacencies();
 		createDeck();
 		dealCards();
-		setPreferredSize(new Dimension(BoardCell.PIXEL_SIZE_OF_CELL * numColumns, BoardCell.PIXEL_SIZE_OF_CELL * numRows));
+		
+		boardWidth = BoardCell.PIXEL_SIZE_OF_CELL * numColumns;
+		boardHeight = BoardCell.PIXEL_SIZE_OF_CELL * numRows;
+		setPreferredSize(new Dimension(boardWidth, boardHeight));
+		addMouseListener(this);
+		
+		// set the first player to be 1 before the human so that the first time "Next Player" is pressed
+		// the game starts on the human
+		if ( humanPlayerIndex > 0 ) {
+			currentPlayer = humanPlayerIndex - 1;
+		}
+		else {
+			currentPlayer = playerList.length - 1;
+		}
 	}
 	
 	
@@ -93,16 +117,23 @@ public class Board extends JPanel implements MouseListener{
 	// paint the board
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		addMouseListener(this);
+		
+		boolean isTarget;
+		boolean isPreviousLocation;
 		// paint acll of the Board Cells and doors
 		for ( int column = 0; column < numColumns; column++ ) {
 			for (int row = 0; row < numRows; row++) {
-				if ( targets.contains(board[row][column]) ) {
-					board[row][column].draw(g, true);
+				isTarget = false;
+				isPreviousLocation = false;
+				if ( targets.contains(board[row][column]) || board[row][column].equals(newLocation) ) {
+					isTarget = true;
 				}
-				else {
-					board[row][column].draw(g, false);
+				if ( row == previousRow && column == previousColumn ) {
+					isPreviousLocation = true;
 				}
+				
+				board[row][column].draw(g, isTarget, isPreviousLocation);
+				
 			}
 		}
 		
@@ -260,6 +291,7 @@ public class Board extends JPanel implements MouseListener{
 				newPlayer = new ComputerPlayer(name, color, row, col);
 			} else {
 				newPlayer = new HumanPlayer(name,color,row,col);
+				humanPlayerIndex = index;
 			}
 			
 			// add to player list
@@ -505,10 +537,89 @@ public class Board extends JPanel implements MouseListener{
 		return null;
 	}
 
-	public int rollDie(){
-		int die = (int)(5.0 * Math.random() + 1);
-		return die;
+	public void rollDie(){
+		dieRoll = rand.nextInt(MAX_MOVEMENT) + 1;
 	}
+	
+	// Update the Player
+	// If the new player is a computer: finish the computer's turn
+	public void nextPlayer() {
+		// update the current player
+		currentPlayer++;
+		if ( currentPlayer == MAX_PLAYERS ) {
+			currentPlayer = 0;
+		}
+		
+		// roll the die and calculate targets no matter which player it is
+		rollDie();
+		calcTargets( playerList[currentPlayer].getRow(), playerList[currentPlayer].getCol(), dieRoll );
+		previousRow = -1;
+		previousColumn = -1;
+		newLocation = null;
+		hasMoved = false;
+		
+		// if it's a computer's turn, finish the computer's turn
+		if ( playerList[currentPlayer] instanceof ComputerPlayer ) {
+			doComputersTurn();
+		}
+		
+		// repaint the board
+		repaint();
+		
+	}
+	public void doComputersTurn() {
+		BoardCell computerTarget = ((ComputerPlayer) playerList[currentPlayer]).pickLocation(targets);
+		movePlayer(computerTarget);
+	}
+	
+	
+	@Override
+	public void mouseClicked(MouseEvent mouseEvent) {
+		boolean isError = true;
+		// loop through targets and see if a mouse clicked on one
+		if((hasMoved == false)  && (playerList[currentPlayer] instanceof HumanPlayer)) {
+			for (BoardCell in : targets) {
+				if (containsClick(mouseEvent.getX(), mouseEvent.getY(), in)) {
+					isError = false;
+					hasMoved = true;
+					// move the player
+					movePlayer(in);
+				}
+			}
+			if (isError) {
+				// display error if no target was found
+				JPanel error = new JPanel();
+				JOptionPane.showMessageDialog(error, "Invalid Location Selected. Please select one of the cyan tiles.");
+			}
+		}
+	}
+	
+	public boolean containsClick(int mouseX, int mouseY, BoardCell potentialTarget){
+		//check to see if clicked location was in the cell of a target
+		Rectangle rect = new Rectangle(potentialTarget.getPixelColumn(), potentialTarget.getPixelRow(), BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
+		if(rect.contains(new Point(mouseX,mouseY))){
+			return true;
+		}
+		return false;
+	}
+
+	public void movePlayer(BoardCell newLocation){
+		// update the previous location
+		previousRow = playerList[currentPlayer].getRow();
+		previousColumn = playerList[currentPlayer].getCol();
+		
+		//update player with new information
+		playerList[currentPlayer].setLocation(newLocation.getRow(),newLocation.getColumn());
+		this.newLocation = newLocation;
+		
+		// clear the targets
+		targets = new HashSet<BoardCell>();
+		
+		//repaint gui with new location
+		repaint();
+	}
+	
+	
 
 	// Getter Functions
 	public Map<Character, String> getLegend() {
@@ -567,6 +678,24 @@ public class Board extends JPanel implements MouseListener{
 		
 		return null;
 	}
+	public Player getCurrentPlayer() {
+		return playerList[currentPlayer];
+	}
+	public int getDieRoll() {
+		return dieRoll;
+	}
+	public String getLastGuess() {
+		return lastGuess;
+	}
+	public String getGuessResponse() {
+		return lestGuessResponse;
+	}
+	public int getBoardWidth() {
+		return boardWidth;
+	}
+	public int getBoardHeight() {
+		return boardHeight;
+	}
 
 	//Setter Functions
 	public void setConfigFiles(String boardCSV, String legendTXT, String peopleTXT, String weaponsTXT) {
@@ -576,14 +705,7 @@ public class Board extends JPanel implements MouseListener{
 		weaponConfigFile = weaponsTXT;
 	}
 
-	public boolean containsClick(int mouseX, int mouseY, BoardCell targets){
-		//check to see if clicked location was in the cell of a target
-		Rectangle rect = new Rectangle(targets.getPixelColumn(), targets.getPixelRow(), BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
-		if(rect.contains(new Point(mouseX,mouseY))){
-			return true;
-		}
-		return false;
-	}
+	
 
 
 	// Functions currently only being using for J-Unit tests
@@ -600,36 +722,7 @@ public class Board extends JPanel implements MouseListener{
 		hasMoved = moved;
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent mouseEvent) {
-		boolean isError = true;
-		// loop through targets and see if a mouse clicked on one
-		if((hasMoved == false)  && (playerList[currentPlayer].getplayerName() == getHumanPlayer().getplayerName())) {
-			for (BoardCell in : targets) {
-				if (containsClick(mouseEvent.getX(), mouseEvent.getY(), in)) {
-					// target was found so no error
-					isError = false;
-					hasMoved = true;
-					// move the player
-					movePlayer(in.getColumn(), in.getRow());
-				}
-			}
-			if (isError) {
-				// display error if no target was found
-				JPanel error = new JPanel();
-				JOptionPane.showMessageDialog(error, "Incorrect selection");
-			}
-		}
-	}
-
-	public void movePlayer(int x, int y){
-		//update player with new information
-		getHumanPlayer().setLocation(x,y);
-		// calculate its new targets for next round
-		calcTargets(x,y,rollDie());
-		//repaint gui with new location
-		repaint();
-	}
+	
 
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
@@ -650,4 +743,6 @@ public class Board extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent mouseEvent) {
 
 	}
+	
+	
 }

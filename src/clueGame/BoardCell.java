@@ -8,7 +8,7 @@ import java.awt.*;
 
 
 public class BoardCell {
-	public static final int PIXEL_SIZE_OF_CELL = 20;
+	public static final int PIXEL_SIZE_OF_CELL = 30;
 
 	//instance variables
 	private int row;
@@ -68,15 +68,23 @@ public class BoardCell {
 		return false;
 	}
 
-	public void draw(Graphics g, boolean isTarget) {
+	public void draw(Graphics g, boolean isTarget, boolean isPreviousLocation) {
 		// Draw a filled rectangle depending on cell status
-		if (!isWalkway()) {
-			g.setColor(Color.GRAY);
-		} else {
-			g.setColor(Color.YELLOW);
-		}
-		if (isTarget) {
+		// distinguish the target cells
+		if ( isTarget ) {
 			g.setColor(Color.CYAN);
+		}
+		// if the player just moved from this cell, mark it a light grey
+		else if ( isPreviousLocation ) {
+			g.setColor(Color.LIGHT_GRAY);
+		}
+		// if there is no movement going on with this cell and it's a walkway make it yellow
+		else if (isWalkway()) {
+			g.setColor(Color.YELLOW);
+		} 
+		// any other case is a room cell that should be gray
+		else {
+			g.setColor(Color.GRAY);
 		}
 
 		g.fillRect(pixelColumn, pixelRow, PIXEL_SIZE_OF_CELL, PIXEL_SIZE_OF_CELL);
