@@ -325,7 +325,7 @@ public class gameActionTests {
 		Solution suggestion = new Solution(unknownPerson, unknownRoom, unknownWeapon);
 		Card returnedCard = board.handleSuggestion( suggestion );
 		assertEquals( returnedCard, null );
-		/*
+		
 		// TEST: handle a suggestion where only the human player can disprove while they are making the suggestion (returns null)
 		suggestion = new Solution(personCard, unknownRoom, unknownWeapon);
 		returnedCard = board.handleSuggestion( suggestion );
@@ -352,7 +352,7 @@ public class gameActionTests {
 		suggestion = new Solution(computer1_PersonCard, roomCard, unknownWeapon);
 		returnedCard = board.handleSuggestion( suggestion );
 		assertEquals( returnedCard, roomCard );
-	*/	
+		
 	}
 
 }

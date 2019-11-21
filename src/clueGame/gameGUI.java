@@ -39,7 +39,7 @@ public class gameGUI extends JFrame {
 		ControlPanel cp = new ControlPanel();
 		cp.setPreferredSize(new Dimension(board.getBoardWidth(), SCREEN_HEIGHT - board.getBoardHeight()));
 		add(cp, BorderLayout.SOUTH);
-		
+		board.setControlPanel(cp);
 	}
 	
 	private JMenu createFileMenu() {

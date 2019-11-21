@@ -99,13 +99,17 @@ public class ControlPanel extends JPanel {
 	 private class AccusationListener implements ActionListener {
 		 public void actionPerformed(ActionEvent e) {
 			 // call functions
-			 //board.openGuessDialog();
-			 board.openAccusationDialog();
+			 if ( board.getCurrentPlayer() instanceof HumanPlayer && !board.getHasMoved() ) {
+				 board.openAccusationDialog();
+			 } else {
+				 JPanel error = new JPanel();
+				JOptionPane.showMessageDialog(error, "You can only make an accusation at the start of your turn!");
+			 }
 			 updateControlPanel();
 		 }
 	 }
 	 
-	 private void updateControlPanel() {
+	 public void updateControlPanel() {
 		 // get the new information
 		 this.name = board.getCurrentPlayer().getplayerName();
 		 this.dieRoll = board.getDieRoll();
@@ -119,7 +123,7 @@ public class ControlPanel extends JPanel {
 		 guess.setText(lastGuess);
 	 }
 	 
-
+	 
 	 
 	
 }

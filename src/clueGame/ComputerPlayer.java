@@ -5,9 +5,13 @@ import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
+	
+	private Solution lastGuess;
+	private boolean lastGuessReturnedSomething;
 
 	public ComputerPlayer(String playerName, String color, int row, int col) {
 		super(playerName, color, row, col);
+		lastGuessReturnedSomething = true;
 	}
 	
 	public Solution createSuggestion() {
@@ -35,9 +39,10 @@ public class ComputerPlayer extends Player {
 		// always set the room to be the currently visited room
 		room = new Card(lastVisitedRoom, CardType.ROOM); 
 		
-		return new Solution(unknownPerson, room, unknownWeapon);
+		lastGuess = new Solution(unknownPerson, room, unknownWeapon);
+		
+		return lastGuess;
 	}
-	
 	
 	
 	// getTarget
@@ -71,7 +76,15 @@ public class ComputerPlayer extends Player {
 	}
 
 	
-
+	public void setLastGuessReturnedSomething(boolean lastGuessReturnedSomething) {
+		this.lastGuessReturnedSomething = lastGuessReturnedSomething;
+	}
+	public boolean getLastGuessReturnedSomething() {
+		return this.lastGuessReturnedSomething;
+	}
+	public Solution getLastGuess() {
+		return this.lastGuess;
+	}
 	
 
 }

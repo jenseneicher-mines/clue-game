@@ -63,12 +63,13 @@ public class Board extends JPanel implements MouseListener{
 	private int boardHeight;
 	private Random rand = new Random();
 	private String lastGuess;
-	private String lestGuessResponse;
+	private String lastGuessResponse;
 	private int previousRow = -1;
 	private int previousColumn = -1;
 	private BoardCell newLocation;
 	
 	// variables for the dialogs
+	private ControlPanel mainControlPanel;
 	private JDialog makeAGuessDialog;
 	private JLabel currentRoom;
 	private JComboBox<String> weaponDropdownGuess;
@@ -607,7 +608,7 @@ public class Board extends JPanel implements MouseListener{
 				continue;
 			}
 			visited.add(adjCell);
-			if ( pathLength == 1 || adjCell.isDoorway() ) {
+			if ( ( pathLength == 1 || adjCell.isDoorway() ) && playerList[currentPlayer].getLastVisitedRoom().charAt(0) != adjCell.getInitial() ) {
 				targets.add(adjCell);
 			}
 			else
@@ -633,12 +634,15 @@ public class Board extends JPanel implements MouseListener{
 	// have the board loop through every player when a suggestion is made
 	// once it finds a match, it returns the card to show the player who made the suggestion
 	public Card handleSuggestion(Solution suggestion) {
+		// update the guess box of the GUI to let the player know what was just guessed
+		lastGuess = suggestion.toString();
+		
 		int playerBeingChecked = currentPlayer + 1;
-		Card matchingCard;
+		Card matchingCard = null;
 		while ( playerBeingChecked != currentPlayer ) {
 			matchingCard = playerList[playerBeingChecked].disproveSuggestion(suggestion);
 			if ( matchingCard != null ) {
-				return matchingCard;
+				break;
 			}
 			
 			if ( playerBeingChecked == playerList.length - 1 ) {
@@ -649,7 +653,20 @@ public class Board extends JPanel implements MouseListener{
 			}
 		}
 		
-		return null;
+		// update the last guess response
+		if ( matchingCard != null ) {
+			lastGuessResponse = matchingCard.getCardName(); 
+		}
+		else {
+			lastGuessResponse = "";
+		}
+		
+		
+		// update the GUI
+		mainControlPanel.updateControlPanel();
+		
+		// return the result
+		return matchingCard;
 	}
 
 	public void rollDie(){
@@ -683,8 +700,49 @@ public class Board extends JPanel implements MouseListener{
 		
 	}
 	public void doComputersTurn() {
-		BoardCell computerTarget = ((ComputerPlayer) playerList[currentPlayer]).pickLocation(targets);
-		movePlayer(computerTarget);
+		boolean canMove = true;
+		
+		// if the computer's last guess didn't return anything: make an accusation
+		if ( !((ComputerPlayer)playerList[currentPlayer]).getLastGuessReturnedSomething() ) {
+			// have the computer make an accusation with their last guess
+			// if the accusation is right: end the game
+			if ( checkAccusation(((ComputerPlayer)playerList[currentPlayer]).getLastGuess()) ) {
+				// END THE GAME
+			}
+			// if it isn't right, end the player's turn and make sure they don't make an accusation again next round
+			else {
+				canMove = false;
+				((ComputerPlayer)playerList[currentPlayer]).setLastGuessReturnedSomething(true);
+			}
+		}
+		
+		int guessedPerson = currentPlayer;
+		// only move if the player didn't make a wrong accusation
+		if ( canMove ) {
+			// Move the player
+			BoardCell computerTarget = ((ComputerPlayer) playerList[currentPlayer]).pickLocation(targets);
+			
+			// if the player is now in a room, have them make a suggestion
+			if ( computerTarget.isRoom() ) {
+				playerList[currentPlayer].setLastVisitedRoom( getRoomName(computerTarget.getInitial()) );
+				Solution computerGuess = ((ComputerPlayer)playerList[currentPlayer]).createSuggestion();
+				guessedPerson = findGuessedPerson(computerGuess);
+				playerList[guessedPerson].setLastVisitedRoom( getRoomName(computerTarget.getInitial()) );
+				Card suggestionResult = handleSuggestion(computerGuess);
+				// update whether or not the player found a card
+				if ( suggestionResult == null ) {
+					((ComputerPlayer)playerList[currentPlayer]).setLastGuessReturnedSomething(false);
+				}
+				else {
+					((ComputerPlayer)playerList[currentPlayer]).setLastGuessReturnedSomething(true);
+				}
+				
+				
+			}
+			
+			movePlayer(computerTarget, guessedPerson);
+		
+		}
 	}
 	
 	
@@ -697,8 +755,8 @@ public class Board extends JPanel implements MouseListener{
 				if (containsClick(mouseEvent.getX(), mouseEvent.getY(), in)) {
 					isError = false;
 					hasMoved = true;
-					// move the player
-					movePlayer(in);
+					//do the human's turn
+					doHumanTurn(in);
 				}
 			}
 			if (isError) {
@@ -707,6 +765,21 @@ public class Board extends JPanel implements MouseListener{
 				JOptionPane.showMessageDialog(error, "Invalid Location Selected. Please select one of the cyan tiles.");
 			}
 		}
+	}
+	public void doHumanTurn(BoardCell newLocation) {
+		movePlayer(newLocation, currentPlayer);
+		
+	}
+	public int findGuessedPerson(Solution guess) {
+		int guessedPerson = currentPlayer;
+		
+		for ( int i = 0; i < playerList.length ; i++ ) {
+			if ( playerList[i].getplayerName().equals(guess.person.getCardName()) ) {
+				guessedPerson = i;
+			}
+		}
+		
+		return guessedPerson;
 	}
 	
 	public boolean containsClick(int mouseX, int mouseY, BoardCell potentialTarget){
@@ -718,13 +791,14 @@ public class Board extends JPanel implements MouseListener{
 		return false;
 	}
 
-	public void movePlayer(BoardCell newLocation){
+	public void movePlayer(BoardCell newLocation, int guessedPerson){
 		// update the previous location
 		previousRow = playerList[currentPlayer].getRow();
 		previousColumn = playerList[currentPlayer].getCol();
 		
 		//update player with new information
 		playerList[currentPlayer].setLocation(newLocation.getRow(),newLocation.getColumn());
+		playerList[guessedPerson].setLocation(newLocation.getRow(),newLocation.getColumn());
 		this.newLocation = newLocation;
 		
 		// clear the targets
@@ -803,7 +877,7 @@ public class Board extends JPanel implements MouseListener{
 		return lastGuess;
 	}
 	public String getGuessResponse() {
-		return lestGuessResponse;
+		return lastGuessResponse;
 	}
 	public int getBoardWidth() {
 		return boardWidth;
@@ -819,7 +893,9 @@ public class Board extends JPanel implements MouseListener{
 		playerConfigFile = peopleTXT;
 		weaponConfigFile = weaponsTXT;
 	}
-
+	public void setControlPanel(ControlPanel cp) {
+		this.mainControlPanel = cp;
+	}
 	
 
 

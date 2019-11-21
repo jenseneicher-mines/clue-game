@@ -13,5 +13,9 @@ public class Solution {
 	public Solution() {
 		super();
 	}
+	@Override
+	public String toString() {
+		return person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName();
+	}
 	
 }
