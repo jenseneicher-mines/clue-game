@@ -316,7 +316,7 @@ public class Board extends JPanel implements MouseListener{
 		
 		boolean isTarget;
 		boolean isPreviousLocation;
-		isOnTop = false;
+		boolean isOnTop = false;
 		// paint acll of the Board Cells and doors
 		for ( int column = 0; column < numColumns; column++ ) {
 			for (int row = 0; row < numRows; row++) {
@@ -352,7 +352,7 @@ public class Board extends JPanel implements MouseListener{
 			}
 		}
 	}
-	}
+	
 	
 
 	// read the given txt file and convert the contents to the Map legend
