@@ -21,7 +21,7 @@ public class Player {
 	protected ArrayList<Card> peopleNotSeen;
 	protected ArrayList<Card> weaponsNotSeen;
 	protected ArrayList<Card> roomsNotSeen;
-	protected String lastVisitedRoom;
+	protected String lastVisitedRoom = "X";
 
 	// constructor
 	public Player(String playerName, String color, int row, int column) {

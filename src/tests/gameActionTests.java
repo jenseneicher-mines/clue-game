@@ -18,6 +18,7 @@ import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
 import clueGame.ComputerPlayer;
+import clueGame.ControlPanel;
 import clueGame.HumanPlayer;
 import clueGame.Player;
 import clueGame.Solution;
@@ -41,6 +42,8 @@ public class gameActionTests {
 		board.setConfigFiles("OurInputFiles/GameBoardFinal.csv", "OurInputFiles/Rooms.txt", "OurInputFiles/PlayerConfig.txt", "OurInputFiles/WeaponConfig.txt");		
 		// Initialize will load BOTH config files 
 		board.initialize();
+		ControlPanel cp = new ControlPanel();
+		board.setControlPanel(cp);
 		
 		// initialize some cards we'll use multiple times for tests
 		computer1_PersonCard = new Card( "Baldwin", CardType.PERSON);
@@ -293,11 +296,11 @@ public class gameActionTests {
 	public void testHandlingSuggestion() {
 		// create a few players with known cards
 		Player humanPlayer = (HumanPlayer) board.getPlayers()[5];
-		Set<Card> knownHand = new HashSet<Card>();
-		knownHand.add(  personCard );
-		knownHand.add( weaponCard );
-		knownHand.add( roomCard );
-		humanPlayer.setCurrentHand(knownHand);
+		Set<Card> knownHandH = new HashSet<Card>();
+		knownHandH.add(  personCard );
+		knownHandH.add( weaponCard );
+		knownHandH.add( roomCard );
+		humanPlayer.setCurrentHand(knownHandH);
 
 		// create 3 more cards for the 3rd player
 		Card computer2_PersonCard = new Card( "Camp", CardType.PERSON);
@@ -305,11 +308,11 @@ public class gameActionTests {
 		Card computer2_RoomCard = new Card( "Porch", CardType.ROOM );
 		
 		Player computerPlayer2 = (ComputerPlayer) board.getPlayers()[1];
-		knownHand.clear();
-		knownHand.add(  computer2_PersonCard );
-		knownHand.add( computer2_WeaponCard );
-		knownHand.add( computer2_RoomCard );
-		computerPlayer2.setCurrentHand(knownHand);
+		Set<Card> knownHandC = new HashSet<Card>();
+		knownHandC.add(  computer2_PersonCard );
+		knownHandC.add( computer2_WeaponCard );
+		knownHandC.add( computer2_RoomCard );
+		computerPlayer2.setCurrentHand(knownHandC);
 		
 		// set the board to only have these 3 players
 		board.setPlayers(new Player[] { humanPlayer, computerPlayer1, computerPlayer2 });

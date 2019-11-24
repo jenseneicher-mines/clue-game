@@ -6,6 +6,8 @@ package clueGame;
 
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
@@ -45,6 +47,7 @@ public class Board extends JPanel implements MouseListener{
 	private int humanPlayerIndex;
 	private boolean hasMoved = false;
 	private int dieRoll = 0;
+	private boolean gameOver = false;
 	
 	// calcTargets variables
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
@@ -70,18 +73,26 @@ public class Board extends JPanel implements MouseListener{
 	
 	// variables for the dialogs
 	private ControlPanel mainControlPanel;
+	// Guess Dialogs
 	private JDialog makeAGuessDialog;
 	private JLabel currentRoom;
 	private JComboBox<String> weaponDropdownGuess;
 	private JComboBox<String> personDropdownGuess;
 	private JButton submitButtonGuess;
 	private JButton cancelButtonGuess;
+	// Accusation Dialog
 	private JDialog makeAnAccusationDialog;
 	private JComboBox<String> roomDropdownAccusation;
 	private JComboBox<String> weaponDropdownAccusation;
 	private JComboBox<String> personDropdownAccusation;
 	private JButton submitButtonAccusation;
 	private JButton cancelButtonAccusation;
+	// Accusation Response Dialog
+	private JDialog accusationResponseDialog;
+	private JLabel accusationGiver;
+	private JLabel accusationText;
+	private JLabel accusationResponse;
+	private JButton exitButton;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -109,6 +120,7 @@ public class Board extends JPanel implements MouseListener{
 		// set up the JDialogs for when the player is making a guess/accusation
 		setUpGuessDialog();
 		setUpAccusationDialog();
+		setUpAccusationResponse();
 		
 		// set the first player to be 1 before the human so that the first time "Next Player" is pressed
 		// the game starts on the human
@@ -118,6 +130,8 @@ public class Board extends JPanel implements MouseListener{
 		else {
 			currentPlayer = playerList.length - 1;
 		}
+		
+		
 	}
 	
 	public void setUpGuessDialog() {
@@ -156,12 +170,25 @@ public class Board extends JPanel implements MouseListener{
 		
 		// make the submit button
 		submitButtonGuess = new JButton("Submit");
+		submitButtonGuess.addActionListener(new guessSubmitListener());
 		makeAGuessDialog.add(submitButtonGuess);
 		
 		// make the cancel button
 		cancelButtonGuess = new JButton("Cancel");
+		cancelButtonGuess.addActionListener(e -> makeAGuessDialog.setVisible(false));
 		makeAGuessDialog.add(cancelButtonGuess);
 	}
+	public void openGuessDialog() {
+		makeAGuessDialog.setVisible(true);
+	}
+	public class guessSubmitListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// when the submit button is pressed, get the chosen person and room and finish the logic for the suggestion
+			humanGuessed( personDropdownGuess.getSelectedItem().toString(), weaponDropdownGuess.getSelectedItem().toString() );
+			makeAGuessDialog.setVisible(false);
+		}
+	}
+	
 	public void setUpAccusationDialog() {
 		makeAnAccusationDialog = new JDialog();
 		makeAnAccusationDialog.setTitle("Make an Accusation");
@@ -201,20 +228,73 @@ public class Board extends JPanel implements MouseListener{
 		
 		// make the submit button
 		submitButtonAccusation = new JButton("Submit");
+		submitButtonAccusation.addActionListener(new accusationSubmitListener());
 		makeAnAccusationDialog.add(submitButtonAccusation);
 		
 		// make the cancel button
 		cancelButtonAccusation = new JButton("Cancel");
+		cancelButtonAccusation.addActionListener(e -> makeAGuessDialog.setVisible(false));
 		makeAnAccusationDialog.add(cancelButtonAccusation);
 	}
 	
 	public void openAccusationDialog() {
 		makeAnAccusationDialog.setVisible(true);
 	}
-	public void openGuessDialog() {
-		makeAGuessDialog.setVisible(true);
+	public class accusationSubmitListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// Submit button is pressed
+			Solution playerAccusation = new Solution( new Card(personDropdownAccusation.getSelectedItem().toString(), CardType.PERSON), new Card(roomDropdownAccusation.getSelectedItem().toString(), CardType.ROOM), new Card(weaponDropdownAccusation.getSelectedItem().toString(), CardType.WEAPON) );
+			makeAnAccusation(playerAccusation);
+			makeAnAccusationDialog.setVisible(false);
+			hasMoved = true;
+			targets = new HashSet<>();
+			repaint();
+		}
 	}
 	
+	public void setUpAccusationResponse() {
+		accusationResponseDialog = new JDialog();
+		accusationResponseDialog.setTitle("Accusation Results:");
+		accusationResponseDialog.setLayout(new GridLayout(4,1));
+		accusationResponseDialog.setSize(new Dimension(400,400));
+		accusationGiver = new JLabel("");
+		accusationGiver.setHorizontalAlignment(JLabel.CENTER);
+		accusationGiver.setVerticalAlignment(JLabel.CENTER);
+		accusationResponseDialog.add(accusationGiver);
+		accusationText = new JLabel("");
+		accusationText.setHorizontalAlignment(JLabel.CENTER);
+		accusationText.setVerticalAlignment(JLabel.CENTER);
+		accusationResponseDialog.add(accusationText);
+		accusationResponse = new JLabel("The accusation is incorrect!");
+		accusationResponse.setHorizontalAlignment(JLabel.CENTER);
+		accusationResponse.setVerticalAlignment(JLabel.CENTER);
+		accusationResponseDialog.add(accusationResponse);
+		exitButton = new JButton("Continue");
+		exitButton.addActionListener(new exitListener());
+		accusationResponseDialog.add(exitButton);
+	}
+	private class exitListener implements ActionListener {
+		 public void actionPerformed(ActionEvent e) {
+			 if ( gameOver ) {
+				 System.exit(0);
+			 }
+			 else {
+				 accusationResponseDialog.setVisible(false);
+			 }
+		 }
+	 }
+	
+	
+	public void makeAnAccusation(Solution accusation) {
+		accusationGiver.setText(playerList[currentPlayer].getplayerName() + " has made an accusation!");
+		accusationText.setText("Accusation: " + accusation.toString());
+		// if the accusation is correct: end the game
+		if ( checkAccusation(accusation) ) {
+			gameOver = true;
+			endGame();
+		}
+		accusationResponseDialog.setVisible(true);
+	}
 	
 	
 	// load function that calls all load config functions
@@ -625,7 +705,7 @@ public class Board extends JPanel implements MouseListener{
 	
 	// check the player's accusation against the correct solution set and return true if it's a correct guess and false if not
 	public boolean checkAccusation(Solution guess) {
-		if ( correctSolution.person == guess.person && correctSolution.weapon == guess.weapon && correctSolution.room == guess.room ) {
+		if ( guess.toString().equals(correctSolution.toString()) ) {
 			return true;
 		}
 		return false;
@@ -638,6 +718,11 @@ public class Board extends JPanel implements MouseListener{
 		lastGuess = suggestion.toString();
 		
 		int playerBeingChecked = currentPlayer + 1;
+		if (playerBeingChecked == playerList.length) {
+			playerBeingChecked = 0;
+		}
+		
+		
 		Card matchingCard = null;
 		while ( playerBeingChecked != currentPlayer ) {
 			matchingCard = playerList[playerBeingChecked].disproveSuggestion(suggestion);
@@ -658,7 +743,7 @@ public class Board extends JPanel implements MouseListener{
 			lastGuessResponse = matchingCard.getCardName(); 
 		}
 		else {
-			lastGuessResponse = "";
+			lastGuessResponse = "No New Clue";
 		}
 		
 		
@@ -704,16 +789,10 @@ public class Board extends JPanel implements MouseListener{
 		
 		// if the computer's last guess didn't return anything: make an accusation
 		if ( !((ComputerPlayer)playerList[currentPlayer]).getLastGuessReturnedSomething() ) {
-			// have the computer make an accusation with their last guess
-			// if the accusation is right: end the game
-			if ( checkAccusation(((ComputerPlayer)playerList[currentPlayer]).getLastGuess()) ) {
-				// END THE GAME
-			}
-			// if it isn't right, end the player's turn and make sure they don't make an accusation again next round
-			else {
-				canMove = false;
-				((ComputerPlayer)playerList[currentPlayer]).setLastGuessReturnedSomething(true);
-			}
+			makeAnAccusation(((ComputerPlayer)playerList[currentPlayer]).getLastGuess());
+			// if the game is still running after the computer makes an accuasation that means the game didn't end and the computer did not guess correctly
+			canMove = false;
+			((ComputerPlayer)playerList[currentPlayer]).setLastGuessReturnedSomething(true);
 		}
 		
 		int guessedPerson = currentPlayer;
@@ -756,7 +835,7 @@ public class Board extends JPanel implements MouseListener{
 					isError = false;
 					hasMoved = true;
 					//do the human's turn
-					doHumanTurn(in);
+					startHumanTurn(in);
 				}
 			}
 			if (isError) {
@@ -766,10 +845,28 @@ public class Board extends JPanel implements MouseListener{
 			}
 		}
 	}
-	public void doHumanTurn(BoardCell newLocation) {
+	public void startHumanTurn(BoardCell newLocation) {
+		this.newLocation = newLocation;
+		
+		// if the player moved into a room: pull up the guess panel
+		if ( newLocation.isRoom() ) {
+			playerList[currentPlayer].setLastVisitedRoom(getRoomName(newLocation.getInitial()));
+			currentRoom.setText(getRoomName(newLocation.getInitial()));
+			openGuessDialog();
+		}
+		
 		movePlayer(newLocation, currentPlayer);
 		
 	}
+	// this function is called after the user clicks 'submit' on the guess panel
+	public void humanGuessed(String guessedPerson, String guessedWeapon) {
+		Solution humanGuess = new Solution( new Card(guessedPerson, CardType.PERSON), new Card(playerList[currentPlayer].getLastVisitedRoom(), CardType.ROOM), new Card (guessedWeapon, CardType.WEAPON) );
+		int guessedPersonIndex = findGuessedPerson(humanGuess);
+		handleSuggestion(humanGuess);
+		playerList[guessedPersonIndex].setLastVisitedRoom(playerList[currentPlayer].getLastVisitedRoom());
+		movePlayer(this.newLocation, guessedPersonIndex);
+	}
+	
 	public int findGuessedPerson(Solution guess) {
 		int guessedPerson = currentPlayer;
 		
@@ -808,6 +905,12 @@ public class Board extends JPanel implements MouseListener{
 		repaint();
 	}
 	
+	public void endGame() {
+		accusationResponseDialog.setTitle("Game Over!");
+		accusationResponse.setText(playerList[currentPlayer].getplayerName() + " has solved the mystery! Thanks for Playing!");
+		exitButton.setText("EXIT");
+		accusationResponseDialog.setVisible(true);
+	}
 	
 
 	// Getter Functions
