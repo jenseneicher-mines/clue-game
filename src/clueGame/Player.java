@@ -73,7 +73,15 @@ public class Player {
 	}
 	
 	// Draw function so the player is shown on screen
-	public void draw(Graphics g) {
+	public void draw(Graphics g, boolean isOntop, Color c) {
+		// if the players are ontop of eachother paint one bigger and make visable
+		if(isOntop == true) {
+			g.setColor(c);
+			g.fillOval(pixelColumn, pixelRow, BoardCell.PIXEL_SIZE_OF_CELL + 4, BoardCell.PIXEL_SIZE_OF_CELL + 4);
+			g.setColor(Color.BLACK);
+			g.drawOval(pixelColumn, pixelRow, BoardCell.PIXEL_SIZE_OF_CELL + 4, BoardCell.PIXEL_SIZE_OF_CELL + 4);
+		}
+		//else we paint normally
 		g.setColor(this.color);
 		g.fillOval(pixelColumn, pixelRow, BoardCell.PIXEL_SIZE_OF_CELL, BoardCell.PIXEL_SIZE_OF_CELL);
 		g.setColor(Color.BLACK);

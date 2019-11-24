@@ -316,6 +316,7 @@ public class Board extends JPanel implements MouseListener{
 		
 		boolean isTarget;
 		boolean isPreviousLocation;
+		isOnTop = false;
 		// paint acll of the Board Cells and doors
 		for ( int column = 0; column < numColumns; column++ ) {
 			for (int row = 0; row < numRows; row++) {
@@ -339,11 +340,18 @@ public class Board extends JPanel implements MouseListener{
 				board[row][column].drawRoomNames(g);
 			}
 		}
-		
+
 		// paint all of the players
 		for ( Player p : playerList ) {
-			p.draw(g);
+			for( Player player : playerList){
+				if((player.getplayerName() != p.getplayerName()) && ((player.getCol() == p.getCol()) && (player.getRow() == p.getRow()))){
+					isOnTop = true;
+				}
+				p.draw(g, isOnTop, player.getColor());
+				isOnTop = false;
+			}
 		}
+	}
 	}
 	
 
